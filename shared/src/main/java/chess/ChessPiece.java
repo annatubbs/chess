@@ -69,6 +69,55 @@ public class ChessPiece {
         }
     }
 
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currRow = myPosition.getRow();
+        int currCol = myPosition.getColumn();
+
+        // Check col moves
+        // Move up
+        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
+            ChessPosition currPos = new ChessPosition(currRow,col);
+
+            if (canMoveHere(currPos, board)) {
+                moves.add(new ChessMove(myPosition, currPos, null));
+            } else {
+                break; // same team's piece here. can't go further. stop iteration
+            }
+        }
+        // Move down
+        for (int col=currCol; col<=1; col--) { // ***think 8 works w/o index error. getPiece calculates index offset..
+            ChessPosition currPos = new ChessPosition(currRow,col);
+
+            if (canMoveHere(currPos, board)) {
+                moves.add(new ChessMove(myPosition, currPos, null));
+            } else {
+                break; // same team's piece here. can't go further. stop iteration
+            }
+        }
+
+        return moves;
+    }
+
+    // Checks if the piece can move to this spot
+    public boolean canMoveHere(ChessPosition currPos, ChessBoard board) {
+        ChessPiece pieceAtCurrPos = board.getPiece(currPos);
+
+        if (pieceAtCurrPos == null) { // position empty
+            return true;
+            //moves.add(new ChessMove(myPosition, currPos, null));
+        } else { // already has piece there
+            if (this.pieceColor != pieceAtCurrPos.getTeamColor()) { // other team's piece here. Take piece.
+                return true;
+                //moves.add(new ChessMove(myPosition, currPos, null));
+            } else { // same team's piece here. can't go further. stop iteration
+                return false;
+                //break;
+            }
+        }
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -81,32 +130,5 @@ public class ChessPiece {
     @Override
     public int hashCode() {
         return Objects.hash(pieceColor, type);
-    }
-
-    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // Check col moves
-        // Move up
-        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(currRow,col);
-            ChessPiece pieceAtCurrPos = board.getPiece(currPos);
-
-            // See if any piece there
-            if (pieceAtCurrPos == null) { // position empty
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else { // already has piece there
-                if (this.pieceColor != pieceAtCurrPos.getTeamColor()) { // other team's piece here. Take piece.
-                    moves.add(new ChessMove(myPosition, currPos, null));
-                } else { // same team's peace here. stop iteration
-                    break;
-                }
-            }
-
-        }
-
-        return moves;
     }
 }
