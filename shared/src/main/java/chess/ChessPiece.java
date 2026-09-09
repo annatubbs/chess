@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -68,6 +69,20 @@ public class ChessPiece {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessPiece that = (ChessPiece) o;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
+    }
+
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow();
@@ -75,7 +90,7 @@ public class ChessPiece {
 
         // Check col moves
         // Move up
-        for (int col=currCol; col<=7; col++) {
+        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
             ChessPosition currPos = new ChessPosition(currRow,col);
             ChessPiece pieceAtCurrPos = board.getPiece(currPos);
 
