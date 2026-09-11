@@ -11,8 +11,8 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPiece {
-    private ChessGame.TeamColor pieceColor;
-    private ChessPiece.PieceType type;
+    private final ChessGame.TeamColor pieceColor;
+    private final ChessPiece.PieceType type;
 
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
@@ -24,19 +24,51 @@ public class ChessPiece {
      * The various different chess piece options
      */
     public enum PieceType {
-        KING("King"),
-        QUEEN("Queen"),
-        BISHOP("Bishop"),
-        KNIGHT("Knight"),
-        ROOK("Rook"),
-        PAWN("Pawn");
-
+        KING("King") {
+            @Override
+            public ChessPiece create(ChessGame.TeamColor pieceColor) {
+                return new King(pieceColor);
+            }
+        },
+        QUEEN("Queen") {
+            @Override
+            public ChessPiece create(ChessGame.TeamColor pieceColor) {
+                return new Queen(pieceColor);
+            }
+        },
+        BISHOP("Bishop") {
+            @Override
+            public ChessPiece create(ChessGame.TeamColor pieceColor) {
+                return new Bishop(pieceColor);
+            }
+        },
+        KNIGHT("Knight") {
+            @Override
+            public ChessPiece create(ChessGame.TeamColor pieceColor) {
+                return new Knight(pieceColor);
+            }
+        },
+        ROOK("Rook") {
+            @Override
+            public ChessPiece create(ChessGame.TeamColor pieceColor) {
+                return new Rook(pieceColor);
+            }
+        },
+        PAWN("Pawn") {
+            @Override
+            public ChessPiece create(ChessGame.TeamColor pieceColor) {
+                return new Pawn(pieceColor);
+            }
+        };
+        // String label for each enum val
         private final String label;
-
+        // Abstract constructor
+        public abstract ChessPiece create(ChessGame.TeamColor pieceColor);
+        // initialize String label
         PieceType (String label) {
             this.label = label;
         }
-
+        // toString()
         @Override
         public String toString() {
             return label;
@@ -202,8 +234,6 @@ public class ChessPiece {
 
     // interface?? ^
 
-    // *********toString()
-
 
     @Override
     public boolean equals(Object o) {
@@ -224,3 +254,4 @@ public class ChessPiece {
         return pieceColor.toString() + " " + type.toString();
     }
 }
+
