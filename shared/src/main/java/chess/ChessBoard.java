@@ -12,11 +12,6 @@ import java.util.Objects;
 public class ChessBoard {
     private ChessPiece[][] board = new ChessPiece[8][8];
 
-    // Piece type order of reset board back row
-    public static final ChessPiece.PieceType[] backRowOrder = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT,
-            ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KING,
-            ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK};
-
     public ChessBoard() {
     }
 
@@ -50,33 +45,31 @@ public class ChessBoard {
      */
     public void resetBoard() {
         // Set black pieces
-        // back row
-        for (int col=0; col<=7; col++) {
-            board[7][col] = new ChessPiece(ChessGame.TeamColor.BLACK, backRowOrder[col]);
-        }
-        // front row
-        for (int col=0; col<=7; col++) {
-            board[6][col] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
-        }
+        board[7] = resetBackRow(ChessGame.TeamColor.BLACK);
+        board[6] = resetFrontRow(ChessGame.TeamColor.BLACK);
 
         // Set white pieces
-        // back row
-        for (int col=0; col<=7; col++) {
-            board[0][col] = new ChessPiece(ChessGame.TeamColor.WHITE, backRowOrder[col]);
-        }
-        // front row
-        for (int col=0; col<=7; col++) {
-            board[1][col] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-        }
+        board[0] = resetBackRow(ChessGame.TeamColor.WHITE);
+        board[1] = resetFrontRow(ChessGame.TeamColor.WHITE);
 
         // Set middle blank
         for (int row=2; row<=5; row++) { // loop just middle rows
-            for (int col = 0; col <= 7; col++) { // loop all cols
-                board[row][col] = null;
-            }
+            board[row] = new ChessPiece[]{null,null,null,null,null,null,null,null};
         }
     }
 
+    // return back row of pieces at starting positions
+    private ChessPiece[] resetBackRow(ChessGame.TeamColor color) {
+        return new ChessPiece[]{new Rook(color), new Knight(color), new Bishop(color), new Queen(color),
+                                new King(color), new Bishop(color), new Knight(color), new Rook(color)};
+
+    }
+
+    // return front row of pawns for starting board
+    private ChessPiece[] resetFrontRow(ChessGame.TeamColor color) {
+        return new ChessPiece[]{new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color),
+                                new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color)};
+    }
 
     @Override
     public boolean equals(Object o) {
