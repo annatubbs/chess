@@ -97,129 +97,32 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        if (this.type == PieceType.ROOK) {
-            return rookMoves(board,myPosition);
-        } else if (this.type == PieceType.KNIGHT) {
-            return null;
-        } else if (this.type == PieceType.BISHOP) {
-            return null;
-        } else if (this.type == PieceType.QUEEN) {
-            return null;
-        } else if (this.type == PieceType.KING) {
-            return null;
-        } else { // this.type == PieceType.PAWN) {
-            return null;
-        }
+        if (type == PieceType.KING) {
+            King temp = new King(ChessGame.TeamColor.WHITE);
+            return temp.pieceMoves(board,myPosition);
+
+        } else if (type == PieceType.QUEEN) {
+            Queen temp = new Queen(ChessGame.TeamColor.WHITE);
+            return temp.pieceMoves(board,myPosition);
+
+        } else if (type == PieceType.BISHOP) {
+            Bishop temp = new Bishop(ChessGame.TeamColor.WHITE);
+            return temp.pieceMoves(board,myPosition);
+
+        } else if (type == PieceType.KNIGHT) {
+            Knight temp = new Knight(ChessGame.TeamColor.WHITE);
+            return temp.pieceMoves(board,myPosition);
+
+        } else if (type == PieceType.ROOK) {
+            Rook temp = new Rook(ChessGame.TeamColor.WHITE);
+            return temp.pieceMoves(board,myPosition);
+
+        } else if (type == PieceType.PAWN) {
+            Pawn temp = new Pawn(ChessGame.TeamColor.WHITE);
+            return temp.pieceMoves(board,myPosition);
+        } else
+            throw new UnsupportedOperationException("Subclass should call this pieceMoves() only :(");
     }
-
-
-    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // Check col moves
-        // Move up
-        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(currRow,col);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further. stop iteration
-            }
-        }
-        // Move down
-        for (int col=currCol; col>=1; col--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(currRow,col);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further.stop iteration
-            }
-        }
-
-        // Check row moves
-        // Move right
-        for (int row=currRow; row<=8; row++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(row,currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further. stop iteration
-            }
-        }
-        // Move left
-        for (int row=currRow; row>=1; row--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(row,currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further.stop iteration
-            }
-        }
-
-        return moves;
-    }
-
-
-    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // Move up-left
-        //int tempRow = currRow;
-        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            //row += 1;
-
-            ChessPosition currPos = new ChessPosition(currRow,col);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further. stop iteration
-            }
-        }
-        // Move down
-        for (int col=currCol; col>=1; col--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(currRow,col);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further.stop iteration
-            }
-        }
-
-        // Check row moves
-        // Move right
-        for (int row=currRow; row<=8; row++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(row,currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further. stop iteration
-            }
-        }
-        // Move left
-        for (int row=currRow; row>=1; row--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(row,currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further.stop iteration
-            }
-        }
-
-        return moves;
-    }
-
 
     // Checks if the piece can move to this spot
     public boolean canMoveHere(ChessPosition currPos, ChessBoard board) {
@@ -231,9 +134,6 @@ public class ChessPiece {
             return this.pieceColor != pieceAtCurrPos.getTeamColor();
         }
     }
-
-    // interface?? ^
-
 
     @Override
     public boolean equals(Object o) {

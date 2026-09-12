@@ -63,7 +63,7 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        String str = "ChessMove: " + startPosition.toString() + ">" + endPosition.toString() + "; ";
+        String str = "ChessMove: " + startPosition.toString() + " to " + endPosition.toString() + " ";
         if (promotionPiece == null) {
             return str + "Not promoted.";
         } else {

@@ -8,6 +8,9 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
+
+//***NOTE: row and col are numbers 1-8, inclusive. They are NOT indexes. Get index in array by subtracting 1.
+
 public class ChessPosition {
     private int row;
     private int col;
@@ -50,6 +53,6 @@ public class ChessPosition {
 
     @Override
     public String toString() {
-        return "Position: " + Integer.toString(row) + ", " + Integer.toString(col);
+        return "Position (" + Integer.toString(row) + ", " + Integer.toString(col) + ")";
     }
 }
