@@ -137,7 +137,9 @@ public class ChessPiece {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
+        if (this == o) return true;
+
+        if (!(o instanceof ChessPiece)) {
             return false;
         }
         ChessPiece that = (ChessPiece) o;

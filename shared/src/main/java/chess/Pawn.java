@@ -237,4 +237,9 @@ public class Pawn extends ChessPiece {
 
         return moves;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

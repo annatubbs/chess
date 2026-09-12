@@ -157,4 +157,9 @@ public class King extends ChessPiece {
 
         return moves;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }
