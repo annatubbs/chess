@@ -8,26 +8,16 @@ public class King extends ChessPiece {
         super(pieceColor,PieceType.KING);
     }
 
-    // Gather all available moves helper funcs
-    // Collect all vertical (row) moves
-        private Collection<ChessMove> verticalMoves(ChessBoard board, ChessPosition myPosition) {
+    // Gather all available moves: helper funcs
+    // Check+add move up
+        private Collection<ChessMove> upMove(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow();
         int currCol = myPosition.getColumn();
 
-        // Move up
         if (currRow < 8) {
             ChessPosition currPos = new ChessPosition(currRow+1,currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } // else: same team's piece here. can't go further. stop iteration
-        }
-
-        // Move down
-        if (currRow > 1) {
-            ChessPosition currPos = new ChessPosition(currRow-1,currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -37,8 +27,26 @@ public class King extends ChessPiece {
         return moves;
     }
 
-    // Collect all horizontal (col) moves
-    private Collection<ChessMove> horizontalMoves(ChessBoard board, ChessPosition myPosition) {
+    // Check+add move down
+    private Collection<ChessMove> downMove(ChessBoard board, ChessPosition myPosition) {
+
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currRow = myPosition.getRow();
+        int currCol = myPosition.getColumn();
+
+        if (currRow > 1) {
+            ChessPosition currPos = new ChessPosition(currRow-1, currCol);
+
+            if (canMoveHere(currPos, board)) {
+                moves.add(new ChessMove(myPosition, currPos, null));
+            } // else: same team's piece here. can't go further. stop iteration
+        }
+
+        return moves;
+    }
+
+    // Check+add move right
+    private Collection<ChessMove> rightMove(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow();
@@ -53,7 +61,16 @@ public class King extends ChessPiece {
             } // else: same team's piece here. can't go further. stop iteration
         }
 
-        // Move left
+        return moves;
+    }
+
+    // Check+add move left
+    private Collection<ChessMove> leftMove(ChessBoard board, ChessPosition myPosition) {
+
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currRow = myPosition.getRow();
+        int currCol = myPosition.getColumn();
+
         if (currCol > 1) {
             ChessPosition currPos = new ChessPosition(currRow,currCol-1);
 
@@ -65,7 +82,7 @@ public class King extends ChessPiece {
         return moves;
     }
 
-    // Collect all up-right diagonal moves
+    // Check+add up-right diagonal move
     private Collection<ChessMove> upRightDiagonalMoves(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
@@ -84,7 +101,7 @@ public class King extends ChessPiece {
         return moves;
     }
 
-    // Collect all up-left diagonal moves
+    // Check+add up-left diagonal move
     private Collection<ChessMove> upLeftDiagonalMoves(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
@@ -103,7 +120,7 @@ public class King extends ChessPiece {
         return moves;
     }
 
-    // Collect all down-right diagonal moves
+    // Check+add down-right diagonal move
     private Collection<ChessMove> downRightDiagonalMoves(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
@@ -122,7 +139,7 @@ public class King extends ChessPiece {
         return moves;
     }
 
-    // Collect all down-left diagonal moves
+    // Check+add down-left diagonal move
     private Collection<ChessMove> downLeftDiagonalMoves(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
@@ -145,15 +162,19 @@ public class King extends ChessPiece {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-        // Add horizontal/vertical moves
-        Collection<ChessMove> moves = verticalMoves(board,myPosition);
-        moves.addAll(horizontalMoves(board,myPosition));
+        // Add vertical moves
+        Collection<ChessMove> moves = upMove(board, myPosition);
+        moves.addAll(downMove(board, myPosition));
+
+        // Ad horizontal moves
+        moves.addAll(rightMove(board, myPosition));
+        moves.addAll(leftMove(board, myPosition));
 
         // Add diagonal moves
-        moves.addAll(upRightDiagonalMoves(board,myPosition));
-        moves.addAll(upLeftDiagonalMoves(board,myPosition));
-        moves.addAll(downRightDiagonalMoves(board,myPosition));
-        moves.addAll(downLeftDiagonalMoves(board,myPosition));
+        moves.addAll(upRightDiagonalMoves(board, myPosition));
+        moves.addAll(upLeftDiagonalMoves(board, myPosition));
+        moves.addAll(downRightDiagonalMoves(board, myPosition));
+        moves.addAll(downLeftDiagonalMoves(board, myPosition));
 
         return moves;
     }

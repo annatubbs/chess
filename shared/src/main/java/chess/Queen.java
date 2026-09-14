@@ -5,20 +5,20 @@ import java.util.Collection;
 
 public class Queen extends ChessPiece {
     public Queen(ChessGame.TeamColor pieceColor) {
-        super(pieceColor,PieceType.QUEEN);
+        super(pieceColor, PieceType.QUEEN);
     }
 
     // Gather all available moves helper funcs
-    // Collect all vertical (row) moves
-    private Collection<ChessMove> verticalMoves(ChessBoard board, ChessPosition myPosition) {
+
+    // Collect all up (row) moves
+    private Collection<ChessMove> upMoves(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow();
         int currCol = myPosition.getColumn();
 
-        // Move up
         for (int row=currRow; row<=8; row++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(row,currCol);
+            ChessPosition currPos = new ChessPosition(row, currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -26,40 +26,19 @@ public class Queen extends ChessPiece {
                 break; // same team's piece here. can't go further. stop iteration
             }
         }
-        // Move down
-        for (int row=currRow; row>=1; row--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(row,currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further.stop iteration
-            }
-        }
 
         return moves;
     }
 
-    // Collect all horizontal (col) moves
-    private Collection<ChessMove> horizontalMoves(ChessBoard board, ChessPosition myPosition) {
+    // Collect all down (row) moves
+    private Collection<ChessMove> downMoves(ChessBoard board, ChessPosition myPosition) {
 
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow();
         int currCol = myPosition.getColumn();
 
-        // Move right
-        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(currRow,col);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } else {
-                break; // same team's piece here. can't go further. stop iteration
-            }
-        }
-        // Move left
-        for (int col=currCol; col>=1; col--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
-            ChessPosition currPos = new ChessPosition(currRow,col);
+        for (int row=currRow; row>=1; row--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
+            ChessPosition currPos = new ChessPosition(row, currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -71,6 +50,45 @@ public class Queen extends ChessPiece {
         return moves;
     }
 
+    // Collect all right (col) moves
+    private Collection<ChessMove> rightMoves(ChessBoard board, ChessPosition myPosition) {
+
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currRow = myPosition.getRow();
+        int currCol = myPosition.getColumn();
+
+        for (int col=currCol; col<=8; col++) { // ***think 8 works w/o index error. getPiece calculates index offset..
+            ChessPosition currPos = new ChessPosition(currRow, col);
+
+            if (canMoveHere(currPos, board)) {
+                moves.add(new ChessMove(myPosition, currPos, null));
+            } else {
+                break; // same team's piece here. can't go further. stop iteration
+            }
+        }
+
+        return moves;
+    }
+
+    // Collect all left (col) moves
+    private Collection<ChessMove> leftMoves(ChessBoard board, ChessPosition myPosition) {
+
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currRow = myPosition.getRow();
+        int currCol = myPosition.getColumn();
+
+        for (int col=currCol; col>=1; col--) { // ***think 1 works w/o miss spot. getPiece calculates index offset..
+            ChessPosition currPos = new ChessPosition(currRow, col);
+
+            if (canMoveHere(currPos, board)) {
+                moves.add(new ChessMove(myPosition, currPos, null));
+            } else {
+                break; // same team's piece here. can't go further.stop iteration
+            }
+        }
+
+        return moves;
+    }
 
     // Collect all up-right diagonal moves
     private Collection<ChessMove> upRightDiagonalMoves(ChessBoard board, ChessPosition myPosition) {
@@ -84,7 +102,7 @@ public class Queen extends ChessPiece {
             row++;
             col++;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -108,7 +126,7 @@ public class Queen extends ChessPiece {
             row++;
             col--;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -132,7 +150,7 @@ public class Queen extends ChessPiece {
             row--;
             col++;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -156,7 +174,7 @@ public class Queen extends ChessPiece {
             row--;
             col--;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -172,15 +190,19 @@ public class Queen extends ChessPiece {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-        // Add horizontal/vertical moves
-        Collection<ChessMove> moves = verticalMoves(board,myPosition);
-        moves.addAll(horizontalMoves(board,myPosition));
+        // Add vertical moves
+        Collection<ChessMove> moves = upMoves(board, myPosition);
+        moves.addAll(downMoves(board, myPosition));
+
+        // Add horizontal moves
+        moves.addAll(rightMoves(board, myPosition));
+        moves.addAll(leftMoves(board, myPosition));
 
         // Add diagonal moves
-        moves.addAll(upRightDiagonalMoves(board,myPosition));
-        moves.addAll(upLeftDiagonalMoves(board,myPosition));
-        moves.addAll(downRightDiagonalMoves(board,myPosition));
-        moves.addAll(downLeftDiagonalMoves(board,myPosition));
+        moves.addAll(upRightDiagonalMoves(board, myPosition));
+        moves.addAll(upLeftDiagonalMoves(board, myPosition));
+        moves.addAll(downRightDiagonalMoves(board, myPosition));
+        moves.addAll(downLeftDiagonalMoves(board, myPosition));
 
         return moves;
     }

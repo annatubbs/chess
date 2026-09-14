@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public class Knight extends ChessPiece {
     public Knight(ChessGame.TeamColor pieceColor) {
-        super(pieceColor,PieceType.KNIGHT);
+        super(pieceColor, PieceType.KNIGHT);
     }
 
     // Gather all available moves helper funcs
@@ -126,10 +126,10 @@ public class Knight extends ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         // Compile list of moves
-        Collection<ChessMove> moves = upMoves(board,myPosition);
-        moves.addAll(downMoves(board,myPosition));
-        moves.addAll(leftMoves(board,myPosition));
-        moves.addAll(rightMoves(board,myPosition));
+        Collection<ChessMove> moves = upMoves(board, myPosition);
+        moves.addAll(downMoves(board, myPosition));
+        moves.addAll(leftMoves(board, myPosition));
+        moves.addAll(rightMoves(board, myPosition));
 
         return moves;
     }

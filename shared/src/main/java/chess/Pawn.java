@@ -32,7 +32,7 @@ public class Pawn extends ChessPiece {
         int currCol = myPosition.getColumn();
 
         // moves up
-        ChessPosition currPos = new ChessPosition(currRow+2,currCol);
+        ChessPosition currPos = new ChessPosition(currRow+2, currCol);
 
         if (canMoveHere(currPos, board)) {
            moves.add(new ChessMove(myPosition, currPos, null));
@@ -49,14 +49,14 @@ public class Pawn extends ChessPiece {
 
         // White piece: moves up
         if (currRow < 7) { // in middle of board
-            ChessPosition currPos = new ChessPosition(currRow+1,currCol);
+            ChessPosition currPos = new ChessPosition(currRow+1, currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, null));
             } // else: same team's piece here
 
         } else if (currRow == 7) { // promotion
-            ChessPosition currPos = new ChessPosition(currRow+1,currCol);
+            ChessPosition currPos = new ChessPosition(currRow+1, currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
@@ -126,7 +126,7 @@ public class Pawn extends ChessPiece {
         int currCol = myPosition.getColumn();
 
         // BLACK piece. Moves down
-        ChessPosition currPos = new ChessPosition(currRow-2,currCol);
+        ChessPosition currPos = new ChessPosition(currRow-2, currCol);
 
         if (canMoveHere(currPos, board)) {
            moves.add(new ChessMove(myPosition, currPos, null));
@@ -143,14 +143,14 @@ public class Pawn extends ChessPiece {
 
         // BLACK piece. Moves down
         if (currRow > 2) { // in middle of board
-            ChessPosition currPos = new ChessPosition(currRow-1,currCol);
+            ChessPosition currPos = new ChessPosition(currRow-1, currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, null));
             } // else: same team's piece here
 
         } else if (currRow == 2) { // promotion
-            ChessPosition currPos = new ChessPosition(currRow-1,currCol);
+            ChessPosition currPos = new ChessPosition(currRow-1, currCol);
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
@@ -216,23 +216,23 @@ public class Pawn extends ChessPiece {
 
         if (this.getTeamColor() == ChessGame.TeamColor.WHITE) {
             if (firstMove) {
-                moves.addAll(firstMoveWhite(board,myPosition));
+                moves.addAll(firstMoveWhite(board, myPosition));
             }
             // Add forward move
-            moves.addAll(forwardMoveWhite(board,myPosition));
+            moves.addAll(forwardMoveWhite(board, myPosition));
 
             // Add diagonal move
-            moves.addAll(diagonalMoveWhite(board,myPosition));
+            moves.addAll(diagonalMoveWhite(board, myPosition));
 
         } else { // piece color BLACK
             if (firstMove) {
-                moves.addAll(firstMoveBlack(board,myPosition));
+                moves.addAll(firstMoveBlack(board, myPosition));
             }
             // Add forward move
-            moves.addAll(forwardMoveBlack(board,myPosition));
+            moves.addAll(forwardMoveBlack(board, myPosition));
 
             // Add diagonal move
-            moves.addAll(diagonalMoveBlack(board,myPosition));
+            moves.addAll(diagonalMoveBlack(board, myPosition));
         }
 
         return moves;

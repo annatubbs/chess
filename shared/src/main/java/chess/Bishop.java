@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public class Bishop extends ChessPiece {
     public Bishop(ChessGame.TeamColor pieceColor) {
-        super(pieceColor,PieceType.BISHOP);
+        super(pieceColor, PieceType.BISHOP);
     }
 
     // Gather all available moves helper funcs
@@ -21,7 +21,7 @@ public class Bishop extends ChessPiece {
             row++;
             col++;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -45,7 +45,7 @@ public class Bishop extends ChessPiece {
             row++;
             col--;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -69,7 +69,7 @@ public class Bishop extends ChessPiece {
             row--;
             col++;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -93,7 +93,7 @@ public class Bishop extends ChessPiece {
             row--;
             col--;
 
-            ChessPosition currPos = new ChessPosition(row,col);
+            ChessPosition currPos = new ChessPosition(row, col);
 
             if (canMoveHere(currPos, board)) { // space empty or other team's piece
                 moves.add(new ChessMove(myPosition, currPos, null));
@@ -109,10 +109,10 @@ public class Bishop extends ChessPiece {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         // Collect moves in each diagonal direction
-        Collection<ChessMove> moves = upRightDiagonalMoves(board,myPosition);
-        moves.addAll(upLeftDiagonalMoves(board,myPosition));
-        moves.addAll(downRightDiagonalMoves(board,myPosition));
-        moves.addAll(downLeftDiagonalMoves(board,myPosition));
+        Collection<ChessMove> moves = upRightDiagonalMoves(board, myPosition);
+        moves.addAll(upLeftDiagonalMoves(board, myPosition));
+        moves.addAll(downRightDiagonalMoves(board, myPosition));
+        moves.addAll(downLeftDiagonalMoves(board, myPosition));
 
         return moves;
     }
