@@ -126,6 +126,15 @@ public class ChessPiece {
 
     // Checks if the piece can move to this spot
     public boolean canMoveHere(ChessPosition currPos, ChessBoard board) {
+        // check if in board's range
+        int currRow = currPos.getRow();
+        int currCol = currPos.getColumn();
+
+        if (!(currRow >= 1 && currRow <= 8 && currCol >= 1 && currCol <= 8)) {
+            return false;
+        }
+
+        // check if space occupied
         ChessPiece pieceAtCurrPos = board.getPiece(currPos);
 
         if (pieceAtCurrPos == null) { // position empty
