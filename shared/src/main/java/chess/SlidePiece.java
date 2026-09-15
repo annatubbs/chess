@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class SlidePiece extends ChessPiece {
-    private ChessGame.TeamColor pieceColor;
-    private ChessPiece.PieceType type;
 
     public SlidePiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         super(pieceColor, type);

@@ -13,198 +13,56 @@ public class Pawn extends ChessPiece {
 
     // Potential piece moves helpers
 
-    private boolean isEnemyPiece(ChessPosition currPos, ChessBoard board) {
-        ChessPiece pieceAtCurrPos = board.getPiece(currPos);
+    // Tells if piece moves up/down
+    private int upDownFactor() {
 
+        if (this.getTeamColor() == ChessGame.TeamColor.WHITE) { // piece color WHITE; move up
+            return 1;
+        }
+        // piece color BLACK; move down
+        return -1;
+    }
+
+   // Checks if the piece can move to this spot
+    private boolean canMoveHere(ChessPosition currPos, ChessBoard board, boolean captureMove) {
+        // Check if in board's range
+        int currRow = currPos.getRow();
+        int currCol = currPos.getColumn();
+
+        if (!(currRow >= 1 && currRow <= 8 && currCol >= 1 && currCol <= 8)) {
+            return false;
+        }
+        
+        // Check if piece is at spot
+        ChessPiece pieceAtCurrPos = board.getPiece(currPos);
+        // moving fwd
+        if (!captureMove) {
+            return pieceAtCurrPos == null; // pawns can only move fwd if space empty
+        }
+        // move to capture piece; diagonal
         if (pieceAtCurrPos == null) { // position empty
             return false;
-        } else { // return true if piece of other team; false if own team
-            return this.getTeamColor() != pieceAtCurrPos.getTeamColor();
         }
+        return this.getTeamColor() != pieceAtCurrPos.getTeamColor(); // return true if piece of other team
     }
-
-    // WHITE pieces
-    // can move 2 spaces on first move
-    private Collection<ChessMove> firstMoveWhite(ChessBoard board, ChessPosition myPosition) {
+    
+    private Collection<ChessMove> singleStepMove(ChessBoard board, ChessPosition myPosition, int[] xyDirection, 
+                                                 boolean captureMove) {
 
         Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
+        int currRow = myPosition.getRow() + xyDirection[0];
+        int currCol = myPosition.getColumn() + xyDirection[1];
 
         // moves up
-        ChessPosition currPos = new ChessPosition(currRow+2, currCol);
+        ChessPosition currPos = new ChessPosition(currRow, currCol);
 
-        if (canMoveHere(currPos, board)) {
-           moves.add(new ChessMove(myPosition, currPos, null));
-        } // else: same team's piece here. can't go further. stop iteration
-
-        return moves;
-    }
-
-    private Collection<ChessMove> forwardMoveWhite(ChessBoard board, ChessPosition myPosition) {
-
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // White piece: moves up
-        if (currRow < 7) { // in middle of board
-            ChessPosition currPos = new ChessPosition(currRow+1, currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
-            } // else: same team's piece here
-
-        } else if (currRow == 7) { // promotion
-            ChessPosition currPos = new ChessPosition(currRow+1, currCol);
-
-            if (canMoveHere(currPos, board)) {
+        if (canMoveHere(currPos, board, captureMove)) {
+            if (currRow == 1 || currRow == 8) { // promote pawn to queen at end row
                 moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-            } // else: same team's piece here
-        } // else : currRow == 8, at end of board. Should never get here
-
-        return moves;
-    }
-
-    // Capture moves
-    private Collection<ChessMove> diagonalMoveWhite(ChessBoard board, ChessPosition myPosition) {
-
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // White piece: moves up
-        if (currRow < 7) { // in middle of board
-
-            // right diagonal
-            if (currCol < 8) {
-                ChessPosition currPos = new ChessPosition(currRow+1, currCol+1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, null));
-                } // else: same team's piece here
-            }
-            // left diagonal
-            if (currCol > 1) {
-                ChessPosition currPos = new ChessPosition(currRow+1, currCol-1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, null));
-                } // else: same team's piece here
-            }
-
-        } else if (currRow == 7) { // promotion
-
-            // right diagonal
-            if (currCol < 8) {
-                ChessPosition currPos = new ChessPosition(currRow+1, currCol+1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-                } // else: same team's piece here
-            }
-            // left diagonal
-            if (currCol > 1) {
-                ChessPosition currPos = new ChessPosition(currRow+1, currCol-1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-                } // else: same team's piece here
-            }
-
-        } // else: currRow == 1, at end of board. Should never get here without being promoted
-
-        return moves;
-    }
-
-    // BLACK pieces
-    // can move 2 spaces on first move
-    private Collection<ChessMove> firstMoveBlack(ChessBoard board, ChessPosition myPosition) {
-
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // BLACK piece. Moves down
-        ChessPosition currPos = new ChessPosition(currRow-2, currCol);
-
-        if (canMoveHere(currPos, board)) {
-           moves.add(new ChessMove(myPosition, currPos, null));
-        } // else: same team's piece here. can't go further. stop iteration
-
-        return moves;
-    }
-
-    private Collection<ChessMove> forwardMoveBlack(ChessBoard board, ChessPosition myPosition){
-
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // BLACK piece. Moves down
-        if (currRow > 2) { // in middle of board
-            ChessPosition currPos = new ChessPosition(currRow-1, currCol);
-
-            if (canMoveHere(currPos, board)) {
+            } else { // no promotion
                 moves.add(new ChessMove(myPosition, currPos, null));
-            } // else: same team's piece here
-
-        } else if (currRow == 2) { // promotion
-            ChessPosition currPos = new ChessPosition(currRow-1, currCol);
-
-            if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-            } // else: same team's piece here
-        } // else: currRow == 1, at end of board. Should never get here
-
-        return moves;
-    }
-
-    // Capture moves
-    private Collection<ChessMove> diagonalMoveBlack(ChessBoard board, ChessPosition myPosition) {
-
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currRow = myPosition.getRow();
-        int currCol = myPosition.getColumn();
-
-        // BLACK piece. Moves down
-        if (currRow > 2) { // in middle of board
-            // right diagonal
-            if (currCol < 8) {
-                ChessPosition currPos = new ChessPosition(currRow-1, currCol+1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, null));
-                } // else: same team's piece here
             }
-            // left diagonal
-            if (currCol > 1) {
-                ChessPosition currPos = new ChessPosition(currRow-1, currCol-1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, null));
-                } // else: same team's piece here
-            }
-
-        } else if (currRow == 2) { // promotion
-            // right diagonal
-            if (currCol < 8) {
-                ChessPosition currPos = new ChessPosition(currRow-1, currCol+1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-                } // else: same team's piece here
-            }
-            // left diagonal
-            if (currCol > 1) {
-                ChessPosition currPos = new ChessPosition(currRow-1, currCol-1);
-
-                if (isEnemyPiece(currPos, board)) {
-                    moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-                } // else: same team's piece here
-            }
-
-        } // else: currRow == 1, at end of board. Should never get here without being promoted
+        } // else: same team's piece here. can't go further. stop iteration
 
         return moves;
     }
@@ -212,29 +70,21 @@ public class Pawn extends ChessPiece {
     // return array of all possible moves for piece
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+
+        int upDownFactor = upDownFactor(); // based on team color
         Collection<ChessMove> moves = new ArrayList<>();
-
-        if (this.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            if (firstMove) {
-                moves.addAll(firstMoveWhite(board, myPosition));
-            }
-            // Add forward move
-            moves.addAll(forwardMoveWhite(board, myPosition));
-
-            // Add diagonal move
-            moves.addAll(diagonalMoveWhite(board, myPosition));
-
-        } else { // piece color BLACK
-            if (firstMove) {
-                moves.addAll(firstMoveBlack(board, myPosition));
-            }
-            // Add forward move
-            moves.addAll(forwardMoveBlack(board, myPosition));
-
-            // Add diagonal move
-            moves.addAll(diagonalMoveBlack(board, myPosition));
+        
+        // first move, can go 2 steps
+        if (firstMove) {
+            moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor*2,0}, false));
         }
+        // forward move
+        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor,0}, false));
 
+        // diagonal moves
+        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor,1}, true)); // right
+        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor,-1}, true)); // left
+        
         return moves;
     }
 
