@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Queen extends SlidePiece {
+
     public Queen(ChessGame.TeamColor pieceColor) {
         super(pieceColor, PieceType.QUEEN);
     }
@@ -12,13 +13,11 @@ public class Queen extends SlidePiece {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-        // Add vertical moves
-        Collection<ChessMove> moves = super.slideMoves(board, myPosition, new int[]{1,0});
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{1,0}));
-
-        // Add horizontal moves
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{0,1}));
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{0,-1}));
+        // Add vertical/horizontal moves
+        Collection<ChessMove> moves = super.slideMoves(board, myPosition, new int[]{1,0}); // up
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1,0})); // down
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{0,1})); // right
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{0,-1})); // left
 
         // Diagonal moves
         moves.addAll(super.slideMoves(board, myPosition, new int[]{1,1})); // up-right
@@ -27,10 +26,5 @@ public class Queen extends SlidePiece {
         moves.addAll(super.slideMoves(board, myPosition, new int[]{-1,-1})); // down-left
 
         return moves;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
     }
 }

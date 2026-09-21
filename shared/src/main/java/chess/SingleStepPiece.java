@@ -8,9 +8,7 @@ abstract class SingleStepPiece extends ChessPiece {
     public SingleStepPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) { super(pieceColor, type);}
 
     @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return super.pieceMoves(board, myPosition);
-    }
+    public abstract Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
 
     // Get available moves helper
     protected Collection<ChessMove> singleStepMove(ChessBoard board, ChessPosition myPosition, int[] rcDirection) {
@@ -18,7 +16,6 @@ abstract class SingleStepPiece extends ChessPiece {
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow();
         int currCol = myPosition.getColumn();
-
 
         ChessPosition currPos = new ChessPosition(currRow+rcDirection[0], currCol+rcDirection[1]);
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Knight extends SingleStepPiece {
+
     public Knight(ChessGame.TeamColor pieceColor) {
         super(pieceColor, PieceType.KNIGHT);
     }
@@ -26,10 +27,5 @@ public class Knight extends SingleStepPiece {
         moves.addAll(singleStepMove(board, myPosition, new int[]{-1,-2}));
 
         return moves;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
     }
 }

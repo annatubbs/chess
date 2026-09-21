@@ -10,9 +10,7 @@ public abstract class SlidePiece extends ChessPiece {
     }
 
     @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return super.pieceMoves(board, myPosition);
-    }
+    public abstract Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
 
     // Get available moves helper
     protected Collection<ChessMove> slideMoves(ChessBoard board, ChessPosition myPosition, int[] rcDirection) {
@@ -28,6 +26,13 @@ public abstract class SlidePiece extends ChessPiece {
 
             if (canMoveHere(currPos, board)) {
                 moves.add(new ChessMove(myPosition, currPos, null));
+
+                // check for capture. (clunky, checks piece types twice..)
+                ChessPiece pieceAtPos = board.getPiece(currPos);
+                if (pieceAtPos != null && getPieceType() != pieceAtPos.getPieceType()) {
+                    break;
+                }
+
             } else break; // same team's piece here or off board. stop iteration
         }
 

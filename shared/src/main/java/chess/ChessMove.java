@@ -9,10 +9,17 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessMove {
-    private ChessPosition startPosition;
-    private ChessPosition endPosition;
-    private ChessPiece.PieceType promotionPiece;
+    private final ChessPosition startPosition;
+    private final ChessPosition endPosition;
+    private final ChessPiece.PieceType promotionPiece;
 
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
+                     ChessPiece.PieceType promotionPiece) {
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        this.promotionPiece = promotionPiece;
+
+    }
 
     /**
      * @return ChessPosition of starting location
@@ -41,9 +48,7 @@ public class ChessMove {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (o == null || getClass() != o.getClass()) return false;
         ChessMove chessMove = (ChessMove) o;
         return Objects.equals(startPosition, chessMove.startPosition) && Objects.equals(endPosition, chessMove.endPosition) && promotionPiece == chessMove.promotionPiece;
     }
@@ -53,21 +58,12 @@ public class ChessMove {
         return Objects.hash(startPosition, endPosition, promotionPiece);
     }
 
-    public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
-                     ChessPiece.PieceType promotionPiece) {
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
-        this.promotionPiece = promotionPiece;
-
-    }
-
     @Override
     public String toString() {
-        String str = "ChessMove: " + startPosition.toString() + " to " + endPosition.toString() + " ";
-        if (promotionPiece == null) {
-            return str + "Not promoted.";
-        } else {
+        String str = "Move: " + startPosition.toString() + "->" + endPosition.toString() + " ";
+        if (promotionPiece != null) {
             return str + "Promoted to " + promotionPiece.toString();
         }
+        return str;
     }
 }

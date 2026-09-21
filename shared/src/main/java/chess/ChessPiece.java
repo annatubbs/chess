@@ -60,34 +60,26 @@ public class ChessPiece {
                 return new Pawn(pieceColor);
             }
         };
-        // String label for each enum val
+
         private final String label;
         // Abstract constructor
         public abstract ChessPiece create(ChessGame.TeamColor pieceColor);
         // initialize String label
-        PieceType (String label) {
-            this.label = label;
-        }
-        // toString()
+        PieceType(String label) { this.label = label;}
+
         @Override
-        public String toString() {
-            return label;
-        }
+        public String toString() { return label;}
     }
 
     /**
      * @return Which team this chess piece belongs to
      */
-    public ChessGame.TeamColor getTeamColor() {
-        return pieceColor;
-    }
+    public ChessGame.TeamColor getTeamColor() { return pieceColor;}
 
     /**
      * @return which type of chess piece this piece is
      */
-    public PieceType getPieceType() {
-        return type;
-    }
+    public PieceType getPieceType() { return type;}
 
     /**
      * Calculates all the positions a chess piece can move to
@@ -96,41 +88,14 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        if (type == PieceType.KING) {
-            King temp = new King(ChessGame.TeamColor.WHITE);
-            return temp.pieceMoves(board,myPosition);
-
-        } else if (type == PieceType.QUEEN) {
-            Queen temp = new Queen(ChessGame.TeamColor.WHITE);
-            return temp.pieceMoves(board,myPosition);
-
-        } else if (type == PieceType.BISHOP) {
-            Bishop temp = new Bishop(ChessGame.TeamColor.WHITE);
-            return temp.pieceMoves(board,myPosition);
-
-        } else if (type == PieceType.KNIGHT) {
-            Knight temp = new Knight(ChessGame.TeamColor.WHITE);
-            return temp.pieceMoves(board,myPosition);
-
-        } else if (type == PieceType.ROOK) {
-            Rook temp = new Rook(ChessGame.TeamColor.WHITE);
-            return temp.pieceMoves(board,myPosition);
-
-        } else if (type == PieceType.PAWN) {
-            Pawn temp = new Pawn(ChessGame.TeamColor.WHITE);
-            return temp.pieceMoves(board,myPosition);
-        } else
-            throw new UnsupportedOperationException("Subclass should call this pieceMoves() only :(");
-    }
-
     // Checks if the piece can move to this spot
     public boolean canMoveHere(ChessPosition currPos, ChessBoard board) {
         // check if in board's range
         int currRow = currPos.getRow();
         int currCol = currPos.getColumn();
 
-        if (!(currRow >= 1 && currRow <= 8 && currCol >= 1 && currCol <= 8)) {
+        // check if move in range of board
+        if (currRow < 1 || currRow > 8 || currCol < 1 || currCol > 8) {
             return false;
         }
 
@@ -144,11 +109,39 @@ public class ChessPiece {
         }
     }
 
+    // calculate moves for each piece type
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        if (type == PieceType.KING) {
+            King temp = new King(pieceColor);
+            return temp.pieceMoves(board, myPosition);
+
+        } else if (type == PieceType.QUEEN) {
+            Queen temp = new Queen(pieceColor);
+            return temp.pieceMoves(board, myPosition);
+
+        } else if (type == PieceType.BISHOP) {
+            Bishop temp = new Bishop(pieceColor);
+            return temp.pieceMoves(board, myPosition);
+
+        } else if (type == PieceType.KNIGHT) {
+            Knight temp = new Knight(pieceColor);
+            return temp.pieceMoves(board, myPosition);
+
+        } else if (type == PieceType.ROOK) {
+            Rook temp = new Rook(pieceColor);
+            return temp.pieceMoves(board, myPosition);
+
+        } else { // (type == PieceType.PAWN)
+            Pawn temp = new Pawn(pieceColor);
+            return temp.pieceMoves(board, myPosition);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (!(o instanceof ChessPiece)) {
+        if (!(o instanceof ChessPiece)) { // covers if o == null
             return false;
         }
         ChessPiece that = (ChessPiece) o;

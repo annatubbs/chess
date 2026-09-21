@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Bishop extends SlidePiece {
+
     public Bishop(ChessGame.TeamColor pieceColor) {
         super(pieceColor, PieceType.BISHOP);
     }

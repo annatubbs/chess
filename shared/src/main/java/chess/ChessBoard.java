@@ -10,10 +10,9 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private ChessPiece[][] board = new ChessPiece[8][8];
+    private ChessPiece[][] board;
 
-    public ChessBoard() {
-    }
+    public ChessBoard() { board = new ChessPiece[8][8];}
 
     /**
      * Adds a chess piece to the chessboard
@@ -33,49 +32,43 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        int row = position.getRow();
-        int col = position.getColumn();
-
-        return board[row-1][col-1]; // should return piece or null...?
+        return board[position.getRow()-1][position.getColumn()-1]; // should return piece or null...?
     }
 
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
-    public void resetBoard() {
-        // Set black pieces
-        board[7] = resetBackRow(ChessGame.TeamColor.BLACK);
-        board[6] = resetFrontRow(ChessGame.TeamColor.BLACK);
-
-        // Set white pieces
-        board[0] = resetBackRow(ChessGame.TeamColor.WHITE);
-        board[1] = resetFrontRow(ChessGame.TeamColor.WHITE);
-
-        // Set middle blank
-        for (int row=2; row<=5; row++) { // loop just middle rows
-            board[row] = new ChessPiece[]{null,null,null,null,null,null,null,null};
-        }
-    }
-
     // return back row of pieces at starting positions
     private ChessPiece[] resetBackRow(ChessGame.TeamColor color) {
         return new ChessPiece[]{new Rook(color), new Knight(color), new Bishop(color), new Queen(color),
-                                new King(color), new Bishop(color), new Knight(color), new Rook(color)};
+                new King(color), new Bishop(color), new Knight(color), new Rook(color)};
 
     }
 
     // return front row of pawns for starting board
     private ChessPiece[] resetFrontRow(ChessGame.TeamColor color) {
         return new ChessPiece[]{new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color),
-                                new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color)};
+                new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color)};
+    }
+
+    public void resetBoard() {
+        ChessPiece[][] startBoard = new ChessPiece[8][8];
+
+        // Set black pieces
+        startBoard[7] = resetBackRow(ChessGame.TeamColor.BLACK);
+        startBoard[6] = resetFrontRow(ChessGame.TeamColor.BLACK);
+
+        // Set white pieces
+        startBoard[0] = resetBackRow(ChessGame.TeamColor.WHITE);
+        startBoard[1] = resetFrontRow(ChessGame.TeamColor.WHITE);
+
+        board = startBoard;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (o == null || getClass() != o.getClass()) return false;
         ChessBoard that = (ChessBoard) o;
         return Objects.deepEquals(board, that.board);
     }
@@ -94,16 +87,14 @@ public class ChessBoard {
             String rowStr = "";
             for (ChessPiece colVal : row) {
                 if (colVal == null) {
-                    rowStr += " ";
+                    rowStr += "           | ";
                 } else {
-                    rowStr += colVal.toString(); // fill pieces in row
+                    rowStr += colVal.toString() + " | "; // fill pieces in row
                 }
-                rowStr += ", ";
             }
-            rowStr = rowStr.substring(0,rowStr.length()-2); // trim last ", "
             boardStr = rowStr + "\n" + boardStr; // add row above existing rows in board
         }
 
-        return "ChessBoard: \n" + boardStr;
+        return "Board:\n" + boardStr;
     }
 }

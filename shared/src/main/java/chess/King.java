@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class King extends SingleStepPiece {
+
     public King(ChessGame.TeamColor pieceColor) {
         super(pieceColor, PieceType.KING);
     }
@@ -12,13 +13,11 @@ public class King extends SingleStepPiece {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-        // Add vertical moves
-        Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{1,0});
-        moves.addAll(singleStepMove(board, myPosition, new int[]{1,0}));
-
-        // Add horizontal moves
-        moves.addAll(singleStepMove(board, myPosition, new int[]{0,1}));
-        moves.addAll(singleStepMove(board, myPosition, new int[]{0,-1}));
+        // Add vertical/horizontal moves
+        Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{1,0}); // up
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-1,0})); // down
+        moves.addAll(singleStepMove(board, myPosition, new int[]{0,1})); // right
+        moves.addAll(singleStepMove(board, myPosition, new int[]{0,-1})); // left
 
         // Diagonal moves
         moves.addAll(singleStepMove(board, myPosition, new int[]{1,1})); // up-right
@@ -27,10 +26,5 @@ public class King extends SingleStepPiece {
         moves.addAll(singleStepMove(board, myPosition, new int[]{-1,-1})); // down-left
 
         return moves;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
     }
 }

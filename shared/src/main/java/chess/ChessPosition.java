@@ -12,8 +12,8 @@ import java.util.Objects;
 //***NOTE: row and col are numbers 1-8, inclusive. They are NOT indexes. Get index in array by subtracting 1.
 
 public class ChessPosition {
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
     // constructor
     public ChessPosition(int row, int col) {
@@ -39,9 +39,7 @@ public class ChessPosition {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (o == null || getClass() != o.getClass()) return false;
         ChessPosition that = (ChessPosition) o;
         return row == that.row && col == that.col;
     }
@@ -53,6 +51,6 @@ public class ChessPosition {
 
     @Override
     public String toString() {
-        return "Position (" + Integer.toString(row) + ", " + Integer.toString(col) + ")";
+        return "(" + Integer.toString(row) + ", " + Integer.toString(col) + ")";
     }
 }
