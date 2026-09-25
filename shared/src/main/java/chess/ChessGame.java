@@ -9,16 +9,21 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessGame {
+    private TeamColor teamTurn;
+    ChessBoard board;
 
     public ChessGame() {
+        teamTurn = TeamColor.WHITE;
 
+        board = new ChessBoard();
+        board.resetBoard();
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return teamTurn;
     }
 
     /**
@@ -26,9 +31,7 @@ public class ChessGame {
      *
      * @param team the team whose turn it is
      */
-    public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
-    }
+    public void setTeamTurn(TeamColor team) { teamTurn = team;}
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -49,6 +52,10 @@ public class ChessGame {
         }
     }
 
+    // Functions:
+    // get team positions (get board positions of all players of one color )
+
+
     /**
      * Gets all valid moves for a piece at the given location
      *
@@ -57,7 +64,22 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+
+        ChessPiece piece = board.getPiece(startPosition);
+        // check if there is a piece at position
+        if (piece == null) return null;
+
+        // get potential pieceMoves()
+        Collection<ChessMove> possibleMoves = piece.pieceMoves(board, startPosition);
+
+        // see if team's king in check
+        Collection<ChessMove> validMoves = possibleMoves;
+
+        // loop through possibleMove positions
+        // create board for each position
+        // check if king in check (function separate)
+
+        return validMoves;
     }
 
     /**
@@ -78,6 +100,15 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
+
+        // loop through all spaces on board
+        // if piece. if other team color. save pos
+        // if piece. if king this color. save pos diff location
+        // After. if pieceMoves has king's position, return true
+        // return false.
+        // * what about pawns far away? no chance. faster check row+col val?
+
+
     }
 
     /**
@@ -88,7 +119,20 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
+        // if king in check
+
+        // need get all other team pieces that could kill king (w/o) curr team in way (target paths/xray)
+        // get all curr team pieces in way + king
+        // get their pieceMoves
+        // if
+
+        // BRUTE STRAT:
+        // for all this team pieces. get piece moves
+        // for pieceMove. generate board with that move
+        // if not isCheck() return false
+        // end of loop, return true.
     }
+
 
     /**
      * Determines if the given team is in stalemate, which here is defined as having
@@ -99,6 +143,12 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
+
+        // if not isCheck (if in check, return false?? Or exception)
+
+        // get all positions of pieces of team.
+        // for teamPiece. if (validMoves() != null) return false
+        // after. return true.
     }
 
     /**
@@ -106,16 +156,12 @@ public class ChessGame {
      *
      * @param board the new board to use
      */
-    public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
-    }
+    public void setBoard(ChessBoard updateBoard) { board = updateBoard;}
 
     /**
      * Gets the current chessboard
      *
      * @return the chessboard
      */
-    public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
-    }
+    public ChessBoard getBoard() { return board.deepCopy();}
 }

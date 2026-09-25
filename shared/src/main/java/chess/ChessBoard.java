@@ -66,6 +66,23 @@ public class ChessBoard {
         board = startBoard;
     }
 
+    public ChessBoard deepCopy() {
+        ChessBoard copyBoard = new ChessBoard();
+
+        for (int row=0; row<8; row++) {
+            for (int col=0; col<8; col++) {
+                ChessPiece currPiece = board[row][col];
+
+                if (currPiece != null) {
+                    copyBoard.addPiece(new ChessPosition(row-1,col-1), currPiece);
+                }
+            }
+        }
+
+        return copyBoard;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
