@@ -3,7 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
-abstract class SingleStepPiece extends ChessPiece {
+public abstract class SingleStepPiece extends ChessPiece {
 
     public SingleStepPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) { super(pieceColor, type);}
 
@@ -26,5 +26,6 @@ abstract class SingleStepPiece extends ChessPiece {
         return moves;
     }
 
-    ;
+    @Override
+    public abstract ChessPiece deepCopy();
 }

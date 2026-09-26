@@ -38,4 +38,7 @@ public abstract class SlidePiece extends ChessPiece {
 
         return moves;
     }
+
+    @Override
+    public abstract ChessPiece deepCopy();
 }

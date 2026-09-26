@@ -32,6 +32,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
+
         return board[position.getRow()-1][position.getColumn()-1]; // should return piece or null...?
     }
 
@@ -69,19 +70,18 @@ public class ChessBoard {
     public ChessBoard deepCopy() {
         ChessBoard copyBoard = new ChessBoard();
 
-        for (int row=0; row<8; row++) {
-            for (int col=0; col<8; col++) {
-                ChessPiece currPiece = board[row][col];
+        for (int row=1; row<=8; row++) {
+            for (int col=1; col<=8; col++) {
 
-                if (currPiece != null) {
-                    copyBoard.addPiece(new ChessPosition(row-1,col-1), currPiece);
-                }
+                ChessPiece currPiece = board[row-1][col-1];
+                // Check piece type at position
+                if (currPiece == null) continue;
+                copyBoard.addPiece(new ChessPosition(row, col), currPiece.deepCopy());
             }
         }
 
         return copyBoard;
     }
-
 
     @Override
     public boolean equals(Object o) {

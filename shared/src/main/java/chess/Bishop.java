@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class Bishop extends SlidePiece {
@@ -13,12 +12,17 @@ public class Bishop extends SlidePiece {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-        // Diagonal moves
+        // Add diagonal moves
         Collection<ChessMove> moves = slideMoves(board, myPosition, new int[]{1,1}); // up-right
         moves.addAll(slideMoves(board, myPosition, new int[]{1,-1})); // up-left
         moves.addAll(slideMoves(board, myPosition, new int[]{-1,1})); // down-right
         moves.addAll(slideMoves(board, myPosition, new int[]{-1,-1})); // down-left
 
         return moves;
+    }
+
+    @Override
+    public Bishop deepCopy() {
+        return new Bishop(getTeamColor());
     }
 }

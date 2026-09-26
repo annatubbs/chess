@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -135,6 +134,10 @@ public class ChessPiece {
             Pawn temp = new Pawn(pieceColor);
             return temp.pieceMoves(board, myPosition);
         }
+    }
+
+    public ChessPiece deepCopy() {
+        return new ChessPiece(pieceColor, type);
     }
 
     @Override

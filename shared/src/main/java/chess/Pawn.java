@@ -3,12 +3,22 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Pawn extends SingleStepPiece {
+public class Pawn extends ChessPiece {
     private boolean firstMove;
 
     public Pawn(ChessGame.TeamColor pieceColor) {
         super(pieceColor,PieceType.PAWN);
         firstMove = true;
+    }
+
+    public Pawn(ChessGame.TeamColor pieceColor, boolean firstMove) {
+        super(pieceColor,PieceType.PAWN);
+        this.firstMove = firstMove;
+    }
+
+    // when first move done, sets firstMove to false
+    public void didFirstMove() {
+        firstMove = false;
     }
 
     // Helpers for potential piece moves
@@ -41,7 +51,7 @@ public class Pawn extends SingleStepPiece {
     }
 
     // Calculate if new move possible
-    private Collection<ChessMove> singleStepMove(ChessBoard board, ChessPosition myPosition, int[] xyDirection, 
+    private Collection<ChessMove> pawnMove(ChessBoard board, ChessPosition myPosition, int[] xyDirection, 
                                                  boolean captureMove) {
 
         Collection<ChessMove> moves = new ArrayList<>();
@@ -65,7 +75,6 @@ public class Pawn extends SingleStepPiece {
     }
 
     private Collection<ChessMove> firstMove(ChessBoard board, ChessPosition myPosition, int upDownFactor) {
-        firstMove = false;
         Collection<ChessMove> moves = new ArrayList<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -79,7 +88,7 @@ public class Pawn extends SingleStepPiece {
         ChessPosition currPos = new ChessPosition(row + upDownFactor, col);
         if (board.getPiece(currPos) != null) return moves;
         // cont to 2nd square if not blocked
-        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor*2,0}, false));
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor*2,0}, false));
 
         return moves;
     }
@@ -97,11 +106,16 @@ public class Pawn extends SingleStepPiece {
         }
 
         // forward move
-        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor,0}, false));
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor,0}, false));
         // diagonal moves
-        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor,1}, true)); // right
-        moves.addAll(singleStepMove(board, myPosition, new int[]{upDownFactor,-1}, true)); // left
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor,1}, true)); // right
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor,-1}, true)); // left
         
         return moves;
+    }
+
+    @Override
+    public Pawn deepCopy() {
+        return new Pawn(getTeamColor(), firstMove);
     }
 }

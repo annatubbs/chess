@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class Knight extends SingleStepPiece {
@@ -16,7 +15,7 @@ public class Knight extends SingleStepPiece {
         // up
         Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{2,1});
         moves.addAll(singleStepMove(board, myPosition, new int[]{2,-1}));
-        //down
+        // down
         moves.addAll(singleStepMove(board, myPosition, new int[]{-2,1}));
         moves.addAll(singleStepMove(board, myPosition, new int[]{-2,-1}));
         // right
@@ -27,5 +26,10 @@ public class Knight extends SingleStepPiece {
         moves.addAll(singleStepMove(board, myPosition, new int[]{-1,-2}));
 
         return moves;
+    }
+
+    @Override
+    public Knight deepCopy() {
+        return new Knight(getTeamColor());
     }
 }
