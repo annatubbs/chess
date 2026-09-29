@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 
 /**
@@ -67,6 +68,7 @@ public class ChessBoard {
         board = startBoard;
     }
 
+    // create copy of board
     public ChessBoard deepCopy() {
         ChessBoard copyBoard = new ChessBoard();
 
@@ -81,6 +83,38 @@ public class ChessBoard {
         }
 
         return copyBoard;
+    }
+
+    // get positions of all a team's pieces
+    public LinkedHashSet<ChessPosition> getTeamPositions(ChessGame.TeamColor color) {
+        LinkedHashSet<ChessPosition> positions = new LinkedHashSet<>();
+
+        for (int rowI=0; rowI<8; rowI++) {
+            for (int colI=0; colI<8; colI++) {
+                ChessPiece currPiece = board[rowI][colI];
+
+                if (currPiece.getTeamColor() == color) { // if right color, add position
+                    positions.add(new ChessPosition(rowI + 1, colI + 1));
+                }
+            }
+        }
+        return positions;
+    }
+
+    // get positions of all a team's pieces
+    public ChessPosition getKingPosition(ChessGame.TeamColor color) {
+
+        for (int rowI=0; rowI<8; rowI++) {
+            for (int colI=0; colI<8; colI++) {
+                ChessPiece currPiece = board[rowI][colI];
+
+                if (!(currPiece.getTeamColor() == color)) continue; // if wrong color, continue to next position
+
+                if (currPiece.getPieceType() == ChessPiece.PieceType.KING) { // if King, add and return
+                    return new ChessPosition(rowI + 1, colI + 1);
+                } // else if not King, continue searching
+            }
+        }
     }
 
     @Override

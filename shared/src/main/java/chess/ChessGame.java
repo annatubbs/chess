@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -45,6 +46,9 @@ public class ChessGame {
         TeamColor (String label) {
             this.label = label;
         }
+
+        // return opposite team color
+        public TeamColor opposite() { return this == WHITE ? BLACK : WHITE;}
 
         @Override
         public String toString() {
@@ -99,16 +103,24 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // loop through board to get king and enemy positions
+        ChessPosition kingPosition = board.getKingPosition(teamColor);
+        LinkedHashSet<ChessPosition> enemyPositions = board.getTeamPositions(teamColor.opposite());
 
-        // loop through all spaces on board
-        // if piece. if other team color. save pos
-        // if piece. if king this color. save pos diff location
-        // After. if pieceMoves has king's position, return true
-        // return false.
-        // * what about pawns far away? no chance. faster check row+col val?
+        // get potential moves of all enemy pieces
+        for (ChessPosition pos : enemyPositions) {
+            ChessPiece currPiece = board.getPiece(pos);
+            Collection<ChessMove> potentialMoves = currPiece.pieceMoves(board, pos);
 
-
+            // if potential move is king's position, king is in check
+            for (ChessMove move : potentialMoves) {
+                if (move.getEndPosition() == kingPosition) {
+                    return true;
+                }
+            }
+        }
+        // king safe
+        return false;
     }
 
     /**
