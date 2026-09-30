@@ -25,13 +25,22 @@ public abstract class SlidePiece extends ChessPiece {
             ChessPosition currPos = new ChessPosition(currRow, currCol);
 
             if (canMoveHere(currPos, board)) {
-                moves.add(new ChessMove(myPosition, currPos, null));
 
                 // check for capture. (clunky, checks piece types twice..)
                 ChessPiece pieceAtPos = board.getPiece(currPos);
-                if (pieceAtPos != null && getPieceType() != pieceAtPos.getPieceType()) {
+                if (pieceAtPos != null) { //&& getPieceType() != pieceAtPos.getPieceType()) {
+                    // see if move can capture king
+                    if (pieceAtPos.getPieceType() == ChessPiece.PieceType.KING) {
+                        moves.add(new ChessMove(myPosition, currPos, null, true));
+                    }
+                    // captures other piece
+                    moves.add(new ChessMove(myPosition, currPos, null, false));
                     break;
                 }
+                // space empty
+                moves.add(new ChessMove(myPosition, currPos, null, false));
+
+
 
             } else break; // same team's piece here or off board. stop iteration
         }

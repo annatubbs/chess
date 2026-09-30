@@ -15,6 +15,25 @@ public class ChessBoard {
 
     public ChessBoard() { board = new ChessPiece[8][8];}
 
+
+    // create copy of board
+    public ChessBoard deepCopy() {
+        ChessBoard copyBoard = new ChessBoard();
+
+        for (int row=1; row<=8; row++) {
+            for (int col=1; col<=8; col++) {
+
+                ChessPiece currPiece = board[row-1][col-1];
+                // Check piece type at position
+                if (currPiece == null) continue;
+                copyBoard.addPiece(new ChessPosition(row, col), currPiece.deepCopy());
+            }
+        }
+
+        return copyBoard;
+    }
+
+
     /**
      * Adds a chess piece to the chessboard
      *
@@ -35,6 +54,34 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
 
         return board[position.getRow()-1][position.getColumn()-1]; // should return piece or null...?
+    }
+
+    private void removePiece(ChessPosition position) {
+        board[position.getRow()-1][position.getColumn()-1] = null;
+    }
+
+    public ChessBoard movePiece(ChessMove move) throws InvalidMoveException {
+        ChessBoard updateBoard = this.deepCopy();
+
+        ChessPosition startPosition = move.getStartPosition();
+        ChessPosition endPosition = move.getEndPosition();
+        ChessPiece.PieceType promotionPiece = move.getPromotionPiece();
+
+        ChessPiece piece = updateBoard.getPiece(startPosition);
+
+        if (piece == null) {
+            throw new InvalidMoveException("ChessBoard, movePiece(): start " + startPosition.toString() + " null");
+        }
+
+        updateBoard.removePiece(startPosition);
+
+        if (promotionPiece == null) { // not promoted
+            updateBoard.addPiece(endPosition, piece);
+        } else { // piece promoted
+            updateBoard.addPiece(endPosition, new ChessPiece(piece.getTeamColor(), promotionPiece));
+        }
+
+        return updateBoard;
     }
 
     /**
@@ -68,22 +115,6 @@ public class ChessBoard {
         board = startBoard;
     }
 
-    // create copy of board
-    public ChessBoard deepCopy() {
-        ChessBoard copyBoard = new ChessBoard();
-
-        for (int row=1; row<=8; row++) {
-            for (int col=1; col<=8; col++) {
-
-                ChessPiece currPiece = board[row-1][col-1];
-                // Check piece type at position
-                if (currPiece == null) continue;
-                copyBoard.addPiece(new ChessPosition(row, col), currPiece.deepCopy());
-            }
-        }
-
-        return copyBoard;
-    }
 
     // get positions of all a team's pieces
     public LinkedHashSet<ChessPosition> getTeamPositions(ChessGame.TeamColor color) {
@@ -93,14 +124,14 @@ public class ChessBoard {
             for (int colI=0; colI<8; colI++) {
                 ChessPiece currPiece = board[rowI][colI];
 
-                if (currPiece.getTeamColor() == color) { // if right color, add position
+                if (currPiece != null && currPiece.getTeamColor() == color) { // if not null and right color, add position
                     positions.add(new ChessPosition(rowI + 1, colI + 1));
                 }
             }
         }
         return positions;
     }
-
+/*
     // get positions of all a team's pieces
     public ChessPosition getKingPosition(ChessGame.TeamColor color) {
 
@@ -108,15 +139,17 @@ public class ChessBoard {
             for (int colI=0; colI<8; colI++) {
                 ChessPiece currPiece = board[rowI][colI];
 
-                if (!(currPiece.getTeamColor() == color)) continue; // if wrong color, continue to next position
+                if (currPiece == null) continue; // if null next position
 
-                if (currPiece.getPieceType() == ChessPiece.PieceType.KING) { // if King, add and return
+                if (currPiece.getTeamColor() == color && currPiece.getPieceType() == ChessPiece.PieceType.KING) { // if team's King, add and return
                     return new ChessPosition(rowI + 1, colI + 1);
                 } // else if not King, continue searching
             }
         }
-    }
 
+        return null; // should never get here... throw error message**********************************
+    }
+*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

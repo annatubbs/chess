@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -11,13 +12,17 @@ import java.util.LinkedHashSet;
  */
 public class ChessGame {
     private TeamColor teamTurn;
-    ChessBoard board;
+    private ChessBoard board;
+    private ArrayList<ChessBoard> boardHistory;
 
     public ChessGame() {
         teamTurn = TeamColor.WHITE;
 
         board = new ChessBoard();
         board.resetBoard();
+
+        boardHistory = new ArrayList<>();
+        boardHistory.add(board.deepCopy());
     }
 
     /**
@@ -70,18 +75,30 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
 
         ChessPiece piece = board.getPiece(startPosition);
-        // check if there is a piece at position
-        if (piece == null) return null;
+        if (piece == null) return null; // if no piece there, no valid moves
 
         // get potential pieceMoves()
         Collection<ChessMove> possibleMoves = piece.pieceMoves(board, startPosition);
+        TeamColor color = piece.getTeamColor();
 
-        // see if team's king in check
-        Collection<ChessMove> validMoves = possibleMoves;
+        // see if moves put king in check
+        // because board isInCheck can only use board of curr chessGame, have to change board
+        ChessBoard ogBoard = board.deepCopy();
+        Collection<ChessMove> validMoves = new ArrayList<>();
 
-        // loop through possibleMove positions
-        // create board for each position
-        // check if king in check (function separate)
+        for (ChessMove move: possibleMoves) {
+            try {
+                board = board.movePiece(move); // set board to that move
+            } catch (InvalidMoveException e ) {
+                System.out.println(e);
+            }
+
+            if (!isInCheck(color)) { // check if move puts king in check
+                validMoves.add(move);
+            }
+
+            board = (ogBoard.deepCopy()); // reset board to original board
+        }
 
         return validMoves;
     }
@@ -93,7 +110,9 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        board = board.movePiece(move); // throws InvalidMoveException
+        boardHistory.add(board.deepCopy());
+        teamTurn = teamTurn.opposite();
     }
 
     /**
@@ -103,20 +122,15 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        // loop through board to get king and enemy positions
-        ChessPosition kingPosition = board.getKingPosition(teamColor);
+        // get all enemy team positions
         LinkedHashSet<ChessPosition> enemyPositions = board.getTeamPositions(teamColor.opposite());
 
-        // get potential moves of all enemy pieces
         for (ChessPosition pos : enemyPositions) {
             ChessPiece currPiece = board.getPiece(pos);
-            Collection<ChessMove> potentialMoves = currPiece.pieceMoves(board, pos);
+            Collection<ChessMove> potentialMoves = currPiece.pieceMoves(board, pos); // get potential moves of all enemy pieces
 
-            // if potential move is king's position, king is in check
             for (ChessMove move : potentialMoves) {
-                if (move.getEndPosition() == kingPosition) {
-                    return true;
-                }
+                if (move.getIsCheck()) return true; // if move captures king, is in check
             }
         }
         // king safe
@@ -130,19 +144,19 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
-        // if king in check
 
-        // need get all other team pieces that could kill king (w/o) curr team in way (target paths/xray)
-        // get all curr team pieces in way + king
-        // get their pieceMoves
-        // if
+        if (!isInCheck(teamColor)) return false; // if king not in check, not checkmate
 
-        // BRUTE STRAT:
-        // for all this team pieces. get piece moves
-        // for pieceMove. generate board with that move
-        // if not isCheck() return false
-        // end of loop, return true.
+        // check all team piece's moves to see if one can rescue king
+        LinkedHashSet<ChessPosition> teamPositions = board.getTeamPositions(teamColor);
+
+        for (ChessPosition piecePosition : teamPositions) {
+            Collection<ChessMove> validPieceMoves = validMoves(piecePosition);
+
+            if (!validPieceMoves.isEmpty()) return false; // if any valid moves, not checkmate
+        }
+
+        return true; // if no valid moves, is checkmate
     }
 
 
@@ -154,13 +168,19 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
 
-        // if not isCheck (if in check, return false?? Or exception)
+        if (isInCheck(teamColor)) return false; // if king in check, not stalemate
 
-        // get all positions of pieces of team.
-        // for teamPiece. if (validMoves() != null) return false
-        // after. return true.
+        // check all team piece's moves to see if any valid moves
+        LinkedHashSet<ChessPosition> teamPositions = board.getTeamPositions(teamColor);
+
+        for (ChessPosition piecePosition : teamPositions) {
+            Collection<ChessMove> validPieceMoves = validMoves(piecePosition);
+
+            if (!validPieceMoves.isEmpty()) return false; // if valid moves, not stalemate
+        }
+
+        return true; // if no valid moves, is stalemate
     }
 
     /**

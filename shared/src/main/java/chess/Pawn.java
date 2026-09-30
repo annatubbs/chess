@@ -36,7 +36,7 @@ public class Pawn extends ChessPiece {
         int currRow = currPos.getRow();
         int currCol = currPos.getColumn();
 
-        if (!(currRow >= 1 && currRow <= 8 && currCol >= 1 && currCol <= 8)) {
+        if (currRow < 1 || currRow > 8 || currCol < 1 || currCol > 8) {
             return false;
         }
         

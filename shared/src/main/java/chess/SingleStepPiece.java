@@ -20,7 +20,14 @@ public abstract class SingleStepPiece extends ChessPiece {
         ChessPosition currPos = new ChessPosition(currRow+rcDirection[0], currCol+rcDirection[1]);
 
         if (canMoveHere(currPos, board)) { // space empty or other team's piece
-            moves.add(new ChessMove(myPosition, currPos, null));
+            ChessPiece currPiece = board.getPiece(currPos);
+
+            if (currPiece != null && currPiece.getPieceType() == PieceType.KING) { // if king in check
+                moves.add(new ChessMove(myPosition, currPos, null, true));
+
+            } else { // not king
+                moves.add(new ChessMove(myPosition, currPos, null));
+            }
         } // else: same team's piece here. can't go further. stop iteration
 
         return moves;
