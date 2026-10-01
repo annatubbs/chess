@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 
@@ -65,12 +66,7 @@ public class ChessBoard {
         ChessPosition startPosition = move.getStartPosition();
         ChessPosition endPosition = move.getEndPosition();
         ChessPiece.PieceType promotionPiece = move.getPromotionPiece();
-
         ChessPiece piece = updateBoard.getPiece(startPosition);
-
-        if (piece == null) {
-            throw new InvalidMoveException("ChessBoard, movePiece(): start " + startPosition.toString() + " null");
-        }
 
         updateBoard.removePiece(startPosition);
 

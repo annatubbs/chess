@@ -56,7 +56,11 @@ public class ChessMove {
 
     public boolean getIsCheck() { return isCheck;}
     
-    
+    public boolean inRange() {
+        return startPosition.inRange() && endPosition.inRange();
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

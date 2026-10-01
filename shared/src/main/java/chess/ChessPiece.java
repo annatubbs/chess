@@ -89,6 +89,12 @@ public class ChessPiece {
      */
     // Checks if the piece can move to this spot
     public boolean canMoveHere(ChessPosition currPos, ChessBoard board) {
+        // Pawns: call specific canMoveHere
+//        if (this.type == PieceType.PAWN) {
+//            Pawn temp = new Pawn(this.pieceColor);
+//            return temp.canMoveHere(currPos, board);
+//        }
+
         // check if in board's range
         int currRow = currPos.getRow();
         int currCol = currPos.getColumn();

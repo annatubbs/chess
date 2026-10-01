@@ -103,6 +103,18 @@ public class ChessGame {
         return validMoves;
     }
 
+    private boolean isValidPieceMove(ChessMove move) {
+        // check if move valid for piece
+        Collection<ChessMove> pieceMoves = validMoves(move.getStartPosition());
+
+        for (ChessMove validMove : pieceMoves) {
+            if (validMove.equals(move)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Makes a move in the chess game
      *
@@ -110,8 +122,23 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        ChessPiece currPiece = board.getPiece(move.getStartPosition());
+
+        // check if there is a piece at start position
+        if (currPiece == null) {
+            throw new InvalidMoveException("ChessBoard, validMove(): no piece here " + move);
+        }
+        // check if this team's turn
+        if (teamTurn != currPiece.getTeamColor()) {
+            throw new InvalidMoveException("ChessGame, makeMove(): not team's turn " + move);
+        }
+        if (!this.isValidPieceMove(move)) {
+            throw new InvalidMoveException("ChessGame, makeMove(): invalid piece move" + move);
+        }
+
         board = board.movePiece(move); // throws InvalidMoveException
         boardHistory.add(board.deepCopy());
+
         teamTurn = teamTurn.opposite();
     }
 
