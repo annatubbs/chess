@@ -23,7 +23,7 @@ public class Rook extends SlidePiece {
     }
 
     @Override
-    public Pawn deepCopy() {
-        return new Pawn(getTeamColor());
+    public Rook deepCopy() {
+        return new Rook(getTeamColor());
     }
 }
