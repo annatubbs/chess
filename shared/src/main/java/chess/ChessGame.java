@@ -127,8 +127,8 @@ public class ChessGame {
 
         for (ChessPosition pos : enemyPositions) {
             ChessPiece currPiece = board.getPiece(pos);
-            Collection<ChessMove> potentialMoves = currPiece.pieceMoves(board, pos); // get potential moves of all enemy pieces
 
+            Collection<ChessMove> potentialMoves = currPiece.pieceMoves(board, pos); // get potential moves of all enemy pieces
             for (ChessMove move : potentialMoves) {
                 if (move.getIsCheck()) return true; // if move captures king, is in check
             }

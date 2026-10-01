@@ -73,8 +73,11 @@ public class ChessMove {
     public String toString() {
         String str = "Move: " + startPosition.toString() + "->" + endPosition.toString() + " ";
         if (promotionPiece != null) {
-            return str + "Promoted to " + promotionPiece.toString();
+            str += "Promoted to " + promotionPiece.toString();
         }
-        return str;
+        if (isCheck) {
+            return str + ", Check";
+        };
+        return str + ", no Check";
     }
 }

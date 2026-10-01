@@ -61,13 +61,16 @@ public class Pawn extends ChessPiece {
         ChessPosition currPos = new ChessPosition(currRow, currCol);
 
         if (canMoveHere(currPos, board, captureMove)) {
+            ChessPiece currPiece = board.getPiece(currPos);
+            boolean isKingHere = currPiece != null && (currPiece).getPieceType() == PieceType.KING;
+
             if (currRow == 1 || currRow == 8) { // promote pawn when arrives at last row
-                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN));
-                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.ROOK));
+                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.QUEEN, isKingHere));
+                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.BISHOP, isKingHere));
+                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.KNIGHT, isKingHere));
+                moves.add(new ChessMove(myPosition, currPos, ChessPiece.PieceType.ROOK, isKingHere));
             } else { // no promotion
-                moves.add(new ChessMove(myPosition, currPos, null));
+                moves.add(new ChessMove(myPosition, currPos, null, isKingHere));
             }
         } // else: same team's piece here. can't go further.
 
