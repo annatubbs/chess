@@ -1,7 +1,6 @@
 package chess;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 
@@ -126,25 +125,7 @@ public class ChessBoard {
         }
         return positions;
     }
-/*
-    // get positions of all a team's pieces
-    public ChessPosition getKingPosition(ChessGame.TeamColor color) {
 
-        for (int rowI=0; rowI<8; rowI++) {
-            for (int colI=0; colI<8; colI++) {
-                ChessPiece currPiece = board[rowI][colI];
-
-                if (currPiece == null) continue; // if null next position
-
-                if (currPiece.getTeamColor() == color && currPiece.getPieceType() == ChessPiece.PieceType.KING) { // if team's King, add and return
-                    return new ChessPosition(rowI + 1, colI + 1);
-                } // else if not King, continue searching
-            }
-        }
-
-        return null; // should never get here... throw error message**********************************
-    }
-*/
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

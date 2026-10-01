@@ -33,13 +33,10 @@ public class Pawn extends ChessPiece {
    // Checks if the piece can move to this spot
     private boolean canMoveHere(ChessPosition currPos, ChessBoard board, boolean captureMove) {
         // Check if in board's range
-        int currRow = currPos.getRow();
-        int currCol = currPos.getColumn();
-
-        if (currRow < 1 || currRow > 8 || currCol < 1 || currCol > 8) {
+        if (!currPos.inRange()) {
             return false;
         }
-        
+
         // Check piece at position
         ChessPiece pieceAtCurrPos = board.getPiece(currPos);
 

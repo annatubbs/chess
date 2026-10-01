@@ -16,20 +16,13 @@ public class ChessPosition {
     private final int col;
 
     public boolean inRange() {
-        if (row < 1 || row > 8 || col < 1 || col > 8) {
-            return false;
-        } return true;
+        return row >= 1 && row <= 8 && col >= 1 && col <= 8;
     }
 
     // constructor
     public ChessPosition(int row, int col) {
         this.row = row;
         this.col = col;
-
-//        if (!inRange()) {
-//            throw new IllegalArgumentException
-//                    ("ChessPosition: index (" + Integer.toString(row) + "," + Integer.toString(col) +") out of range [1,8].");
-//        }
     }
 
     /**

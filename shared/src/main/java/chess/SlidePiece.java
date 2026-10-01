@@ -24,25 +24,22 @@ public abstract class SlidePiece extends ChessPiece {
             currCol += rcDirection[1];
             ChessPosition currPos = new ChessPosition(currRow, currCol);
 
-            if (canMoveHere(currPos, board)) {
+            if (canMoveHere(currPos, board)) { // checks index and if same team's piece here
 
-                // check for capture. (clunky, checks piece types twice..)
                 ChessPiece pieceAtPos = board.getPiece(currPos);
-                if (pieceAtPos != null) { //&& getPieceType() != pieceAtPos.getPieceType()) {
-                    // see if move can capture king
-                    if (pieceAtPos.getPieceType() == ChessPiece.PieceType.KING) {
+
+                if (pieceAtPos != null) { // position has piece
+                    if (pieceAtPos.getPieceType() == ChessPiece.PieceType.KING) { // attacks other team's king
                         moves.add(new ChessMove(myPosition, currPos, null, true));
+                    } else { // not king here
+                        moves.add(new ChessMove(myPosition, currPos, null, false));
+                        break; // stop iteration. hit a piece
                     }
-                    // captures other piece
+                } else { // position empty
                     moves.add(new ChessMove(myPosition, currPos, null, false));
-                    break;
                 }
-                // space empty
-                moves.add(new ChessMove(myPosition, currPos, null, false));
-
-
-
-            } else break; // same team's piece here or off board. stop iteration
+                
+            } else break; // invalid move. stop iteration
         }
 
         return moves;

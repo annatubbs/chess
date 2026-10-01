@@ -158,7 +158,7 @@ public class ChessGame {
 
             Collection<ChessMove> potentialMoves = currPiece.pieceMoves(board, pos); // get potential moves of all enemy pieces
             for (ChessMove move : potentialMoves) {
-                if (move.getIsCheck()) return true; // if move captures king, is in check
+                if (move.putsOtherTeamInCheck()) return true; // if move captures king, is in check
             }
         }
         // king safe

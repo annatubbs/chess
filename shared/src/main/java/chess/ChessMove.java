@@ -12,22 +12,22 @@ public class ChessMove {
     private final ChessPosition startPosition;
     private final ChessPosition endPosition;
     private final ChessPiece.PieceType promotionPiece;
-    private boolean isCheck;
+    private final boolean putsOtherTeamInCheck;
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
         this.promotionPiece = promotionPiece;
-        this.isCheck = false;
+        this.putsOtherTeamInCheck = false;
     }
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
-                     ChessPiece.PieceType promotionPiece, boolean isCheck) {
+                     ChessPiece.PieceType promotionPiece, boolean putsOtherTeamInCheck) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
         this.promotionPiece = promotionPiece;
-        this.isCheck = isCheck;
+        this.putsOtherTeamInCheck = putsOtherTeamInCheck;
     }
 
     /**
@@ -54,12 +54,7 @@ public class ChessMove {
         return promotionPiece;
     }
 
-    public boolean getIsCheck() { return isCheck;}
-    
-    public boolean inRange() {
-        return startPosition.inRange() && endPosition.inRange();
-    }
-
+    public boolean putsOtherTeamInCheck() { return putsOtherTeamInCheck;}
 
     @Override
     public boolean equals(Object o) {
@@ -79,7 +74,7 @@ public class ChessMove {
         if (promotionPiece != null) {
             str += "Promoted to " + promotionPiece.toString();
         }
-        if (isCheck) {
+        if (putsOtherTeamInCheck) {
             return str + ", Check";
         };
         return str + ", no Check";
