@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowgray" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="900" height="430" rx="20" fill="#f8fafc"/>
+  <text x="450" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#0f172a">Symmetric vs. directed coupling</text>
+  <line x1="450" y1="75" x2="450" y2="400" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="225" y="95" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#334155">Symmetric association</text>
+  <text x="675" y="95" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#334155">Directed influence estimate</text>
+  <circle cx="130" cy="220" r="56" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+  <circle cx="320" cy="220" r="56" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="130" y="214" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#1e3a8a">Band A</text>
+  <text x="130" y="239" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#1e3a8a">e.g., 3 Hz</text>
+  <text x="320" y="214" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#78350f">Band B</text>
+  <text x="320" y="239" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#78350f">e.g., 8 Hz</text>
+  <line x1="190" y1="205" x2="260" y2="205" stroke="#64748b" stroke-width="4" marker-end="url(#arrowgray)"/>
+  <line x1="260" y1="235" x2="190" y2="235" stroke="#64748b" stroke-width="4" marker-end="url(#arrowgray)"/>
+  <text x="225" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#475569">The relationship is similar</text>
+  <text x="225" y="334" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#475569">in either direction.</text>
+  <circle cx="580" cy="220" r="56" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+  <circle cx="770" cy="220" r="56" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="580" y="214" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#1e3a8a">Band A</text>
+  <text x="580" y="239" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#1e3a8a">e.g., 3 Hz</text>
+  <text x="770" y="214" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#78350f">Band B</text>
+  <text x="770" y="239" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#78350f">e.g., 8 Hz</text>
+  <line x1="642" y1="220" x2="707" y2="220" stroke="#2563eb" stroke-width="5" marker-end="url(#arrow)"/>
+  <text x="675" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#475569">A’s changes help predict</text>
+  <text x="675" y="334" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#475569">B’s changes more than vice versa.</text>
+  <text x="450" y="385" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#64748b">Direction is an analysis result; it does not by itself prove physical causation.</text>
+</svg>
