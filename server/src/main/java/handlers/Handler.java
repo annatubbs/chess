@@ -4,6 +4,7 @@ import chess.ChessGame;
 import io.javalin.*;
 import io.javalin.http.Context;
 import server.*;
+import services.*;
 
 public class Handler {
 
@@ -28,7 +29,7 @@ public class Handler {
 
 
     public LogoutResult logout(Context ctx) {
-        AuthTokens.AuthToken authToken = new AuthTokens.AuthToken(ctx.formParam("authToken"));
+        AuthTokens.AuthToken authToken = new AuthToken(ctx.formParam("authToken"));
 
         return
     }

@@ -6,7 +6,7 @@ import chess.ChessGame.TeamColor;
 
 public class JoinGameRequest {
 
-    private final AuthTokens.AuthToken authToken;
+    private final AuthToken authToken;
     private final TeamColor playerColor;
     private final int gameID;
 
