@@ -1,15 +1,13 @@
-package server;
+package handlers;
 
-public class RegisterRequest {
+public class LoginRequest {
 
     private final String username;
     private final String password;
-    private final String email;
 
-    public RegisterRequest(String username, String password, String email) {
+    public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
-        this.email = email;
     }
 
     public String getUsername() {
@@ -18,9 +16,5 @@ public class RegisterRequest {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getEmail() {
-        return email;
     }
 }

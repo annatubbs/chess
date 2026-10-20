@@ -1,4 +1,4 @@
-package server;
+package handlers;
 
 import server.AuthTokens.AuthToken;
 

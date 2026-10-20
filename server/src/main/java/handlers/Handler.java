@@ -1,7 +1,6 @@
 package handlers;
 
 import chess.ChessGame;
-import io.javalin.*;
 import io.javalin.http.Context;
 import server.*;
 import services.*;
