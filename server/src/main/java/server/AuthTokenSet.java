@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class AuthTokens {
+public class AuthTokenSet {
     public static class AuthToken {
         private final String tokenStr;
 
@@ -44,8 +44,8 @@ public class AuthTokens {
         while (authTokenSet.contains(token)) { // make sure token is unique
             token = new AuthToken();
         }
-        authTokenSet.add(token);
 
+        authTokenSet.add(token);
         return token;
     }
 

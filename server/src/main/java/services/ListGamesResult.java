@@ -8,8 +8,8 @@ import java.util.Map;
 public class ListGamesResult {
     private ArrayList<GameData> gameList; //* dt
 
-    public ListGamesResult() {
-        gameList = new ArrayList<GameData>();
+    public ListGamesResult(ArrayList<GameData> gameList) {
+        this.gameList = gameList;
     }
 
     public ArrayList<GameData> getGameList() {

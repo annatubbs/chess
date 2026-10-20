@@ -1,6 +1,6 @@
 package handlers;
 
-import server.AuthTokens.AuthToken; //*string!!!!!!!!!!
+import server.AuthTokens.AuthToken; //*string AuthToken?
 
 public class AuthData {
     private final String username;

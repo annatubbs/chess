@@ -1,15 +1,17 @@
 package handlers;
 
+import server.AuthTokens.AuthToken;
+
 public class LogoutRequest {
 
-    private final String username;
+    private final AuthToken authToken;
 
-    public LogoutRequest(String username) {
-        this.username = username;
+    public LogoutRequest(AuthToken authToken) {
+        this.authToken = authToken;
     }
 
-    public String getUsername() {
-        return username;
+    public AuthToken getAuthToken() {
+        return authToken;
     }
 
 }
