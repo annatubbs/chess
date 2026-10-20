@@ -4,14 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameData {
-    private final Map<String, Object> gameDataMap;
+    private final HashMap<String, Object> gameDataMap;
 
     public GameData(int gameID, String blackUsername, String whiteUsername, String gameName) {
-        this.gameDataMap = Map.of("gameID", gameID, "blackUsername", blackUsername,
-                "whiteUsername", whiteUsername, "gameName", gameName);
+        this.gameDataMap = new HashMap<>(Map.of("gameID", gameID,
+                                                "blackUsername", blackUsername,
+                                                "whiteUsername", whiteUsername,
+                                                "gameName", gameName));
     }
 
-    public HashMap<String, Object> getGameDataMap() {
-        return new HashMap<>(gameDataMap);
+    public GameData(HashMap<String, Object> gameDataMap) {
+        this.gameDataMap = new HashMap<>(gameDataMap);
     }
+
+    public GameData deepCopy() {
+        return new GameData(gameDataMap);
+    }
+
 }
