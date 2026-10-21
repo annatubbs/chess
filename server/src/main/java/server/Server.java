@@ -5,7 +5,6 @@ import handlers.GameHandler;
 import handlers.UserHandler;
 import io.javalin.*;
 import io.javalin.http.Context;
-//import org.jetbrains.annotations.NotNull;
 import services.*;
 
 import handlers.Handler;
@@ -16,7 +15,6 @@ import java.util.Map;
 
 public class Server {
 
-    //    private final DataAccess dataAccess
     private final UserHandler userHandler;
     private final GameHandler gameHandler;
     private final Javalin javalin;
@@ -43,62 +41,82 @@ public class Server {
         javalin.put("/game/{authToken}/{playerColor}/{gameID}", this::joinGame);
         javalin.delete("/db", this::clearDb);
 
-
-        // Register your endpoints and exception handlers here.
-//        javalin.addEndpoint("DELETE", "/db");
-
     }
 
 
     private void register(Context ctx) throws Exception { // username, password, email
-        HashMap<String, Object> resultMap = userHandler.register(ctx);
+        try {
+            HashMap<String, Object> resultMap = userHandler.register(ctx);
 
-        ctx.result(resultMap.toString());
-        ctx.status(200);
+//            ctx.result(resultMap.toString());
+            ctx.status(200).json(resultMap);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     private void login(Context ctx) throws Exception { // username, password
-        HashMap<String, Object> resultMap = userHandler.login(ctx);
+        try {
+            HashMap<String, Object> resultMap = userHandler.login(ctx);
 
-        ctx.result(resultMap.toString());
-        ctx.status(200);
+//            ctx.result(resultMap.toString());
+            ctx.status(200).json(resultMap);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     private void logout(Context ctx) throws Exception { // authToken
-        HashMap<String, Object> resultMap = userHandler.logout(ctx);
-        ;
+        try {
+            HashMap<String, Object> resultMap = userHandler.logout(ctx);
 
-        ctx.result(resultMap.toString());
-        ctx.status(200);
+//            ctx.result(resultMap.toString());
+            ctx.status(200).json(resultMap);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     private void listGames(Context ctx) throws Exception { // authToken
-        HashMap<String, Object> resultMap = gameHandler.listGames(ctx);
-        ;
+        try {
+            HashMap<String, Object> resultMap = gameHandler.listGames(ctx);
 
-        ctx.result(resultMap.toString());
-        ctx.status(200);
+//            ctx.result(resultMap.toString());
+            ctx.status(200).json(resultMap);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     private void createGame(Context ctx) throws Exception { // authToken, gameName
-        HashMap<String, Object> resultMap = gameHandler.createGame(ctx);
-        ;
+        try {
+            HashMap<String, Object> resultMap = gameHandler.createGame(ctx);
 
-        ctx.result(resultMap.toString());
-        ctx.status(200);
+//            ctx.result(resultMap.toString());
+            ctx.status(200).json(resultMap);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     private void joinGame(Context ctx) throws Exception { // authToken, playerColor, gameID // make classes here
-        HashMap<String, Object> resultMap = gameHandler.joinGame(ctx);
-        ;
+        try {
+            HashMap<String, Object> resultMap = gameHandler.joinGame(ctx);
 
-        ctx.result(resultMap.toString());
-        ctx.status(200);
+//            ctx.result(resultMap.toString());
+            ctx.status(200).json(resultMap);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     private void clearDb(Context ctx) throws Exception {
-        gameHandler.clear();
-        ctx.status(200);
+        try {
+            gameHandler.clear();
+            ctx.status(200);
+        } catch (DataAccessException e) {
+            ctx.status(500).json(Map.of("message", e.getMessage()));
+        }
     }
 
     public int run(int desiredPort) {
