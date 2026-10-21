@@ -25,7 +25,7 @@ public class GameData {
     public int getGameID() {
         return (Integer) gameDataMap.get("gameID");
     }
-    
+
     public boolean isTaken(ChessGame.TeamColor color) {
         if (color == ChessGame.TeamColor.BLACK) {
             return gameDataMap.get("blackUsername") != null;
@@ -44,6 +44,10 @@ public class GameData {
 
     public GameData deepCopy() {
         return new GameData(gameDataMap);
+    }
+
+    public String toString() {
+        return gameDataMap.toString();
     }
 
 }

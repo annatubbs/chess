@@ -1,44 +1,13 @@
 package dataaccess;
 
-import handlers.AuthData;
-import handlers.UserData;
-import server.AuthTokenSet;
-
-import java.util.ArrayList;
-
 public class DataAccess {
+    private final AuthDataAccess authDataAccess;
+    private final UserDataAccess userDataAccess;
+    private final GameDataAccess gameDataAccess;
 
-    public DataAccess() {
+    public dataAccess() {
+        this.authDataAccess = new AuthDataAccess();
+        this.userDataAccess = new UserDataAccess();
+        this.gameDataAccess = new GameDataAccess();
     }
-
-    public UserData getUser(String username) {
-    }
-
-    public AuthData getAuth(AuthTokenSet.AuthToken authToken) {
-    }
-
-    public GameData getGame(int gameID) {
-    }
-
-    public ArrayList<GameData> listGames() {
-    }
-
-    public GameData createGame(String gameName) {
-    }
-
-    public void createAuth(AuthData authData) {
-    }
-
-    public void createUser(UserData userData) {
-    }
-
-    public void updateGame(GameData gameData) {
-    }
-
-    public void deleteAuth(AuthTokenSet.AuthToken authToken) {
-    }
-
-    public boolean clearData() {
-    }
-
 }

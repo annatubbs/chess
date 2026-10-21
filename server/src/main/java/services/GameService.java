@@ -1,27 +1,30 @@
 package services;
 
 import chess.ChessGame;
+import dataaccess.AuthDataAccess;
 import dataaccess.DataAccess;
+import dataaccess.GameDataAccess;
 import dataaccess.GameData;
 import handlers.AuthData;
 import handlers.CreateGameRequest;
 import handlers.JoinGameRequest;
-import handlers.ListGamesRequest;
 import server.AuthTokenSet;
 
 import java.util.ArrayList;
 
 public class GameService {
-    private final DataAccess dataAccess;
-    private AuthTokenSet authTokensSet;
+    private final AuthDataAccess authDataAccess;
+    private final UserDataAccess userDataAccess;
+    private final GameDataAccess gameDataAccess;
 
-    public GameService(DataAccess dataAccess, AuthTokenSet authTokensSet) {
-        this.dataAccess = dataAccess;
-        this.authTokensSet = authTokensSet;
+    public GameService(DataAccess dataAccess) {
+        this.authDataAccess = dataAccess.getAuthDataAccess(); ////*********crazy
     }
 
-    public ListGamesResult listGames(ListGamesRequest listGamesRequest) {
-        AuthData authData = dataAccess.getAuth(listGamesRequest.getAuthToken());
+    public ListGamesResult listGames(AuthTokenSet.AuthToken authToken) {
+//        AuthData authData = dataAccess.getAuth(listGamesRequest.getAuthToken());
+        AuthData authData = dataAccess.getAuth(authToken);
+
         if (authData == null) {
             throw new UnauthorizedException("Not authorized to see games.");
         }

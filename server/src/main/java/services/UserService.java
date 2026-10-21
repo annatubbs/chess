@@ -1,29 +1,27 @@
 package services;
 
 import dataaccess.DataAccess;
+import dataaccess.GameDataAccess;
 import handlers.*;
 import server.AuthTokenSet;
+import server.AuthTokenSet.AuthToken;
 
 public class UserService {
-    private final DataAccess dataAccess;
     private AuthTokenSet authTokensSet;
+    private final DataAccess dataAccess;
 
-    public UserService(DataAccess dataAccess, AuthTokenSet authTokensSet) {
-        this.dataAccess = dataAccess;
+    public UserService(DataAccess dataAccess) {
         authTokensSet = new AuthTokenSet();
+        this.dataAccess = dataAccess;
     }
 
-    private AuthTokenSet.AuthToken authorize(String username) {
-        AuthTokenSet.AuthToken authToken = authTokensSet.makeToken();
-        AuthData authData = new AuthData(username, authToken);
-
-        dataAccess.createAuth(authData);
-        return authToken;
+    private AuthData generateAuth(String username) {
+        AuthToken authToken = authTokensSet.makeToken();
+        return new AuthData(username, authToken);
     }
 
     public RegisterResult register(RegisterRequest registerRequest) throws Exception {
         String username = registerRequest.getUsername();
-
         if (dataAccess.getUser(username) != null) {
             throw new AlreadyTakenException("Username " + username + " already taken.");
         }
@@ -31,8 +29,10 @@ public class UserService {
         UserData userData = new UserData(registerRequest);
         dataAccess.createUser(userData);
 
-        AuthTokenSet.AuthToken authToken = authorize(username); // throws FailureResponseException
-        return new RegisterResult(authToken);
+        AuthData authData = generateAuth(username);
+        dataAccess.createAuth(authData);
+
+        return new RegisterResult(authData);
     }
 
     public LoginResult login(LoginRequest loginRequest) throws Exception {
@@ -48,12 +48,12 @@ public class UserService {
             throw new UnauthorizedException("Password: " + password + " incorrect for " + username + ".");
         }
 
-        AuthTokenSet.AuthToken authToken = this.authorize(username); // throws FailureResponseException
-        return new LoginResult(authToken);
+        AuthData authData = this.generateAuth(username); // throws FailureResponseException
+        return new LoginResult(authData);
     }
 
-    public LogoutResult logout(AuthTokenSet.AuthToken authToken) throws Exception {
-//        AuthTokenSet.AuthToken authToken = logoutRequest.getAuthToken();
+    public LogoutResult logout(AuthToken authToken) throws Exception {
+//        AuthToken authToken = logoutRequest.getAuthToken();
 
         AuthData authData = dataAccess.getAuth(authToken);
         if (authData == null) {

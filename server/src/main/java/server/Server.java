@@ -1,34 +1,29 @@
 package server;
 
-import com.google.gson.Gson;
 import dataaccess.DataAccess;
 import io.javalin.*;
 import io.javalin.http.Context;
 //import org.jetbrains.annotations.NotNull;
 import services.*;
 
-import server.AuthTokenSet.AuthToken;
-import chess.ChessGame.TeamColor;
 import handlers.Handler;
+
+import java.util.HashMap;
 
 
 public class Server {
 
-    private AuthTokenSet authTokenSet;
     private final DataAccess dataAccess;
-    private final services.UserService userService;
-    private final services.GameService gameService;
+    private final services.Service service;
     private final Javalin javalin;
     private Handler handler;
 
     public Server() {
-        authTokenSet = new AuthTokenSet();
         dataAccess = new DataAccess();
+        service = new Service(dataAccess);
+        handler = new Handler(service);
 
-        userService = new UserService(dataAccess, authTokenSet);
-        gameService = new GameService(dataAccess, authTokenSet);
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
-        handler = new Handler();
 
         // each request takes url path and handler
         javalin.post("/user/{username}/{password}/{email}", Server::register);
@@ -46,32 +41,59 @@ public class Server {
     }
 
 
-    private void register(Context ctx) { // username, password, email
-        handler.register(ctx);
+    private void register(Context ctx) throws Exception { // username, password, email
+        HashMap<String, Object> resultMap = handler.register(ctx);
+
+        ctx.result(resultMap.toString());
+        ctx.status(200);
     }
 
-    private void login(Context ctx) { // username, password
-        handler.login(ctx);
+    private void login(Context ctx) throws Exception { // username, password
+        HashMap<String, Object> resultMap = handler.login(ctx);
+        ;
+
+        ctx.result(resultMap.toString());
+        ctx.status(200);
     }
 
-    private void logout(Context ctx) { // authToken
-        handler.logout(ctx);
+    private void logout(Context ctx) throws Exception { // authToken
+        HashMap<String, Object> resultMap = handler.logout(ctx);
+        ;
+
+        ctx.result(resultMap.toString());
+        ctx.status(200);
     }
 
-    private void listGames(Context ctx) { // authToken
-        handler.listGames(ctx);
+    private void listGames(Context ctx) throws Exception { // authToken
+        HashMap<String, Object> resultMap = handler.listGames(ctx);
+        ;
+
+        ctx.result(resultMap.toString());
+        ctx.status(200);
     }
 
-    private void createGame(Context ctx) { // authToken, gameName
-        handler.createGame(ctx);
+    private void createGame(Context ctx) throws Exception { // authToken, gameName
+        HashMap<String, Object> resultMap = handler.createGame(ctx);
+        ;
+
+        ctx.result(resultMap.toString());
+        ctx.status(200);
     }
 
-    private void joinGame(Context ctx) { // authToken, playerColor, gameID // make classes here
-        handler.joinGame(ctx);
+    private void joinGame(Context ctx) throws Exception { // authToken, playerColor, gameID // make classes here
+        HashMap<String, Object> resultMap = handler.joinGame(ctx);
+        ;
+
+        ctx.result(resultMap.toString());
+        ctx.status(200);
     }
 
-    private void clearDb(Context ctx) {
-        handler.clear();
+    private void clearDb(Context ctx) throws Exception {
+        if (handler.clear()) {
+            ctx.status(200);
+        } else { /// LOOK AT THIS
+            ctx.status(500);
+        }
 //        var r = Map.of();
 //        var json = new Gson();
 //        ctx.json(json.toJson(r));
