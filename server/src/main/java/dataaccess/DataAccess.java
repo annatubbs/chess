@@ -26,6 +26,9 @@ public class DataAccess {
     public GameData createGame(String gameName) {
     }
 
+    public void createAuth(AuthData authData) {
+    }
+
     public void createUser(UserData userData) {
     }
 

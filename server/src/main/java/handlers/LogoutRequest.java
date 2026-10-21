@@ -1,6 +1,8 @@
 package handlers;
 
-import server.AuthTokens.AuthToken;
+import server.AuthTokenSet.AuthToken;
+
+/// ///XXXXXXXXX
 
 public class LogoutRequest {
 

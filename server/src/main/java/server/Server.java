@@ -1,22 +1,32 @@
 package server;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccess;
 import io.javalin.*;
 import io.javalin.http.Context;
 //import org.jetbrains.annotations.NotNull;
-import java.util.Map;
+import services.*;
 
-import server.AuthTokens.AuthToken;
+import server.AuthTokenSet.AuthToken;
 import chess.ChessGame.TeamColor;
 import handlers.Handler;
 
 
 public class Server {
 
+    private AuthTokenSet authTokenSet;
+    private final DataAccess dataAccess;
+    private final services.UserService userService;
+    private final services.GameService gameService;
     private final Javalin javalin;
     private Handler handler;
 
     public Server() {
+        authTokenSet = new AuthTokenSet();
+        dataAccess = new DataAccess();
+
+        userService = new UserService(dataAccess, authTokenSet);
+        gameService = new GameService(dataAccess, authTokenSet);
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
         handler = new Handler();
 

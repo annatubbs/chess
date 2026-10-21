@@ -13,7 +13,7 @@ public class UserService {
         authTokensSet = new AuthTokenSet();
     }
 
-    private AuthTokenSet.AuthToken authorize(String username) throws FailureResponseException {
+    private AuthTokenSet.AuthToken authorize(String username) {
         AuthTokenSet.AuthToken authToken = authTokensSet.makeToken();
         AuthData authData = new AuthData(username, authToken);
 
@@ -21,17 +21,17 @@ public class UserService {
         return authToken;
     }
 
-    public RegisterResult register(RegisterRequest registerRequest) throwsException{
+    public RegisterResult register(RegisterRequest registerRequest) throws Exception {
         String username = registerRequest.getUsername();
 
-        if (dataAccess.getUser(username)) {
+        if (dataAccess.getUser(username) != null) {
             throw new AlreadyTakenException("Username " + username + " already taken.");
         }
 
         UserData userData = new UserData(registerRequest);
         dataAccess.createUser(userData);
 
-        AuthTokenSet.AuthToken authToken = this.authorize(username); // throws FailureResponseException
+        AuthTokenSet.AuthToken authToken = authorize(username); // throws FailureResponseException
         return new RegisterResult(authToken);
     }
 
@@ -50,11 +50,10 @@ public class UserService {
 
         AuthTokenSet.AuthToken authToken = this.authorize(username); // throws FailureResponseException
         return new LoginResult(authToken);
-        }
     }
 
-    public LogoutResult logout(LogoutRequest logoutRequest) throws Exception{
-        AuthTokenSet.AuthToken authToken = logoutRequest.getAuthToken();
+    public LogoutResult logout(AuthTokenSet.AuthToken authToken) throws Exception {
+//        AuthTokenSet.AuthToken authToken = logoutRequest.getAuthToken();
 
         AuthData authData = dataAccess.getAuth(authToken);
         if (authData == null) {
