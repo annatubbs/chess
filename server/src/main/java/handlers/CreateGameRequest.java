@@ -1,6 +1,6 @@
 package handlers;
 
-import server.AuthTokens.AuthToken;
+import server.AuthTokenSet.AuthToken;
 
 
 public class CreateGameRequest {

@@ -1,16 +1,16 @@
 package handlers;
 
-import server.AuthTokens;
+import server.AuthTokenSet.AuthToken;
 
 public class ListGamesRequest {
 
-    private final AuthTokens.AuthToken authToken;
+    private final AuthToken authToken;
 
-    public ListGamesRequest(AuthTokens.AuthToken authToken) {
+    public ListGamesRequest(AuthToken authToken) {
         this.authToken = authToken;
     }
 
-    public AuthTokens.AuthToken getAuthToken() {
+    public AuthToken getAuthToken() {
         return authToken;
     }
 
