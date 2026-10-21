@@ -26,6 +26,18 @@ public class GameData {
         return (Integer) gameDataMap.get("gameID");
     }
 
+    public String getBlackUsername() {
+        return (String) gameDataMap.get("blackUsername");
+    }
+
+    public String getWhiteUsername() {
+        return (String) gameDataMap.get("whiteUsername");
+    }
+
+    public String getGameName() {
+        return (String) gameDataMap.get("gameName");
+    }
+
     public boolean isTaken(ChessGame.TeamColor color) {
         if (color == ChessGame.TeamColor.BLACK) {
             return gameDataMap.get("blackUsername") != null;

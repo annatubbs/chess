@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class AuthMemDataAccess implements AuthDataAccess {
 
-    HashMap<String, String> authDataMap; // authToken: username
+    HashMap<String, HashMap<String, String>> authDataMap; // authToken: username
 
     public AuthMemDataAccess() {
         authDataMap = new HashMap<>();
@@ -20,7 +20,8 @@ public class AuthMemDataAccess implements AuthDataAccess {
             String authTokenStr = authToken.toString();
 
             if (authDataMap.containsKey(authTokenStr)) {
-                return new AuthData(authDataMap.get(authTokenStr), authToken);
+                HashMap<String, String> usernameMap = authDataMap.get(authTokenStr);
+                return new AuthData(usernameMap.get("username"), authToken);
             }
             return null;
         } catch (Exception e) {

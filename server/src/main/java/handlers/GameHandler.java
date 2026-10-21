@@ -50,7 +50,7 @@ public class GameHandler {
                 "gameID", joinGameResult.getGameID()));
     }
 
-    public boolean clear() throws Exception {
-        return gameService.clear();
+    public void clear() throws Exception {
+        gameService.clear();
     }
 }

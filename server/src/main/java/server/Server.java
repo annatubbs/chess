@@ -1,9 +1,6 @@
 package server;
 
-import dataaccess.AuthDataAccess;
-import dataaccess.DataAccess;
-import dataaccess.GameDataAccess;
-import dataaccess.UserDataAccess;
+import dataaccess.*;
 import handlers.GameHandler;
 import handlers.UserHandler;
 import io.javalin.*;
@@ -19,8 +16,7 @@ import java.util.Map;
 
 public class Server {
 
-    //    private final DataAccess dataAccess;
-//    private final services.Service service;
+    //    private final DataAccess dataAccess
     private final UserHandler userHandler;
     private final GameHandler gameHandler;
     private final Javalin javalin;
@@ -31,7 +27,7 @@ public class Server {
 //                "UserDataAccess", new UserDataAccess(),
 //                "GameDataAccess", new GameDataAccess()));
 
-        Service service = new Service(new DataAccess());
+        Service service = new Service(new MemoryDataAccess());
         Handler handler = new Handler(service);
 
         userHandler = handler.getUserHandler();
@@ -101,11 +97,8 @@ public class Server {
     }
 
     private void clearDb(Context ctx) throws Exception {
-        if (gameHandler.clear()) {
-            ctx.status(200);
-        } else { /// LOOK AT THIS***************
-            ctx.status(500);
-        }
+        gameHandler.clear();
+        ctx.status(200);
     }
 
     public int run(int desiredPort) {

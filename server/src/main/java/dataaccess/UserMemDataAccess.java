@@ -2,13 +2,12 @@ package dataaccess;
 
 import handlers.UserData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class UserMemDataAccess implements UserDataAccess {
 
-    private HashMap<String, ArrayList<String>> userDataMap; // Username: password, email
+    private HashMap<String, HashMap<String, String>> userDataMap; // Username: password, email
 
     public UserMemDataAccess() {
         userDataMap = new HashMap<>();
@@ -17,8 +16,8 @@ public class UserMemDataAccess implements UserDataAccess {
     public UserData getUser(String username) throws DataAccessException {
         try {
             if (userDataMap.containsKey(username)) {
-                ArrayList<String> passwordEmailLst = userDataMap.get(username);
-                return new UserData(username, passwordEmailLst.get(0), passwordEmailLst.get(1));
+                HashMap<String, String> passwordEmailLst = userDataMap.get(username);
+                return new UserData(username, passwordEmailLst.get("password"), passwordEmailLst.get("email"));
             }
             return null;
         } catch (Exception e) {
@@ -33,7 +32,8 @@ public class UserMemDataAccess implements UserDataAccess {
             if (userDataMap.containsKey(username)) {
                 throw new DataAccessException("Username already taken.");
             } else {
-                userDataMap.put(username, new ArrayList<>(List.of(userData.getPassword(), userData.getEmail())));
+                userDataMap.put(username,
+                        new HashMap<>(Map.of("password", userData.getPassword(), "email", userData.getEmail())));
             }
         } catch (Exception e) {
             throw new DataAccessException("Error in user data access: " + e.getMessage());

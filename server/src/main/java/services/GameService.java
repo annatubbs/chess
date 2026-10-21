@@ -65,7 +65,7 @@ public class GameService {
         return new JoinGameResult(playerColor, joinGameRequest.getGameID());
     }
 
-    public boolean clear() {
-        return gameDataAccess.clearData();
+    public void clear() {
+        gameDataAccess.clearData();
     }
 }
