@@ -11,6 +11,12 @@ public class UserData {
         this.email = registerRequest.getEmail();
     }
 
+    public UserData(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public String getUsername() {
         return username;
     }

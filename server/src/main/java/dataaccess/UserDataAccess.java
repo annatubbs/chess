@@ -2,11 +2,9 @@ package dataaccess;
 
 import handlers.UserData;
 
-public class UserDataAccess {
+public interface UserDataAccess {
 
-    public UserData getUser(String username) {
-    }
+    UserData getUser(String username) throws DataAccessException;
 
-    public void createUser(UserData userData) {
-    }
+    void createUser(UserData userData) throws DataAccessException;
 }

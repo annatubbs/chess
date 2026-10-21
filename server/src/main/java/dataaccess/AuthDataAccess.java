@@ -3,14 +3,11 @@ package dataaccess;
 import handlers.AuthData;
 import server.AuthTokenSet;
 
-public class AuthDataAccess {
+public interface AuthDataAccess {
 
-    public AuthData getAuth(AuthTokenSet.AuthToken authToken) {
-    }
+    AuthData getAuth(AuthTokenSet.AuthToken authToken) throws DataAccessException;
 
-    public void createAuth(AuthData authData) {
-    }
+    void createAuth(AuthData authData) throws DataAccessException;
 
-    public void deleteAuth(AuthTokenSet.AuthToken authToken) {
-    }
+    void deleteAuth(AuthTokenSet.AuthToken authToken) throws DataAccessException;
 }

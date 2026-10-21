@@ -1,30 +1,16 @@
 package dataaccess;
 
-import handlers.AuthData;
-import handlers.UserData;
-import server.AuthTokenSet;
-
 import java.util.ArrayList;
 
-public class GameDataAccess {
+public interface GameDataAccess {
 
-    public GameDataAccess() {
-    }
+    GameData getGame(int gameID) throws DataAccessException;
 
-    public GameData getGame(int gameID) {
-    }
+    ArrayList<GameData> listGames() throws DataAccessException;
 
-    public ArrayList<GameData> listGames() {
-    }
+    GameData createGame(String gameName) throws DataAccessException;
 
-    public GameData createGame(String gameName) {
-    }
+    void updateGame(GameData gameData) throws DataAccessException;
 
-    public void updateGame(GameData gameData) {
-    }
-
-    public boolean clearData() {
-        return true;
-    }
-
+    boolean clearData() throws DataAccessException;
 }

@@ -1,13 +1,17 @@
 package dataaccess;
 
-public class DataAccess {
-    private final AuthDataAccess authDataAccess;
-    private final UserDataAccess userDataAccess;
-    private final GameDataAccess gameDataAccess;
+/*
+    This phase you will create an implementation of your data access interface that stores your server’s data
+in main memory (RAM) using standard data structures (maps, sets, lists). In the next phase you will
+create an implementation of the data access interface that uses an external SQL database.
+*/
 
-    public dataAccess() {
-        this.authDataAccess = new AuthDataAccess();
-        this.userDataAccess = new UserDataAccess();
-        this.gameDataAccess = new GameDataAccess();
-    }
+public interface DataAccess {
+
+    public AuthDataAccess getAuthDataAccess() throws DataAccessException;
+
+    public UserDataAccess getUserDataAccess() throws DataAccessException;
+
+    public GameDataAccess getGameDataAccess() throws DataAccessException;
+
 }
