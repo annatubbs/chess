@@ -1,6 +1,5 @@
 package services;
 
-import server.AuthTokens;
 
 public class LogoutResult {
     private final String username;

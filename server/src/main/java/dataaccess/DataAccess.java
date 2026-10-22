@@ -8,10 +8,10 @@ create an implementation of the data access interface that uses an external SQL 
 
 public interface DataAccess {
 
-    public AuthDataAccess getAuthDataAccess() throws DataAccessException;
+    public AuthDataAccess getAuthDataAccess();
 
-    public UserDataAccess getUserDataAccess() throws DataAccessException;
+    public UserDataAccess getUserDataAccess();
 
-    public GameDataAccess getGameDataAccess() throws DataAccessException;
+    public GameDataAccess getGameDataAccess();
 
 }

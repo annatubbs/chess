@@ -34,7 +34,7 @@ public class AuthTokenSet {
 
     private final HashSet<AuthToken> authTokenSet; // developer notes: make new instance when clear. immutable
 
-    public AuthTokens() {
+    public AuthTokenSet() {
         authTokenSet = new HashSet<>();
     }
 
@@ -58,7 +58,7 @@ public class AuthTokenSet {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        AuthTokens that = (AuthTokens) o;
+        AuthTokenSet that = (AuthTokenSet) o;
         return Objects.equals(authTokenSet, that.authTokenSet);
     }
 

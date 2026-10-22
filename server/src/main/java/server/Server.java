@@ -1,5 +1,6 @@
 package server;
 
+import com.google.gson.Gson;
 import dataaccess.*;
 import handlers.GameHandler;
 import handlers.UserHandler;
@@ -33,12 +34,12 @@ public class Server {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
         // each request takes url path and handler
-        javalin.post("/user/{username}/{password}/{email}", this::register);
-        javalin.post("/session/{username}/{password}", this::login);
-        javalin.delete("/session/{authToken}", this::logout);
-        javalin.get("/game/{authToken}", this::listGames);
-        javalin.post("/game/{authToken}/{gameName}", this::createGame);
-        javalin.put("/game/{authToken}/{playerColor}/{gameID}", this::joinGame);
+        javalin.post("/user", this::register);
+        javalin.post("/session", this::login);
+        javalin.delete("/session", this::logout);
+        javalin.get("/game", this::listGames);
+        javalin.post("/game", this::createGame);
+        javalin.put("/game", this::joinGame);
         javalin.delete("/db", this::clearDb);
 
     }
@@ -49,13 +50,17 @@ public class Server {
             HashMap<String, Object> resultMap = userHandler.register(ctx);
 
 //            ctx.result(resultMap.toString());
-            ctx.status(200).json(resultMap);
+            ctx.status(200);
+            ctx.json(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
-            ctx.status(400).json(Map.of("message", e.getMessage()));
+            ctx.status(400);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (AlreadyTakenException e) {
-            ctx.status(403).json(Map.of("message", e.getMessage()));
+            ctx.status(403);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
@@ -63,13 +68,17 @@ public class Server {
         try {
             HashMap<String, Object> resultMap = userHandler.login(ctx);
 //            ctx.result(resultMap.toString());
-            ctx.status(200).json(resultMap);
+            ctx.status(200);
+            ctx.json(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
-            ctx.status(400).json(Map.of("message", e.getMessage()));
+            ctx.status(400);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (UnauthorizedException e) {
-            ctx.status(401).json(Map.of("message", e.getMessage()));
+            ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
@@ -77,11 +86,14 @@ public class Server {
         try {
             HashMap<String, Object> resultMap = userHandler.logout(ctx);
 //            ctx.result(resultMap.toString());
-            ctx.status(200).json(resultMap);
+            ctx.status(200);
+            ctx.json(new Gson().toJson(resultMap));
         } catch (UnauthorizedException e) {
-            ctx.status(401).json(Map.of("message", e.getMessage()));
+            ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
@@ -89,11 +101,14 @@ public class Server {
         try {
             HashMap<String, Object> resultMap = gameHandler.listGames(ctx);
 //            ctx.result(resultMap.toString());
-            ctx.status(200).json(resultMap);
+            ctx.status(200);
+            ctx.json(new Gson().toJson(resultMap));
         } catch (UnauthorizedException e) {
-            ctx.status(401).json(Map.of("message", e.getMessage()));
+            ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
@@ -101,13 +116,17 @@ public class Server {
         try {
             HashMap<String, Object> resultMap = gameHandler.createGame(ctx);
 //            ctx.result(resultMap.toString());
-            ctx.status(200).json(resultMap);
+            ctx.status(200);
+            ctx.json(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
-            ctx.status(400).json(Map.of("message", e.getMessage()));
+            ctx.status(400);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (UnauthorizedException e) {
-            ctx.status(401).json(Map.of("message", e.getMessage()));
+            ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
@@ -116,15 +135,20 @@ public class Server {
             HashMap<String, Object> resultMap = gameHandler.joinGame(ctx);
 
 //            ctx.result(resultMap.toString());
-            ctx.status(200).json(resultMap);
+            ctx.status(200);
+            ctx.json(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
-            ctx.status(400).json(Map.of("message", e.getMessage()));
+            ctx.status(400);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (UnauthorizedException e) {
-            ctx.status(401).json(Map.of("message", e.getMessage()));
+            ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (AlreadyTakenException e) {
-            ctx.status(403).json(Map.of("message", e.getMessage()));
+            ctx.status(403);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
@@ -133,7 +157,8 @@ public class Server {
             gameHandler.clear();
             ctx.status(200);
         } catch (DataAccessException e) {
-            ctx.status(500).json(Map.of("message", e.getMessage()));
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
 
