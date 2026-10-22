@@ -41,17 +41,16 @@ public class Server {
         javalin.post("/game", this::createGame);
         javalin.put("/game", this::joinGame);
         javalin.delete("/db", this::clearDb);
-
     }
 
 
     private void register(Context ctx) throws Exception { // username, password, email
         try {
-            HashMap<String, Object> resultMap = userHandler.register(ctx);
+            HashMap<String, Object> resultMap = userHandler.register(ctx.body());
 
-//            ctx.result(resultMap.toString());
             ctx.status(200);
-            ctx.json(new Gson().toJson(resultMap));
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
             ctx.status(400);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -66,10 +65,11 @@ public class Server {
 
     private void login(Context ctx) throws Exception { // username, password
         try {
-            HashMap<String, Object> resultMap = userHandler.login(ctx);
-//            ctx.result(resultMap.toString());
+            HashMap<String, Object> resultMap = userHandler.login(ctx.body());
+
             ctx.status(200);
-            ctx.json(new Gson().toJson(resultMap));
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
             ctx.status(400);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -84,10 +84,12 @@ public class Server {
 
     private void logout(Context ctx) throws Exception { // authToken
         try {
-            HashMap<String, Object> resultMap = userHandler.logout(ctx);
-//            ctx.result(resultMap.toString());
-            ctx.status(200);
+            HashMap<String, Object> resultMap = userHandler.logout(ctx.body());
             ctx.json(new Gson().toJson(resultMap));
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (UnauthorizedException e) {
             ctx.status(401);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -99,10 +101,11 @@ public class Server {
 
     private void listGames(Context ctx) throws Exception { // authToken
         try {
-            HashMap<String, Object> resultMap = gameHandler.listGames(ctx);
-//            ctx.result(resultMap.toString());
+            HashMap<String, Object> resultMap = gameHandler.listGames(ctx.body());
+
             ctx.status(200);
-            ctx.json(new Gson().toJson(resultMap));
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (UnauthorizedException e) {
             ctx.status(401);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -114,10 +117,11 @@ public class Server {
 
     private void createGame(Context ctx) throws Exception { // authToken, gameName
         try {
-            HashMap<String, Object> resultMap = gameHandler.createGame(ctx);
-//            ctx.result(resultMap.toString());
+            HashMap<String, Object> resultMap = gameHandler.createGame(ctx.body());
+
             ctx.status(200);
-            ctx.json(new Gson().toJson(resultMap));
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
             ctx.status(400);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -132,11 +136,11 @@ public class Server {
 
     private void joinGame(Context ctx) throws Exception { // authToken, playerColor, gameID // make classes here
         try {
-            HashMap<String, Object> resultMap = gameHandler.joinGame(ctx);
+            HashMap<String, Object> resultMap = gameHandler.joinGame(ctx.body());
 
-//            ctx.result(resultMap.toString());
             ctx.status(200);
-            ctx.json(new Gson().toJson(resultMap));
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (BadRequestException e) {
             ctx.status(400);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));

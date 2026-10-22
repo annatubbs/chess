@@ -17,6 +17,10 @@ public class AuthTokenSet {
             this.tokenStr = tokenStr;
         }
 
+        public String toString() {
+            return tokenStr;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) {

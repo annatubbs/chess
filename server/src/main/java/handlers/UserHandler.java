@@ -1,6 +1,7 @@
 package handlers;
 
 import chess.ChessGame;
+import com.google.gson.Gson;
 import io.javalin.http.Context;
 import services.*;
 import server.AuthTokenSet.*;
@@ -16,28 +17,32 @@ public class UserHandler {
         this.userService = userService;
     }
 
-    public HashMap<String, Object> register(Context ctx) throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest(ctx.formParam("username"),
-                ctx.formParam("password"), ctx.formParam("email"));
+    public HashMap<String, Object> register(String json) throws Exception {
+
+        RegisterRequest registerRequest = new Gson().fromJson(json, RegisterRequest.class);
+//        RegisterRequest registerRequest = new RegisterRequest(ctx.formParam("username"),
+//                ctx.formParam("password"), ctx.formParam("email"));
 
         RegisterResult registerResult = userService.register(registerRequest);
 
         return new HashMap<>(Map.of("username", registerResult.getUsername(),
-                "authToken", registerResult.getAuthToken()));
+                "authToken", registerResult.getAuthToken().toString()));
     }
 
-    public HashMap<String, Object> login(Context ctx) throws Exception {
-        LoginRequest loginRequest = new LoginRequest(ctx.formParam("username"),
-                ctx.formParam("password"));
+    public HashMap<String, Object> login(String json) throws Exception {
+//        LoginRequest loginRequest = new LoginRequest(ctx.formParam("username"),
+//                ctx.formParam("password"));
+        LoginRequest loginRequest = new Gson().fromJson(json, LoginRequest.class);
 
         LoginResult loginResult = userService.login(loginRequest);
 
         return new HashMap<>(Map.of("username", loginResult.getUsername(),
-                "authToken", loginResult.getAuthToken()));
+                "authToken", loginResult.getAuthToken().toString()));
     }
 
-    public HashMap<String, Object> logout(Context ctx) throws Exception {
-        AuthToken authToken = new AuthToken(ctx.formParam("authToken"));
+    public HashMap<String, Object> logout(String json) throws Exception {
+//        AuthToken authToken = new AuthToken(ctx.formParam("authToken"));
+        AuthToken authToken = new Gson().fromJson(json, AuthToken.class);
 
         LogoutResult logoutResult = userService.logout(authToken);
         return new HashMap<>(Map.of("username", logoutResult.getUsername()));
