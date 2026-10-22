@@ -4,6 +4,7 @@ import handlers.AuthData;
 import server.AuthTokenSet;
 
 import java.util.HashMap;
+import java.util.Map;
 
 // *Cast authToken to string?? I think so for tests..
 
@@ -25,7 +26,7 @@ public class AuthMemDataAccess implements AuthDataAccess {
             }
             return null;
         } catch (Exception e) {
-            throw new DataAccessException("Error in authorization: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -37,10 +38,10 @@ public class AuthMemDataAccess implements AuthDataAccess {
             if (authDataMap.containsKey(authTokenStr)) {
                 throw new DataAccessException("AuthToken already in use.");
             } else {
-                authDataMap.put(authTokenStr, username);
+                authDataMap.put(authTokenStr, new HashMap<>(Map.of("username", username)));
             }
         } catch (Exception e) {
-            throw new DataAccessException("Error in authorization: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -48,7 +49,7 @@ public class AuthMemDataAccess implements AuthDataAccess {
         try {
             authDataMap.remove(authToken.toString());
         } catch (Exception e) {
-            throw new DataAccessException("Error in authorization: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 }

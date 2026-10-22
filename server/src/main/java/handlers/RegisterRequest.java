@@ -1,5 +1,7 @@
 package handlers;
 
+import services.BadRequestException;
+
 public class RegisterRequest {
 
     private final String username;
@@ -7,9 +9,13 @@ public class RegisterRequest {
     private final String email;
 
     public RegisterRequest(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+        try {
+            this.username = username;
+            this.password = password;
+            this.email = email;
+        } catch (Exception e) {
+            throw new BadRequestException(e);
+        }
     }
 
     public String getUsername() {

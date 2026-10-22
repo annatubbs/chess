@@ -50,6 +50,10 @@ public class Server {
 
 //            ctx.result(resultMap.toString());
             ctx.status(200).json(resultMap);
+        } catch (BadRequestException e) {
+            ctx.status(400).json(Map.of("message", e.getMessage()));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403).json(Map.of("message", e.getMessage()));
         } catch (DataAccessException e) {
             ctx.status(500).json(Map.of("message", e.getMessage()));
         }
@@ -58,9 +62,12 @@ public class Server {
     private void login(Context ctx) throws Exception { // username, password
         try {
             HashMap<String, Object> resultMap = userHandler.login(ctx);
-
 //            ctx.result(resultMap.toString());
             ctx.status(200).json(resultMap);
+        } catch (BadRequestException e) {
+            ctx.status(400).json(Map.of("message", e.getMessage()));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).json(Map.of("message", e.getMessage()));
         } catch (DataAccessException e) {
             ctx.status(500).json(Map.of("message", e.getMessage()));
         }
@@ -69,9 +76,10 @@ public class Server {
     private void logout(Context ctx) throws Exception { // authToken
         try {
             HashMap<String, Object> resultMap = userHandler.logout(ctx);
-
 //            ctx.result(resultMap.toString());
             ctx.status(200).json(resultMap);
+        } catch (UnauthorizedException e) {
+            ctx.status(401).json(Map.of("message", e.getMessage()));
         } catch (DataAccessException e) {
             ctx.status(500).json(Map.of("message", e.getMessage()));
         }
@@ -80,9 +88,10 @@ public class Server {
     private void listGames(Context ctx) throws Exception { // authToken
         try {
             HashMap<String, Object> resultMap = gameHandler.listGames(ctx);
-
 //            ctx.result(resultMap.toString());
             ctx.status(200).json(resultMap);
+        } catch (UnauthorizedException e) {
+            ctx.status(401).json(Map.of("message", e.getMessage()));
         } catch (DataAccessException e) {
             ctx.status(500).json(Map.of("message", e.getMessage()));
         }
@@ -91,9 +100,12 @@ public class Server {
     private void createGame(Context ctx) throws Exception { // authToken, gameName
         try {
             HashMap<String, Object> resultMap = gameHandler.createGame(ctx);
-
 //            ctx.result(resultMap.toString());
             ctx.status(200).json(resultMap);
+        } catch (BadRequestException e) {
+            ctx.status(400).json(Map.of("message", e.getMessage()));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).json(Map.of("message", e.getMessage()));
         } catch (DataAccessException e) {
             ctx.status(500).json(Map.of("message", e.getMessage()));
         }
@@ -105,6 +117,12 @@ public class Server {
 
 //            ctx.result(resultMap.toString());
             ctx.status(200).json(resultMap);
+        } catch (BadRequestException e) {
+            ctx.status(400).json(Map.of("message", e.getMessage()));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).json(Map.of("message", e.getMessage()));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403).json(Map.of("message", e.getMessage()));
         } catch (DataAccessException e) {
             ctx.status(500).json(Map.of("message", e.getMessage()));
         }

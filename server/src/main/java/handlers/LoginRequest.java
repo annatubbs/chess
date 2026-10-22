@@ -1,13 +1,19 @@
 package handlers;
 
+import services.BadRequestException;
+
 public class LoginRequest {
 
     private final String username;
     private final String password;
 
     public LoginRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
+        try {
+            this.username = username;
+            this.password = password;
+        } catch (Exception e) {
+            throw new BadRequestException(e);
+        }
     }
 
     public String getUsername() {

@@ -53,7 +53,7 @@ public class GameMemDataAccess implements GameDataAccess {
 
             return new GameData(gameID, "", "", gameName);
         } catch (Exception e) {
-            throw new DataAccessException("Error in game data: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -62,7 +62,8 @@ public class GameMemDataAccess implements GameDataAccess {
             int gameID = gameData.getGameID();
 
             if (!gameDataMap.containsKey(gameID)) {
-                throw new DataAccessException("Error updating game. Game ID " + String.valueOf(gameID) + " doesn't exist.");
+                throw new DataAccessException("Error: Failed to update game. Game ID " + gameID +
+                                              " doesn't exist.");
             }
 
             HashMap<String, String> updatedNameMap = new HashMap<>(Map.of("blackUserName", gameData.getBlackUsername(),
@@ -71,7 +72,7 @@ public class GameMemDataAccess implements GameDataAccess {
 
             gameDataMap.put(gameID, updatedNameMap);
         } catch (Exception e) {
-            throw new DataAccessException("Error in game data: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -80,7 +81,7 @@ public class GameMemDataAccess implements GameDataAccess {
             gameDataMap = new HashMap<>();
             gameIDGenerator = new DataAccessException.GameIDGenerator();
         } catch (Exception e) {
-            throw new DataAccessException("Error in game data: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 

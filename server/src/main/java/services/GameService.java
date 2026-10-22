@@ -19,12 +19,12 @@ public class GameService {
         this.authDataAccess = authDataAccess;
     }
 
-    public ListGamesResult listGames(AuthTokenSet.AuthToken authToken) {
+    public ListGamesResult listGames(AuthTokenSet.AuthToken authToken) throws Exception {
 //        AuthData authData = dataAccess.getAuth(listGamesRequest.getAuthToken());
         AuthData authData = authDataAccess.getAuth(authToken);
 
         if (authData == null) {
-            throw new UnauthorizedException("Not authorized to see games.");
+            throw new UnauthorizedException();
         }
 
         ArrayList<GameData> gameList = gameDataAccess.listGames();
@@ -32,10 +32,10 @@ public class GameService {
         return new ListGamesResult(gameList);
     }
 
-    public CreateGameResult createGame(CreateGameRequest createGameRequest) {
+    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws Exception {
         AuthData authData = authDataAccess.getAuth(createGameRequest.getAuthToken());
         if (authData == null) {
-            throw new UnauthorizedException("Not authorized to create game.");
+            throw new UnauthorizedException();
         }
 
         GameData gameData = gameDataAccess.createGame(createGameRequest.getGameName());
@@ -46,7 +46,7 @@ public class GameService {
     public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws Exception {
         AuthData authData = authDataAccess.getAuth(joinGameRequest.getAuthToken());
         if (authData == null) {
-            throw new UnauthorizedException("Not authorized to join game.");
+            throw new UnauthorizedException();
         }
 
         GameData gameData = gameDataAccess.getGame(joinGameRequest.getGameID());
@@ -55,7 +55,7 @@ public class GameService {
         ChessGame.TeamColor playerColor = joinGameRequest.getPlayerColor();
 
         if (gameData.isTaken(playerColor)) {
-            throw new AlreadyTakenException(playerColor.toString() + " position already full.");
+            throw new AlreadyTakenException();
         }
         String username = authData.getUsername();
         gameData.fillTeamColor(playerColor, username);
@@ -65,7 +65,7 @@ public class GameService {
         return new JoinGameResult(playerColor, joinGameRequest.getGameID());
     }
 
-    public void clear() {
+    public void clear() throws Exception {
         gameDataAccess.clearData();
     }
 }

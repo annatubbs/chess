@@ -1,6 +1,7 @@
 package handlers;
 
 import server.AuthTokenSet.AuthToken;
+import services.BadRequestException;
 
 
 public class CreateGameRequest {
@@ -9,8 +10,12 @@ public class CreateGameRequest {
     private final String gameName;
 
     public CreateGameRequest(AuthToken authToken, String gameName) {
-        this.authToken = authToken;
-        this.gameName = gameName;
+        try {
+            this.authToken = authToken;
+            this.gameName = gameName;
+        } catch (Exception e) {
+            throw new BadRequestException(e);
+        }
     }
 
     public AuthToken getAuthToken() {

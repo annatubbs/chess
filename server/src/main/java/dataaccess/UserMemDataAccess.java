@@ -21,7 +21,7 @@ public class UserMemDataAccess implements UserDataAccess {
             }
             return null;
         } catch (Exception e) {
-            throw new DataAccessException("Error in user data access: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -30,13 +30,13 @@ public class UserMemDataAccess implements UserDataAccess {
             String username = userData.getUsername();
 
             if (userDataMap.containsKey(username)) {
-                throw new DataAccessException("Username already taken.");
+                throw new DataAccessException("Error: Username already taken.");
             } else {
                 userDataMap.put(username,
                         new HashMap<>(Map.of("password", userData.getPassword(), "email", userData.getEmail())));
             }
         } catch (Exception e) {
-            throw new DataAccessException("Error in user data access: " + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 }

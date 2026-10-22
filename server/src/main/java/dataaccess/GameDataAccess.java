@@ -12,5 +12,5 @@ public interface GameDataAccess {
 
     void updateGame(GameData gameData) throws DataAccessException;
 
-    boolean clearData() throws DataAccessException;
+    void clearData() throws DataAccessException;
 }

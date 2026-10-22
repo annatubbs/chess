@@ -25,11 +25,15 @@ public class UserService {
     public RegisterResult register(RegisterRequest registerRequest) throws Exception {
         String username = registerRequest.getUsername();
         if (userDataAccess.getUser(username) != null) {
-            throw new AlreadyTakenException("Username " + username + " already taken.");
+            throw new AlreadyTakenException();
         }
 
-        UserData userData = new UserData(registerRequest);
-        userDataAccess.createUser(userData);
+        try {
+            UserData userData = new UserData(registerRequest);
+            userDataAccess.createUser(userData);
+        } catch (Exception e) {
+            throw new BadRequestException(e);
+        }
 
         AuthData authData = generateAuth(username);
         authDataAccess.createAuth(authData);
@@ -43,11 +47,11 @@ public class UserService {
 
         UserData userData = userDataAccess.getUser(username);
         if (userData == null) {
-            throw new BadRequestException("User not found, username: " + username + ", password: " + password + ".");
+            throw new BadRequestException();
         }
 
         if (userData.getPassword().equals(password)) {
-            throw new UnauthorizedException("Password: " + password + " incorrect for " + username + ".");
+            throw new UnauthorizedException();
         }
 
         AuthData authData = this.generateAuth(username); // throws FailureResponseException
@@ -59,7 +63,7 @@ public class UserService {
 
         AuthData authData = authDataAccess.getAuth(authToken);
         if (authData == null) {
-            throw new UnauthorizedException("Not authorized to logout.");
+            throw new UnauthorizedException();
         }
 
         String username = authData.getUsername();
