@@ -1,27 +1,28 @@
 package handlers;
 
-import server.AuthTokenSet.AuthToken;
+import chess.ChessGame;
+import server.AuthTokenSet;
 import chess.ChessGame.TeamColor;
 import services.BadRequestException;
 
 
 public class JoinGameRequest {
 
-    private final AuthToken authToken;
+    private final String authToken;
     private final TeamColor playerColor;
     private final int gameID;
 
-    public JoinGameRequest(AuthToken authToken, TeamColor playerColor, int gameID) {
+    public JoinGameRequest(String authToken, JoinGameHelperInfo joinGameHelperInfo) {
         try {
             this.authToken = authToken;
-            this.playerColor = playerColor;
-            this.gameID = gameID;
+            this.playerColor = joinGameHelperInfo.playerColor;
+            this.gameID = joinGameHelperInfo.gameID;
         } catch (Exception e) {
             throw new BadRequestException(e);
         }
     }
 
-    public AuthToken getAuthToken() {
+    public String getAuthToken() {
         return authToken;
     }
 
@@ -31,5 +32,15 @@ public class JoinGameRequest {
 
     public int getGameID() {
         return gameID;
+    }
+
+    public static class JoinGameHelperInfo {
+        private final TeamColor playerColor;
+        private final int gameID;
+
+        public JoinGameHelperInfo(String playerColorStr, int gameID) {
+            this.playerColor = ChessGame.TeamColor.fromString(playerColorStr);
+            this.gameID = gameID;
+        }
     }
 }

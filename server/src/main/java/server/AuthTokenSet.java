@@ -6,54 +6,25 @@ import java.util.UUID;
 
 
 public class AuthTokenSet {
-    public static class AuthToken {
-        private final String tokenStr;
 
-        public AuthToken() {
-            this.tokenStr = UUID.randomUUID().toString();
-        }
-
-        public AuthToken(String tokenStr) {
-            this.tokenStr = tokenStr;
-        }
-
-        public String toString() {
-            return tokenStr;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            AuthToken authToken = (AuthToken) o;
-            return Objects.equals(tokenStr, authToken.tokenStr);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(tokenStr);
-        }
-    }
-
-    private final HashSet<AuthToken> authTokenSet; // developer notes: make new instance when clear. immutable
+    private final HashSet<String> authTokenSet; // developer notes: make new instance when clear. immutable
 
     public AuthTokenSet() {
         authTokenSet = new HashSet<>();
     }
 
-    public AuthToken makeToken() {
-        AuthToken token = new AuthToken();
+    public String makeToken() {
+        String authToken = UUID.randomUUID().toString();
 
-        while (authTokenSet.contains(token)) { // make sure token is unique
-            token = new AuthToken();
+        while (authTokenSet.contains(authToken)) { // make sure token is unique
+            authToken = UUID.randomUUID().toString();
         }
 
-        authTokenSet.add(token);
-        return token;
+        authTokenSet.add(authToken);
+        return authToken;
     }
 
-    public boolean isValidToken(AuthToken token) {
+    public boolean isValidToken(String token) {
         return authTokenSet.contains(token);
     }
 

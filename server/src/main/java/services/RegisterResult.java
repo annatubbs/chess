@@ -1,11 +1,11 @@
 package services;
 
 import handlers.AuthData;
-import server.AuthTokenSet.AuthToken;
+import server.AuthTokenSet;
 
 public class RegisterResult {
     private final String username;
-    private final AuthToken authToken;
+    private final String authToken;
 //
 //    public RegisterResult(String username, AuthToken authToken) {
 //        this.username = username;
@@ -21,7 +21,7 @@ public class RegisterResult {
         return username;
     }
 
-    public AuthToken getAuthToken() {
+    public String getAuthToken() {
         return authToken;
     }
 }

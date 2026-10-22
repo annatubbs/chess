@@ -6,7 +6,6 @@ import server.AuthTokenSet;
 import java.util.HashMap;
 import java.util.Map;
 
-// *Cast authToken to string?? I think so for tests..
 
 public class AuthMemDataAccess implements AuthDataAccess {
 
@@ -16,12 +15,12 @@ public class AuthMemDataAccess implements AuthDataAccess {
         authDataMap = new HashMap<>();
     }
 
-    public AuthData getAuth(AuthTokenSet.AuthToken authToken) throws DataAccessException {
+    public AuthData getAuth(String authToken) throws DataAccessException {
         try {
-            String authTokenStr = authToken.toString();
+            System.out.println(authDataMap);
 
-            if (authDataMap.containsKey(authTokenStr)) {
-                HashMap<String, String> usernameMap = authDataMap.get(authTokenStr);
+            if (authDataMap.containsKey(authToken)) {
+                HashMap<String, String> usernameMap = authDataMap.get(authToken);
                 return new AuthData(usernameMap.get("username"), authToken);
             }
             return null;
@@ -33,7 +32,7 @@ public class AuthMemDataAccess implements AuthDataAccess {
     public void createAuth(AuthData authData) throws DataAccessException {
         try {
             String username = authData.getUsername();
-            String authTokenStr = authData.getAuthToken().toString();
+            String authTokenStr = authData.getAuthToken();
 
             if (authDataMap.containsKey(authTokenStr)) {
                 throw new DataAccessException("AuthToken already in use.");
@@ -43,11 +42,12 @@ public class AuthMemDataAccess implements AuthDataAccess {
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }
+        System.out.println(authDataMap);
     }
 
-    public void deleteAuth(AuthTokenSet.AuthToken authToken) throws DataAccessException {
+    public void deleteAuth(String authToken) throws DataAccessException {
         try {
-            authDataMap.remove(authToken.toString());
+            authDataMap.remove(authToken);
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }

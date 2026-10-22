@@ -84,12 +84,10 @@ public class Server {
 
     private void logout(Context ctx) throws Exception { // authToken
         try {
-            HashMap<String, Object> resultMap = userHandler.logout(ctx.body());
-            ctx.json(new Gson().toJson(resultMap));
+            userHandler.logout(ctx.header("Authorization"));
 
             ctx.status(200);
             ctx.contentType("application/json");
-            ctx.result(new Gson().toJson(resultMap));
         } catch (UnauthorizedException e) {
             ctx.status(401);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -101,7 +99,7 @@ public class Server {
 
     private void listGames(Context ctx) throws Exception { // authToken
         try {
-            HashMap<String, Object> resultMap = gameHandler.listGames(ctx.body());
+            HashMap<String, Object> resultMap = gameHandler.listGames(ctx.header("Authorization"));
 
             ctx.status(200);
             ctx.contentType("application/json");
@@ -117,7 +115,7 @@ public class Server {
 
     private void createGame(Context ctx) throws Exception { // authToken, gameName
         try {
-            HashMap<String, Object> resultMap = gameHandler.createGame(ctx.body());
+            HashMap<String, Object> resultMap = gameHandler.createGame(ctx.header("Authorization"), ctx.body());
 
             ctx.status(200);
             ctx.contentType("application/json");
@@ -136,7 +134,7 @@ public class Server {
 
     private void joinGame(Context ctx) throws Exception { // authToken, playerColor, gameID // make classes here
         try {
-            HashMap<String, Object> resultMap = gameHandler.joinGame(ctx.body());
+            HashMap<String, Object> resultMap = gameHandler.joinGame(ctx.header("Authorization"), ctx.body());
 
             ctx.status(200);
             ctx.contentType("application/json");

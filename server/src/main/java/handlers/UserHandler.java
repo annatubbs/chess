@@ -26,7 +26,7 @@ public class UserHandler {
         RegisterResult registerResult = userService.register(registerRequest);
 
         return new HashMap<>(Map.of("username", registerResult.getUsername(),
-                "authToken", registerResult.getAuthToken().toString()));
+                "authToken", registerResult.getAuthToken()));
     }
 
     public HashMap<String, Object> login(String json) throws Exception {
@@ -37,15 +37,14 @@ public class UserHandler {
         LoginResult loginResult = userService.login(loginRequest);
 
         return new HashMap<>(Map.of("username", loginResult.getUsername(),
-                "authToken", loginResult.getAuthToken().toString()));
+                "authToken", loginResult.getAuthToken()));
     }
 
-    public HashMap<String, Object> logout(String json) throws Exception {
+    public void logout(String authToken) throws Exception {
 //        AuthToken authToken = new AuthToken(ctx.formParam("authToken"));
-        AuthToken authToken = new Gson().fromJson(json, AuthToken.class);
 
         LogoutResult logoutResult = userService.logout(authToken);
-        return new HashMap<>(Map.of("username", logoutResult.getUsername()));
+//        return new HashMap<>(Map.of("username", logoutResult.getUsername()));
     }
 
 }

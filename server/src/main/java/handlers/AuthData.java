@@ -1,12 +1,11 @@
 package handlers;
 
-import server.AuthTokenSet.AuthToken; //*string AuthToken?
 
 public class AuthData {
     private final String username;
-    private final AuthToken authToken;
+    private final String authToken;
 
-    public AuthData(String username, AuthToken authToken) {
+    public AuthData(String username, String authToken) {
         this.username = username;
         this.authToken = authToken;
     }
@@ -15,7 +14,7 @@ public class AuthData {
         return username;
     }
 
-    public AuthToken getAuthToken() {
+    public String getAuthToken() {
         return authToken;
     }
 }

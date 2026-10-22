@@ -5,21 +5,20 @@ import dataaccess.*;
 import handlers.AuthData;
 import handlers.CreateGameRequest;
 import handlers.JoinGameRequest;
-import server.AuthTokenSet;
 
 import java.util.ArrayList;
 
 public class GameService {
 
-    private final AuthDataAccess authDataAccess;
-    private final GameDataAccess gameDataAccess;
+    private final AuthMemDataAccess authDataAccess;
+    private final GameMemDataAccess gameDataAccess;
 
-    public GameService(AuthDataAccess authDataAccess, GameDataAccess gameDataAccess) {
+    public GameService(AuthMemDataAccess authDataAccess, GameMemDataAccess gameDataAccess) {
         this.gameDataAccess = gameDataAccess;
         this.authDataAccess = authDataAccess;
     }
 
-    public ListGamesResult listGames(AuthTokenSet.AuthToken authToken) throws Exception {
+    public ListGamesResult listGames(String authToken) throws Exception {
 //        AuthData authData = dataAccess.getAuth(listGamesRequest.getAuthToken());
         AuthData authData = authDataAccess.getAuth(authToken);
 

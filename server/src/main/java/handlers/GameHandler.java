@@ -1,17 +1,15 @@
 package handlers;
 
-import chess.ChessGame;
 import com.google.gson.Gson;
-import io.javalin.http.Context;
-import server.AuthTokenSet;
 import services.CreateGameResult;
 import services.GameService;
 import services.JoinGameResult;
 import services.ListGamesResult;
+import handlers.CreateGameRequest.GameName;
+import handlers.JoinGameRequest.JoinGameHelperInfo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class GameHandler {
 
@@ -21,20 +19,16 @@ public class GameHandler {
         this.gameService = gameService;
     }
 
-    public HashMap<String, Object> listGames(String json) throws Exception {
-//        AuthTokenSet.AuthToken authToken = new AuthTokenSet.AuthToken(ctx.formParam("authToken"));
-        AuthTokenSet.AuthToken authToken = new Gson().fromJson(json, AuthTokenSet.AuthToken.class);
-
+    public HashMap<String, Object> listGames(String authToken) throws Exception {
         ListGamesResult listGamesResult = gameService.listGames(authToken);
 
         return new HashMap<>(Map.of("games", listGamesResult.getGameList())); // might throw error b/c GameData objs
     }
 
 
-    public HashMap<String, Object> createGame(String json) throws Exception {
-//        CreateGameRequest createGameRequest = new CreateGameRequest(new AuthTokenSet.AuthToken(ctx.formParam("authToken")),
-//                ctx.formParam("gameName"));
-        CreateGameRequest createGameRequest = new Gson().fromJson(json, CreateGameRequest.class);
+    public HashMap<String, Object> createGame(String authToken, String json) throws Exception {
+        GameName gameName = new Gson().fromJson(json, GameName.class);
+        CreateGameRequest createGameRequest = new CreateGameRequest(authToken, gameName);
 
         CreateGameResult createGameResult = gameService.createGame(createGameRequest);
 
@@ -42,12 +36,10 @@ public class GameHandler {
     }
 
 
-    public HashMap<String, Object> joinGame(String json) throws Exception {
-//        JoinGameRequest joinGameRequest = new JoinGameRequest(new AuthTokenSet.AuthToken(ctx.formParam("authToken")),
-//                ChessGame.TeamColor.fromString(ctx.formParam("playerColor")),
-//                Integer.parseInt(Objects.requireNonNull(ctx.formParam("gameID"))));
-        JoinGameRequest joinGameRequest = new Gson().fromJson(json, JoinGameRequest.class);
-        
+    public HashMap<String, Object> joinGame(String authToken, String json) throws Exception {
+        JoinGameHelperInfo colorAndID = new Gson().fromJson(json, JoinGameHelperInfo.class);
+        JoinGameRequest joinGameRequest = new JoinGameRequest(authToken, colorAndID);
+
         JoinGameResult joinGameResult = gameService.joinGame(joinGameRequest);
 
         return new HashMap<>(Map.of("playerColor", joinGameResult.getPlayerColor(),

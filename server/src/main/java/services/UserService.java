@@ -1,24 +1,23 @@
 package services;
 
-import dataaccess.AuthDataAccess;
-import dataaccess.UserDataAccess;
+import dataaccess.AuthMemDataAccess;
+import dataaccess.UserMemDataAccess;
 import handlers.*;
 import server.AuthTokenSet;
-import server.AuthTokenSet.AuthToken;
 
 public class UserService {
     private AuthTokenSet authTokensSet;
-    private final AuthDataAccess authDataAccess;
-    private final UserDataAccess userDataAccess;
+    private final AuthMemDataAccess authDataAccess;
+    private final UserMemDataAccess userDataAccess;
 
-    public UserService(AuthDataAccess authDataAccess, UserDataAccess userDataAccess) {
+    public UserService(AuthMemDataAccess authDataAccess, UserMemDataAccess userDataAccess) {
         authTokensSet = new AuthTokenSet();
         this.userDataAccess = userDataAccess;
         this.authDataAccess = authDataAccess;
     }
 
     private AuthData generateAuth(String username) {
-        AuthToken authToken = authTokensSet.makeToken();
+        String authToken = authTokensSet.makeToken();
         return new AuthData(username, authToken);
     }
 
@@ -58,7 +57,7 @@ public class UserService {
         return new LoginResult(authData);
     }
 
-    public LogoutResult logout(AuthToken authToken) throws Exception {
+    public LogoutResult logout(String authToken) throws Exception {
 //        AuthToken authToken = logoutRequest.getAuthToken();
 
         AuthData authData = authDataAccess.getAuth(authToken);
