@@ -1,7 +1,7 @@
-package service;
+package passoff.server;
 
 import org.junit.jupiter.api.*;
-import passoff.server.TestServerFacade;
+import passoff.model.*;
 import server.Server;
 
 public abstract class ServerTests {

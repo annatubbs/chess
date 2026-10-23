@@ -1,0 +1,57 @@
+package passoff.server;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import passoff.model.TestAuthResult;
+import passoff.model.TestCreateRequest;
+import passoff.model.TestCreateResult;
+import passoff.model.TestUser;
+
+
+public class CreateGameTest extends ServerTests {
+    private TestAuthResult registerResult;
+
+    private void setUp() {
+        TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
+
+        registerResult = testServerFacade.register(testUser);
+    }
+
+    @Test
+    public void successTest() {
+        setUp();
+
+        TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), registerResult.getAuthToken());
+
+        System.out.println("Expected Status: 200");
+        System.out.println("Actual Status: " + testServerFacade.getStatusCode());
+        System.out.println(createGameResult.getGameID());
+
+        Assertions.assertEquals(200, testServerFacade.getStatusCode());
+        Assertions.assertNotNull(createGameResult.getGameID());
+    }
+
+    @Test
+    public void badRequestExceptionTest() {
+        setUp();
+
+        TestCreateResult createGameResult = testServerFacade.createGame(null, registerResult.getAuthToken());
+
+        System.out.println("Expected Status: 400");
+        System.out.println("Actual Status: " + testServerFacade.getStatusCode());
+
+        Assertions.assertEquals(400, testServerFacade.getStatusCode());
+    }
+
+    @Test
+    public void unauthorizedExceptionTest() {
+        setUp();
+
+        TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), "1234");
+
+        System.out.println("Expected Status: 401");
+        System.out.println("Actual Status: " + testServerFacade.getStatusCode());
+
+        Assertions.assertEquals(401, testServerFacade.getStatusCode());
+    }
+}

@@ -1,14 +1,14 @@
-package service;
+package passoff.server;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.TestAuthResult;
-import passoff.model.TestCreateRequest;
-import passoff.model.TestCreateResult;
+import passoff.model.TestListResult;
 import passoff.model.TestUser;
 
+import java.util.Arrays;
 
-public class CreateGameTest extends ServerTests {
+public class ListGamesTests extends ServerTests {
     private TestAuthResult registerResult;
 
     private void setUp() {
@@ -21,33 +21,21 @@ public class CreateGameTest extends ServerTests {
     public void successTest() {
         setUp();
 
-        TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), registerResult.getAuthToken());
+        TestListResult listGamesResult = testServerFacade.listGames(registerResult.getAuthToken());
 
         System.out.println("Expected Status: 200");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
-        System.out.println(createGameResult.getGameID());
+        System.out.println(Arrays.toString(listGamesResult.getGames()));
 
         Assertions.assertEquals(200, testServerFacade.getStatusCode());
-        Assertions.assertNotNull(createGameResult.getGameID());
-    }
-
-    @Test
-    public void badRequestExceptionTest() {
-        setUp();
-
-        TestCreateResult createGameResult = testServerFacade.createGame(null, registerResult.getAuthToken());
-
-        System.out.println("Expected Status: 400");
-        System.out.println("Actual Status: " + testServerFacade.getStatusCode());
-
-        Assertions.assertEquals(400, testServerFacade.getStatusCode());
+        Assertions.assertNotNull(listGamesResult.getGames());
     }
 
     @Test
     public void unauthorizedExceptionTest() {
         setUp();
 
-        TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), "1234");
+        TestListResult listGamesResult = testServerFacade.listGames("1234");
 
         System.out.println("Expected Status: 401");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
