@@ -49,7 +49,11 @@ public class GameService {
         }
 
         GameData gameData = gameDataAccess.getGame(joinGameRequest.getGameID());
-        
+
+        if (gameData == null) {
+            throw new BadRequestException();
+        }
+
         // check if color available
         ChessGame.TeamColor playerColor = joinGameRequest.getPlayerColor();
 

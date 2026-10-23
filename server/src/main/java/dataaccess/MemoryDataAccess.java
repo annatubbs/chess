@@ -9,7 +9,7 @@ public class MemoryDataAccess implements DataAccess {
     public MemoryDataAccess() {
         authDataAccess = new AuthMemDataAccess();
         userDataAccess = new UserMemDataAccess();
-        gameDataAccess = new GameMemDataAccess();
+        gameDataAccess = new GameMemDataAccess(authDataAccess, userDataAccess);
     }
 
     public AuthMemDataAccess getAuthDataAccess() {

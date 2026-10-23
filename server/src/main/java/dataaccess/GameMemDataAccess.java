@@ -6,12 +6,16 @@ import java.util.Map;
 
 public class GameMemDataAccess implements GameDataAccess {
 
+    private AuthMemDataAccess authMemDataAccess;
+    private UserMemDataAccess userMemDataAccess;
     private HashMap<Integer, HashMap<String, String>> gameDataMap;
     private DataAccessException.GameIDGenerator gameIDGenerator;
 
-    public GameMemDataAccess() {
-        gameDataMap = new HashMap<>();
-        gameIDGenerator = new DataAccessException.GameIDGenerator();
+    public GameMemDataAccess(AuthMemDataAccess authMemDataAccess, UserMemDataAccess userMemDataAccess) {
+        this.authMemDataAccess = authMemDataAccess;
+        this.userMemDataAccess = userMemDataAccess;
+        this.gameDataMap = new HashMap<>();
+        this.gameIDGenerator = new DataAccessException.GameIDGenerator();
     }
 
     public GameData getGame(int gameID) throws DataAccessException {
@@ -63,7 +67,7 @@ public class GameMemDataAccess implements GameDataAccess {
 
             if (!gameDataMap.containsKey(gameID)) {
                 throw new DataAccessException("Error: Failed to update game. Game ID " + gameID +
-                                              " doesn't exist.");
+                        " doesn't exist.");
             }
 
             HashMap<String, String> updatedNameMap = new HashMap<>(Map.of("blackUserName", gameData.getBlackUsername(),
@@ -79,6 +83,8 @@ public class GameMemDataAccess implements GameDataAccess {
     public void clearData() throws DataAccessException {
         try {
             gameDataMap = new HashMap<>();
+            authMemDataAccess.clearData();
+            userMemDataAccess.clearData();
             gameIDGenerator = new DataAccessException.GameIDGenerator();
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());

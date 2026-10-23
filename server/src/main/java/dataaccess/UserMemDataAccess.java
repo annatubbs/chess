@@ -39,4 +39,12 @@ public class UserMemDataAccess implements UserDataAccess {
             throw new DataAccessException("Error: " + e.getMessage());
         }
     }
+
+    public void clearData() throws DataAccessException {
+        try {
+            userDataMap = new HashMap<>();
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
 }

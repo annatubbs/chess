@@ -51,4 +51,12 @@ public class AuthMemDataAccess implements AuthDataAccess {
             throw new DataAccessException("Error: " + e.getMessage());
         }
     }
+
+    public void clearData() throws DataAccessException {
+        try {
+            authDataMap = new HashMap<>();
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
 }
