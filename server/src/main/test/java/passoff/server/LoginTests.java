@@ -16,7 +16,6 @@ public class LoginTests extends ServerTests {
         testServerFacade.logout(registerResult.getAuthToken());
     }
 
-
     @Test
     public void successTest() {
         setUp();
@@ -31,5 +30,31 @@ public class LoginTests extends ServerTests {
         Assertions.assertEquals(200, testServerFacade.getStatusCode());
         Assertions.assertNotNull(loginResult.getUsername());
         Assertions.assertNotNull(loginResult.getAuthToken());
+    }
+
+    @Test
+    public void BadRequestExceptionTest() {
+        setUp();
+
+        TestUser testUser2 = new TestUser("Nonexixtent", "chessLord", "jeffrey@fakeemail.com");
+        TestAuthResult loginResult = testServerFacade.login(testUser2);
+
+        System.out.println("Expected Status: 400");
+        System.out.println("Actual Status: " + testServerFacade.getStatusCode());
+
+        Assertions.assertEquals(400, testServerFacade.getStatusCode());
+    }
+
+    @Test
+    public void UnauthorizedExceptionTest() {
+        setUp();
+
+        TestUser testUser2 = new TestUser("Jeffrey", "wrongPassword", "jeffrey@fakeemail.com");
+        TestAuthResult loginResult = testServerFacade.login(testUser2);
+
+        System.out.println("Expected Status: 401");
+        System.out.println("Actual Status: " + testServerFacade.getStatusCode());
+
+        Assertions.assertEquals(401, testServerFacade.getStatusCode());
     }
 }

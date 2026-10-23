@@ -38,7 +38,5 @@ public class UserMemDataAccess implements UserDataAccess {
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }
-
-        System.out.println(userDataMap);
     }
 }

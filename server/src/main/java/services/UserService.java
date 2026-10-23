@@ -49,7 +49,7 @@ public class UserService {
             throw new BadRequestException();
         }
 
-        if (userData.getPassword().equals(password)) {
+        if (!userData.getPassword().equals(password)) {
             throw new UnauthorizedException();
         }
 

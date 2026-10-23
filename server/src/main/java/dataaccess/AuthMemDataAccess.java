@@ -42,7 +42,6 @@ public class AuthMemDataAccess implements AuthDataAccess {
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }
-        System.out.println(authDataMap);
     }
 
     public void deleteAuth(String authToken) throws DataAccessException {
