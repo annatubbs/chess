@@ -1,6 +1,5 @@
-package passoff.server;
+package service;
 
-import handlers.JoinGameRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.*;

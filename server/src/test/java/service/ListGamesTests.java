@@ -1,12 +1,15 @@
-package passoff.server;
+package service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.TestAuthResult;
+import passoff.model.TestListResult;
 import passoff.model.TestUser;
 
-public class LogoutTests extends ServerTests {
-    TestAuthResult registerResult;
+import java.util.Arrays;
+
+public class ListGamesTests extends ServerTests {
+    private TestAuthResult registerResult;
 
     private void setUp() {
         TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
@@ -18,21 +21,21 @@ public class LogoutTests extends ServerTests {
     public void successTest() {
         setUp();
 
-        testServerFacade.logout(registerResult.getAuthToken());
+        TestListResult listGamesResult = testServerFacade.listGames(registerResult.getAuthToken());
 
         System.out.println("Expected Status: 200");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
+        System.out.println(Arrays.toString(listGamesResult.getGames()));
 
         Assertions.assertEquals(200, testServerFacade.getStatusCode());
-        Assertions.assertNotNull(registerResult.getUsername());
-        Assertions.assertNotNull(registerResult.getAuthToken());
+        Assertions.assertNotNull(listGamesResult.getGames());
     }
 
     @Test
     public void unauthorizedExceptionTest() {
         setUp();
 
-        testServerFacade.logout("1234"); // fake authtoken
+        TestListResult listGamesResult = testServerFacade.listGames("1234");
 
         System.out.println("Expected Status: 401");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
