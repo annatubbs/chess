@@ -37,7 +37,7 @@ public class RegisterTests extends ServerTests {
     }
 
     @Test
-    public void alreadyTakenTest() {
+    public void alreadyTakenExceptionTest() {
         TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
         TestUser testUser2 = new TestUser("Jeffrey", "password", "jeffrey2@fakeemail.com");
 

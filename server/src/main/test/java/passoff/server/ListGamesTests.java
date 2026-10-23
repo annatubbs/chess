@@ -9,7 +9,7 @@ import passoff.model.TestUser;
 import java.util.Arrays;
 
 public class ListGamesTests extends ServerTests {
-    TestAuthResult registerResult;
+    private TestAuthResult registerResult;
 
     private void setUp() {
         TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
