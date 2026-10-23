@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ListGamesResult {
-    private ArrayList<GameData> gameList; //* dt
+    private final ArrayList<GameData> gameList; //* dt
 
     public ListGamesResult(ArrayList<GameData> gameList) {
         this.gameList = gameList;

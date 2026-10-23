@@ -2,10 +2,10 @@ package handlers;
 
 import services.BadRequestException;
 
-public class LoginRequest {
 
-    private final String username;
-    private final String password;
+public class LoginRequest {
+    private String username;
+    private String password;
 
     public LoginRequest(String username, String password) {
         try {

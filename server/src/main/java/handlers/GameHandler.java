@@ -1,10 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
-import services.CreateGameResult;
-import services.GameService;
-import services.JoinGameResult;
-import services.ListGamesResult;
+import services.*;
 import handlers.CreateGameRequest.GameName;
 import handlers.JoinGameRequest.JoinGameHelperInfo;
 
@@ -29,6 +26,10 @@ public class GameHandler {
     public HashMap<String, Object> createGame(String authToken, String json) throws Exception {
         GameName gameName = new Gson().fromJson(json, GameName.class);
         CreateGameRequest createGameRequest = new CreateGameRequest(authToken, gameName);
+
+        if (createGameRequest.getGameName() == null) {
+            throw new BadRequestException();
+        }
 
         CreateGameResult createGameResult = gameService.createGame(createGameRequest);
 

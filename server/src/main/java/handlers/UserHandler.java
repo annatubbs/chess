@@ -1,8 +1,6 @@
 package handlers;
 
-import chess.ChessGame;
 import com.google.gson.Gson;
-import io.javalin.http.Context;
 import services.*;
 import server.AuthTokenSet.*;
 
@@ -20,8 +18,6 @@ public class UserHandler {
     public HashMap<String, Object> register(String json) throws Exception {
 
         RegisterRequest registerRequest = new Gson().fromJson(json, RegisterRequest.class);
-//        RegisterRequest registerRequest = new RegisterRequest(ctx.formParam("username"),
-//                ctx.formParam("password"), ctx.formParam("email"));
 
         RegisterResult registerResult = userService.register(registerRequest);
 
@@ -30,9 +26,11 @@ public class UserHandler {
     }
 
     public HashMap<String, Object> login(String json) throws Exception {
-//        LoginRequest loginRequest = new LoginRequest(ctx.formParam("username"),
-//                ctx.formParam("password"));
         LoginRequest loginRequest = new Gson().fromJson(json, LoginRequest.class);
+
+        if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+            throw new BadRequestException();
+        }
 
         LoginResult loginResult = userService.login(loginRequest);
 
@@ -41,10 +39,7 @@ public class UserHandler {
     }
 
     public void logout(String authToken) throws Exception {
-//        AuthToken authToken = new AuthToken(ctx.formParam("authToken"));
-
         LogoutResult logoutResult = userService.logout(authToken);
-//        return new HashMap<>(Map.of("username", logoutResult.getUsername()));
     }
 
 }

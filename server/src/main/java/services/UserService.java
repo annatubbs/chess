@@ -46,7 +46,7 @@ public class UserService {
 
         UserData userData = userDataAccess.getUser(username);
         if (userData == null) {
-            throw new BadRequestException();
+            throw new UnauthorizedException();
         }
 
         if (!userData.getPassword().equals(password)) {
@@ -58,8 +58,6 @@ public class UserService {
     }
 
     public LogoutResult logout(String authToken) throws Exception {
-//        AuthToken authToken = logoutRequest.getAuthToken();
-
         AuthData authData = authDataAccess.getAuth(authToken);
         if (authData == null) {
             throw new UnauthorizedException();
