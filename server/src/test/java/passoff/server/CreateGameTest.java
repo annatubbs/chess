@@ -1,42 +1,41 @@
-package passoff.service;
+package passoff.server;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.TestAuthResult;
+import passoff.model.TestCreateRequest;
+import passoff.model.TestCreateResult;
 import passoff.model.TestUser;
 
-public class LoginTests extends ServerTests {
-    private TestUser testUser;
+
+public class CreateGameTest extends ServerTests {
+    private TestAuthResult registerResult;
 
     private void setUp() {
-        testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
+        TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
 
-        TestAuthResult registerResult = testServerFacade.register(testUser);
-        testServerFacade.logout(registerResult.getAuthToken());
+        registerResult = testServerFacade.register(testUser);
     }
 
     @Test
     public void successTest() {
         setUp();
 
-        TestAuthResult loginResult = testServerFacade.login(testUser);
+        TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), registerResult.getAuthToken());
 
         System.out.println("Expected Status: 200");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
-        System.out.println("\nUsername: " + loginResult.getUsername());
-        System.out.println("Auth token: " + loginResult.getAuthToken());
+        System.out.println(createGameResult.getGameID());
 
         Assertions.assertEquals(200, testServerFacade.getStatusCode());
-        Assertions.assertNotNull(loginResult.getUsername());
-        Assertions.assertNotNull(loginResult.getAuthToken());
+        Assertions.assertNotNull(createGameResult.getGameID());
     }
 
     @Test
     public void badRequestExceptionTest() {
         setUp();
 
-        TestUser testUser2 = new TestUser(null, "chessLord", "jeffrey@fakeemail.com");
-        TestAuthResult loginResult = testServerFacade.login(testUser2);
+        TestCreateResult createGameResult = testServerFacade.createGame(null, registerResult.getAuthToken());
 
         System.out.println("Expected Status: 400");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
@@ -48,8 +47,7 @@ public class LoginTests extends ServerTests {
     public void unauthorizedExceptionTest() {
         setUp();
 
-        TestUser testUser2 = new TestUser("Jeffrey", "wrongPassword", "jeffrey@fakeemail.com");
-        TestAuthResult loginResult = testServerFacade.login(testUser2);
+        TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), "1234");
 
         System.out.println("Expected Status: 401");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());

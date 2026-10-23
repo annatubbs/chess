@@ -1,4 +1,4 @@
-package passoff.service;
+package passoff.server;
 
 import org.junit.jupiter.api.*;
 import passoff.model.*;
