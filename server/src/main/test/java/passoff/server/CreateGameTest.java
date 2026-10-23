@@ -1,7 +1,5 @@
 package passoff.server;
 
-import com.google.gson.Gson;
-import handlers.CreateGameRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.TestAuthResult;
@@ -9,7 +7,6 @@ import passoff.model.TestCreateRequest;
 import passoff.model.TestCreateResult;
 import passoff.model.TestUser;
 
-import java.util.Arrays;
 
 public class CreateGameTest extends ServerTests {
     private TestAuthResult registerResult;
@@ -24,7 +21,6 @@ public class CreateGameTest extends ServerTests {
     public void successTest() {
         setUp();
 
-//        CreateGameRequest cgr = new CreateGameRequest(registerResult.getAuthToken(), new CreateGameRequest.GameName("myGame"));
         TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), registerResult.getAuthToken());
 
         System.out.println("Expected Status: 200");
@@ -39,7 +35,6 @@ public class CreateGameTest extends ServerTests {
     public void BadRequestExceptionTest() {
         setUp();
 
-//        CreateGameRequest cgr = new CreateGameRequest(registerResult.getAuthToken(), new CreateGameRequest.GameName("myGame"));
         TestCreateResult createGameResult = testServerFacade.createGame(null, registerResult.getAuthToken());
 
         System.out.println("Expected Status: 400");
@@ -52,7 +47,6 @@ public class CreateGameTest extends ServerTests {
     public void UnauthorizedExceptionTest() {
         setUp();
 
-//        CreateGameRequest cgr = new CreateGameRequest(registerResult.getAuthToken(), new CreateGameRequest.GameName("myGame"));
         TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), "1234");
 
         System.out.println("Expected Status: 401");

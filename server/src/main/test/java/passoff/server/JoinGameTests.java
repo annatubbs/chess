@@ -3,7 +3,6 @@ package passoff.server;
 import chess.ChessGame;
 import dataaccess.GameData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import passoff.model.*;
 import server.Server;

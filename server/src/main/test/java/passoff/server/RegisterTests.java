@@ -4,12 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.TestAuthResult;
 import passoff.model.TestUser;
-import server.Server;
 
 public class RegisterTests extends ServerTests {
     @Test
     public void successTest() {
-
         TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
 
         TestAuthResult registerResult = testServerFacade.register(testUser);

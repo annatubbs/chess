@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.TestAuthResult;
 import passoff.model.TestUser;
-import server.Server;
 
 public class LoginTests extends ServerTests {
     private TestUser testUser;
