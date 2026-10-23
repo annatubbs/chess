@@ -22,9 +22,6 @@ public class Server {
 
 
     public Server() {
-//        dataAccessMap = new HashMap<>(Map.of("AuthDataAccess", new AuthDataAccess(),
-//                "UserDataAccess", new UserDataAccess(),
-//                "GameDataAccess", new GameDataAccess()));
 
         Service service = new Service(new MemoryDataAccess());
         Handler handler = new Handler(service);

@@ -13,19 +13,22 @@ import java.util.Objects;
 public class ChessBoard {
     private ChessPiece[][] board;
 
-    public ChessBoard() { board = new ChessPiece[8][8];}
-
+    public ChessBoard() {
+        board = new ChessPiece[8][8];
+    }
 
     // create copy of board
     public ChessBoard deepCopy() {
         ChessBoard copyBoard = new ChessBoard();
 
-        for (int row=1; row<=8; row++) {
-            for (int col=1; col<=8; col++) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
 
-                ChessPiece currPiece = board[row-1][col-1];
+                ChessPiece currPiece = board[row - 1][col - 1];
                 // Check piece type at position
-                if (currPiece == null) continue;
+                if (currPiece == null) {
+                    continue;
+                }
                 copyBoard.addPiece(new ChessPosition(row, col), currPiece.deepCopy());
             }
         }
@@ -33,15 +36,14 @@ public class ChessBoard {
         return copyBoard;
     }
 
-
     /**
      * Adds a chess piece to the chessboard
      *
      * @param position where to add the piece to
      * @param piece    the piece to add
      */
-    public void addPiece(ChessPosition position, ChessPiece piece)  {
-        board[position.getRow()-1][position.getColumn()-1] = piece; // calc for 0-based index
+    public void addPiece(ChessPosition position, ChessPiece piece) {
+        board[position.getRow() - 1][position.getColumn() - 1] = piece; // calc for 0-based index
     }
 
     /**
@@ -52,11 +54,11 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return board[position.getRow()-1][position.getColumn()-1]; // should return piece or null...?
+        return board[position.getRow() - 1][position.getColumn() - 1]; // should return piece or null...?
     }
 
     private void removePiece(ChessPosition position) {
-        board[position.getRow()-1][position.getColumn()-1] = null;
+        board[position.getRow() - 1][position.getColumn() - 1] = null;
     }
 
     public ChessBoard movePiece(ChessMove move) throws InvalidMoveException {
@@ -108,14 +110,13 @@ public class ChessBoard {
 
         board = startBoard;
     }
-
-
+    
     // get positions of all a team's pieces
     public LinkedHashSet<ChessPosition> getTeamPositions(ChessGame.TeamColor color) {
         LinkedHashSet<ChessPosition> positions = new LinkedHashSet<>();
 
-        for (int rowI=0; rowI<8; rowI++) {
-            for (int colI=0; colI<8; colI++) {
+        for (int rowI = 0; rowI < 8; rowI++) {
+            for (int colI = 0; colI < 8; colI++) {
                 ChessPiece currPiece = board[rowI][colI];
 
                 if (currPiece != null && currPiece.getTeamColor() == color) { // if not null and right color, add position
@@ -128,7 +129,9 @@ public class ChessBoard {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessBoard that = (ChessBoard) o;
         return Objects.deepEquals(board, that.board);
     }

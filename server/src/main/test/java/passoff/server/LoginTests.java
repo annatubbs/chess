@@ -32,7 +32,7 @@ public class LoginTests extends ServerTests {
     }
 
     @Test
-    public void BadRequestExceptionTest() {
+    public void badRequestExceptionTest() {
         setUp();
 
         TestUser testUser2 = new TestUser("Nonexixtent", "chessLord", "jeffrey@fakeemail.com");
@@ -45,7 +45,7 @@ public class LoginTests extends ServerTests {
     }
 
     @Test
-    public void UnauthorizedExceptionTest() {
+    public void unauthorizedExceptionTest() {
         setUp();
 
         TestUser testUser2 = new TestUser("Jeffrey", "wrongPassword", "jeffrey@fakeemail.com");

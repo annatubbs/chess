@@ -32,7 +32,7 @@ public class CreateGameTest extends ServerTests {
     }
 
     @Test
-    public void BadRequestExceptionTest() {
+    public void badRequestExceptionTest() {
         setUp();
 
         TestCreateResult createGameResult = testServerFacade.createGame(null, registerResult.getAuthToken());
@@ -44,7 +44,7 @@ public class CreateGameTest extends ServerTests {
     }
 
     @Test
-    public void UnauthorizedExceptionTest() {
+    public void unauthorizedExceptionTest() {
         setUp();
 
         TestCreateResult createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), "1234");

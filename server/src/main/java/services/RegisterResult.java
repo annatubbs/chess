@@ -6,11 +6,6 @@ import server.AuthTokenSet;
 public class RegisterResult {
     private final String username;
     private final String authToken;
-//
-//    public RegisterResult(String username, AuthToken authToken) {
-//        this.username = username;
-//        this.authToken = authToken;
-//    }t
 
     public RegisterResult(AuthData authData) {
         this.username = authData.getUsername();

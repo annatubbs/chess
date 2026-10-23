@@ -61,24 +61,34 @@ public class ChessPiece {
         };
 
         private final String label;
+
         // Abstract constructor
         public abstract ChessPiece create(ChessGame.TeamColor pieceColor);
+
         // initialize String label
-        PieceType(String label) { this.label = label;}
+        PieceType(String label) {
+            this.label = label;
+        }
 
         @Override
-        public String toString() { return label;}
+        public String toString() {
+            return label;
+        }
     }
 
     /**
      * @return Which team this chess piece belongs to
      */
-    public ChessGame.TeamColor getTeamColor() { return pieceColor;}
+    public ChessGame.TeamColor getTeamColor() {
+        return pieceColor;
+    }
 
     /**
      * @return which type of chess piece this piece is
      */
-    public PieceType getPieceType() { return type;}
+    public PieceType getPieceType() {
+        return type;
+    }
 
     /**
      * Calculates all the positions a chess piece can move to
@@ -142,7 +152,9 @@ public class ChessPiece {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
         if (!(o instanceof ChessPiece)) { // covers if o == null
             return false;

@@ -23,11 +23,7 @@ public class AuthTokenSet {
         authTokenSet.add(authToken);
         return authToken;
     }
-
-    public boolean isValidToken(String token) {
-        return authTokenSet.contains(token);
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

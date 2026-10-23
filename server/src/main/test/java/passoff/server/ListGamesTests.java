@@ -32,7 +32,7 @@ public class ListGamesTests extends ServerTests {
     }
 
     @Test
-    public void UnauthorizedExceptionTest() {
+    public void unauthorizedExceptionTest() {
         setUp();
 
         TestListResult listGamesResult = testServerFacade.listGames("1234");

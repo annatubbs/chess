@@ -29,7 +29,7 @@ public class LogoutTests extends ServerTests {
     }
 
     @Test
-    public void UnauthorizedExceptionTest() {
+    public void unauthorizedExceptionTest() {
         setUp();
 
         testServerFacade.logout("1234"); // fake authtoken

@@ -7,18 +7,13 @@ public class Pawn extends ChessPiece {
     private boolean firstMove;
 
     public Pawn(ChessGame.TeamColor pieceColor) {
-        super(pieceColor,PieceType.PAWN);
+        super(pieceColor, PieceType.PAWN);
         firstMove = true;
     }
 
     public Pawn(ChessGame.TeamColor pieceColor, boolean firstMove) {
-        super(pieceColor,PieceType.PAWN);
+        super(pieceColor, PieceType.PAWN);
         this.firstMove = firstMove;
-    }
-
-    // when first move done, sets firstMove to false
-    public void didFirstMove() {
-        firstMove = false;
     }
 
     // Helpers for potential piece moves
@@ -26,11 +21,13 @@ public class Pawn extends ChessPiece {
     // Tells if piece moves up/down
     private int upDownFactor() {
 
-        if (this.getTeamColor() == ChessGame.TeamColor.WHITE) return 1; // WHITE; move up
+        if (this.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            return 1; // WHITE; move up
+        }
         return -1; // BLACK; move down
     }
 
-   // Checks if the piece can move to this spot
+    // Checks if the piece can move to this spot
     private boolean canMoveHere(ChessPosition currPos, ChessBoard board, boolean captureMove) {
         // Check if in board's range
         if (!currPos.inRange()) {
@@ -41,15 +38,17 @@ public class Pawn extends ChessPiece {
         ChessPiece pieceAtCurrPos = board.getPiece(currPos);
 
         if (captureMove) { // diagonal move. capture
-            if (pieceAtCurrPos == null) return false;
+            if (pieceAtCurrPos == null) {
+                return false;
+            }
             return this.getTeamColor() != pieceAtCurrPos.getTeamColor();
         }
         return pieceAtCurrPos == null; // forward move. not capture
     }
 
     // Calculate if new move possible
-    private Collection<ChessMove> pawnMove(ChessBoard board, ChessPosition myPosition, int[] xyDirection, 
-                                                 boolean captureMove) {
+    private Collection<ChessMove> pawnMove(ChessBoard board, ChessPosition myPosition, int[] xyDirection,
+                                           boolean captureMove) {
 
         Collection<ChessMove> moves = new ArrayList<>();
         int currRow = myPosition.getRow() + xyDirection[0];
@@ -86,9 +85,11 @@ public class Pawn extends ChessPiece {
         }
 
         ChessPosition currPos = new ChessPosition(row + upDownFactor, col);
-        if (board.getPiece(currPos) != null) return moves;
+        if (board.getPiece(currPos) != null) {
+            return moves;
+        }
         // cont to 2nd square if not blocked
-        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor*2,0}, false));
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor * 2, 0}, false));
 
         return moves;
     }
@@ -99,18 +100,18 @@ public class Pawn extends ChessPiece {
 
         int upDownFactor = upDownFactor(); // based on team color
         Collection<ChessMove> moves = new ArrayList<>();
-        
+
         // first move, can go 2 steps
         if (firstMove) {// check that not piece randomly spawned on board by autograder
             moves.addAll(firstMove(board, myPosition, upDownFactor));
         }
 
         // forward move
-        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor,0}, false));
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor, 0}, false));
         // diagonal moves
-        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor,1}, true)); // right
-        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor,-1}, true)); // left
-        
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor, 1}, true)); // right
+        moves.addAll(pawnMove(board, myPosition, new int[]{upDownFactor, -1}, true)); // left
+
         return moves;
     }
 

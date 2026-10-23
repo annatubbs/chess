@@ -54,13 +54,19 @@ public class ChessMove {
         return promotionPiece;
     }
 
-    public boolean putsOtherTeamInCheck() { return putsOtherTeamInCheck;}
+    public boolean putsOtherTeamInCheck() {
+        return putsOtherTeamInCheck;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessMove chessMove = (ChessMove) o;
-        return Objects.equals(startPosition, chessMove.startPosition) && Objects.equals(endPosition, chessMove.endPosition) && promotionPiece == chessMove.promotionPiece;
+        return Objects.equals(startPosition, chessMove.startPosition) &&
+                Objects.equals(endPosition, chessMove.endPosition) &&
+                promotionPiece == chessMove.promotionPiece;
     }
 
     @Override
@@ -72,11 +78,11 @@ public class ChessMove {
     public String toString() {
         String str = "Move: " + startPosition.toString() + "->" + endPosition.toString() + " ";
         if (promotionPiece != null) {
-            str += "Promoted to " + promotionPiece.toString();
+            str += "Promoted to " + promotionPiece;
         }
         if (putsOtherTeamInCheck) {
             return str + ", Check";
-        };
+        }
         return str + ", no Check";
     }
 }

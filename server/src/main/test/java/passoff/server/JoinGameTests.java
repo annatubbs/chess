@@ -15,14 +15,16 @@ public class JoinGameTests extends ServerTests {
     private void setUp() {
         TestUser testUser = new TestUser("Jeffrey", "chessLord", "jeffrey@fakeemail.com");
         registerResult = testServerFacade.register(testUser);
-        createGameResult = testServerFacade.createGame(new TestCreateRequest("MyGame"), registerResult.getAuthToken());
+        createGameResult = testServerFacade.createGame(new TestCreateRequest(
+                "MyGame"), registerResult.getAuthToken());
     }
 
     @Test
     public void successTest() {
         setUp();
 
-        TestResult joinGameResult = testServerFacade.joinPlayer(new TestJoinRequest("black", createGameResult.getGameID()), registerResult.getAuthToken());
+        TestResult joinGameResult = testServerFacade.joinPlayer(new TestJoinRequest(
+                "black", createGameResult.getGameID()), registerResult.getAuthToken());
 
         System.out.println("Expected Status: 200");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
@@ -36,7 +38,8 @@ public class JoinGameTests extends ServerTests {
 
         Server server = new Server();
 
-        TestResult joinGameResult = testServerFacade.joinPlayer(new TestJoinRequest("green", createGameResult.getGameID()), registerResult.getAuthToken());
+        TestResult joinGameResult = testServerFacade.joinPlayer(new TestJoinRequest(
+                "green", createGameResult.getGameID()), registerResult.getAuthToken());
 
         System.out.println("Expected Status: 400");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
@@ -45,17 +48,20 @@ public class JoinGameTests extends ServerTests {
     }
 
     @Test
-    public void AlreadyTakenExceptionTest() {
+    public void alreadyTakenExceptionTest() {
         setUp();
 
         Server server = new Server();
 
-        TestResult joinGameResult = testServerFacade.joinPlayer(new TestJoinRequest("black", createGameResult.getGameID()), registerResult.getAuthToken());
+        TestResult joinGameResult = testServerFacade.joinPlayer(new TestJoinRequest(
+                "black", createGameResult.getGameID()), registerResult.getAuthToken());
 
         // add another user who tries to take the same spot
-        TestUser testUser2 = new TestUser("Charlotte", "butterflyGirl", "charlotte@fakeemail.com");
+        TestUser testUser2 = new TestUser(
+                "Charlotte", "butterflyGirl", "charlotte@fakeemail.com");
         TestAuthResult registerResult2 = testServerFacade.register(testUser2);
-        TestResult joinGameResult2 = testServerFacade.joinPlayer(new TestJoinRequest("black", createGameResult.getGameID()), registerResult2.getAuthToken());
+        TestResult joinGameResult2 = testServerFacade.joinPlayer(new TestJoinRequest(
+                "black", createGameResult.getGameID()), registerResult2.getAuthToken());
 
         System.out.println("Expected Status: 403");
         System.out.println("Actual Status: " + testServerFacade.getStatusCode());
@@ -65,7 +71,8 @@ public class JoinGameTests extends ServerTests {
 
     @Test
     public void colorTaken() {
-        GameData data = new GameData(1234, "blackUser", "", "gameName");
+        GameData data = new GameData(
+                1234, "blackUser", "", "gameName");
 
         Assertions.assertFalse(data.isTaken(ChessGame.TeamColor.WHITE));
         Assertions.assertTrue(data.isTaken(ChessGame.TeamColor.BLACK));
