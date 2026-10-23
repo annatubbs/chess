@@ -53,7 +53,9 @@ public class UserService {
             throw new UnauthorizedException();
         }
 
-        AuthData authData = this.generateAuth(username); // throws FailureResponseException
+        AuthData authData = this.generateAuth(username);
+        authDataAccess.createAuth(authData);
+
         return new LoginResult(authData);
     }
 

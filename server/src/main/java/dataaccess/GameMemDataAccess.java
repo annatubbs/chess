@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class GameMemDataAccess implements GameDataAccess {
 
-    private AuthMemDataAccess authMemDataAccess;
-    private UserMemDataAccess userMemDataAccess;
-    private HashMap<Integer, HashMap<String, String>> gameDataMap;
+    private final AuthMemDataAccess authMemDataAccess;
+    private final UserMemDataAccess userMemDataAccess;
+    private HashMap<Integer, GameData> gameDataMap;
     private DataAccessException.GameIDGenerator gameIDGenerator;
 
     public GameMemDataAccess(AuthMemDataAccess authMemDataAccess, UserMemDataAccess userMemDataAccess) {
@@ -21,9 +21,7 @@ public class GameMemDataAccess implements GameDataAccess {
     public GameData getGame(int gameID) throws DataAccessException {
         try {
             if (gameDataMap.containsKey(gameID)) {
-                HashMap<String, String> nameMap = gameDataMap.get(gameID);
-                return new GameData(gameID, nameMap.get("blackUserName"),
-                        nameMap.get("whiteUserName"), nameMap.get("gameName"));
+                return gameDataMap.get(gameID);
             }
             return null;
         } catch (Exception e) {
@@ -35,11 +33,7 @@ public class GameMemDataAccess implements GameDataAccess {
         try {
             ArrayList<GameData> gameList = new ArrayList<>();
             for (Integer gameID : gameDataMap.keySet()) {
-                HashMap<String, String> nameMap = gameDataMap.get(gameID);
-                GameData data = new GameData(gameID, nameMap.get("blackUserName"),
-                        nameMap.get("whiteUserName"), nameMap.get("gameName"));
-
-                gameList.add(data);
+                gameList.add(gameDataMap.get(gameID)); // add GameData objects to list
             }
             return gameList;
         } catch (Exception e) {
@@ -50,12 +44,10 @@ public class GameMemDataAccess implements GameDataAccess {
     public GameData createGame(String gameName) throws DataAccessException {
         try {
             int gameID = gameIDGenerator.generateID();
+            GameData gameData = new GameData(gameID, null, null, gameName);
 
-            gameDataMap.put(gameID, new HashMap<>(Map.of("blackUserName", "",
-                    "whiteUserName", "",
-                    "gameName", gameName)));
-
-            return new GameData(gameID, "", "", gameName);
+            gameDataMap.put(gameID, gameData);
+            return gameData;
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }
@@ -70,11 +62,7 @@ public class GameMemDataAccess implements GameDataAccess {
                         " doesn't exist.");
             }
 
-            HashMap<String, String> updatedNameMap = new HashMap<>(Map.of("blackUserName", gameData.getBlackUsername(),
-                    "whiteUserName", gameData.getWhiteUsername(),
-                    "gameName", gameData.getGameName()));
-
-            gameDataMap.put(gameID, updatedNameMap);
+            gameDataMap.put(gameID, gameData);
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }

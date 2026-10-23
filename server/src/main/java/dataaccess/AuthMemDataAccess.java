@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class AuthMemDataAccess implements AuthDataAccess {
 
-    HashMap<String, HashMap<String, String>> authDataMap; // authToken: username
+    HashMap<String, AuthData> authDataMap; // authToken: username
 
     public AuthMemDataAccess() {
         authDataMap = new HashMap<>();
@@ -16,11 +16,8 @@ public class AuthMemDataAccess implements AuthDataAccess {
 
     public AuthData getAuth(String authToken) throws DataAccessException {
         try {
-            System.out.println(authDataMap);
-
             if (authDataMap.containsKey(authToken)) {
-                HashMap<String, String> usernameMap = authDataMap.get(authToken);
-                return new AuthData(usernameMap.get("username"), authToken);
+                return authDataMap.get(authToken);
             }
             return null;
         } catch (Exception e) {
@@ -30,13 +27,12 @@ public class AuthMemDataAccess implements AuthDataAccess {
 
     public void createAuth(AuthData authData) throws DataAccessException {
         try {
-            String username = authData.getUsername();
             String authTokenStr = authData.getAuthToken();
 
             if (authDataMap.containsKey(authTokenStr)) {
                 throw new DataAccessException("AuthToken already in use.");
             } else {
-                authDataMap.put(authTokenStr, new HashMap<>(Map.of("username", username)));
+                authDataMap.put(authTokenStr, authData);
             }
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
