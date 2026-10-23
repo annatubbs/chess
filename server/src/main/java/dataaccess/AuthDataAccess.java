@@ -1,7 +1,6 @@
 package dataaccess;
 
 import handlers.AuthData;
-import server.AuthTokenSet;
 
 public interface AuthDataAccess {
 

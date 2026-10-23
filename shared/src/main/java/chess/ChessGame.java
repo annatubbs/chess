@@ -81,7 +81,6 @@ public class ChessGame {
     // Functions:
     // get team positions (get board positions of all players of one color )
 
-
     /**
      * Gets all valid moves for a piece at the given location
      *
@@ -210,7 +209,6 @@ public class ChessGame {
 
         return true; // if no valid moves, is checkmate
     }
-
 
     /**
      * Determines if the given team is in stalemate, which here is defined as having

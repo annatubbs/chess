@@ -1,7 +1,6 @@
 package dataaccess;
 
 import handlers.AuthData;
-import server.AuthTokenSet;
 
 import java.util.HashMap;
 import java.util.Map;
