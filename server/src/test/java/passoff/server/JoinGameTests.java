@@ -72,7 +72,7 @@ public class JoinGameTests extends ServerTests {
     @Test
     public void colorTaken() {
         GameData data = new GameData(
-                1234, "blackUser", "", "gameName");
+                1234, "blackUser", null, "gameName");
 
         Assertions.assertFalse(data.isTaken(ChessGame.TeamColor.WHITE));
         Assertions.assertTrue(data.isTaken(ChessGame.TeamColor.BLACK));

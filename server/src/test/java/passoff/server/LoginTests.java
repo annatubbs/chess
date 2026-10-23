@@ -35,7 +35,7 @@ public class LoginTests extends ServerTests {
     public void badRequestExceptionTest() {
         setUp();
 
-        TestUser testUser2 = new TestUser("Nonexixtent", "chessLord", "jeffrey@fakeemail.com");
+        TestUser testUser2 = new TestUser(null, "chessLord", "jeffrey@fakeemail.com");
         TestAuthResult loginResult = testServerFacade.login(testUser2);
 
         System.out.println("Expected Status: 400");
