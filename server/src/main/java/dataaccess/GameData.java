@@ -40,9 +40,9 @@ public class GameData {
 
     public boolean isTaken(ChessGame.TeamColor color) {
         if (color == ChessGame.TeamColor.BLACK) {
-            return gameDataMap.get("blackUsername") != null;
+            return gameDataMap.get("blackUsername") != "";
         } else { // wants white team
-            return gameDataMap.get("whiteUsername") != null;
+            return gameDataMap.get("whiteUsername") != "";
         }
     }
 

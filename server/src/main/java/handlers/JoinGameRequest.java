@@ -15,7 +15,7 @@ public class JoinGameRequest {
     public JoinGameRequest(String authToken, JoinGameHelperInfo joinGameHelperInfo) {
         try {
             this.authToken = authToken;
-            this.playerColor = joinGameHelperInfo.playerColor;
+            this.playerColor = ChessGame.TeamColor.fromString(joinGameHelperInfo.playerColor);
             this.gameID = joinGameHelperInfo.gameID;
         } catch (Exception e) {
             throw new BadRequestException(e);
@@ -35,11 +35,11 @@ public class JoinGameRequest {
     }
 
     public static class JoinGameHelperInfo {
-        private final TeamColor playerColor;
+        private final String playerColor;
         private final int gameID;
 
         public JoinGameHelperInfo(String playerColorStr, int gameID) {
-            this.playerColor = ChessGame.TeamColor.fromString(playerColorStr);
+            this.playerColor = playerColorStr;
             this.gameID = gameID;
         }
     }
