@@ -9,7 +9,6 @@ import java.util.Map;
 // **** usernames must be "" when empty! not null *****
 
 public class GameData {
-    //    private HashMap<String, Object> gameDataMap;
     private final int gameID;
     private String blackUsername;
     private String whiteUsername;
@@ -21,10 +20,6 @@ public class GameData {
         this.whiteUsername = whiteUsername;
         this.gameName = gameName;
     }
-
-//    public GameData(HashMap<String, Object> gameDataMap) {
-//        this.gameDataMap = new HashMap<>(gameDataMap);
-//    }
 
     public int getGameID() {
         return gameID;
