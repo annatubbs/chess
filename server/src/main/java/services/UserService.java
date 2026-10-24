@@ -23,6 +23,7 @@ public class UserService {
 
     public RegisterResult register(RegisterRequest registerRequest) throws Exception {
         String username = registerRequest.getUsername();
+
         if (userDataAccess.getUser(username) != null) {
             throw new AlreadyTakenException();
         }
@@ -45,6 +46,7 @@ public class UserService {
         String password = loginRequest.getPassword();
 
         UserData userData = userDataAccess.getUser(username);
+
         if (userData == null) {
             throw new UnauthorizedException();
         }
@@ -59,15 +61,13 @@ public class UserService {
         return new LoginResult(authData);
     }
 
-    public LogoutResult logout(String authToken) throws Exception {
+    public void logout(String authToken) throws Exception {
         AuthData authData = authDataAccess.getAuth(authToken);
+
         if (authData == null) {
             throw new UnauthorizedException();
         }
 
-        String username = authData.getUsername();
         authDataAccess.deleteAuth(authToken);
-
-        return new LogoutResult(username);
     }
 }

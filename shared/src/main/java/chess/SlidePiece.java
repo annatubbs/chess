@@ -39,7 +39,9 @@ public abstract class SlidePiece extends ChessPiece {
                     moves.add(new ChessMove(myPosition, currPos, null, false));
                 }
 
-            } else break; // invalid move. stop iteration
+            } else { // invalid move. stop iteration
+                break;
+            }
         }
 
         return moves;

@@ -16,7 +16,6 @@ public class UserHandler {
     }
 
     public HashMap<String, Object> register(String json) throws Exception {
-
         RegisterRequest registerRequest = new Gson().fromJson(json, RegisterRequest.class);
 
         RegisterResult registerResult = userService.register(registerRequest);
@@ -39,7 +38,7 @@ public class UserHandler {
     }
 
     public void logout(String authToken) throws Exception {
-        LogoutResult logoutResult = userService.logout(authToken);
+        userService.logout(authToken);
     }
 
 }

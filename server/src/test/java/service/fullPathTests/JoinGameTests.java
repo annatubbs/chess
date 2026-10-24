@@ -1,4 +1,4 @@
-package service;
+package service.fullPathTests;
 
 import chess.ChessGame;
 import dataaccess.GameData;

@@ -22,7 +22,6 @@ public class GameHandler {
         return new HashMap<>(Map.of("games", listGamesResult.getGameList())); // might throw error b/c GameData objs
     }
 
-
     public HashMap<String, Object> createGame(String authToken, String json) throws Exception {
         GameName gameName = new Gson().fromJson(json, GameName.class);
         CreateGameRequest createGameRequest = new CreateGameRequest(authToken, gameName);
@@ -35,7 +34,6 @@ public class GameHandler {
 
         return new HashMap<>(Map.of("gameID", createGameResult.getGameID()));
     }
-
 
     public HashMap<String, Object> joinGame(String authToken, String json) throws Exception {
         JoinGameHelperInfo colorAndID = new Gson().fromJson(json, JoinGameHelperInfo.class);

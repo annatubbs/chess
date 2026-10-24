@@ -19,4 +19,12 @@ public class RegisterResult {
     public String getAuthToken() {
         return authToken;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterResult{" +
+                "username='" + username + '\'' +
+                ", authToken='" + authToken + '\'' +
+                '}';
+    }
 }

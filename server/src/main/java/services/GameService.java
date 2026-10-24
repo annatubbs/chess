@@ -19,7 +19,6 @@ public class GameService {
     }
 
     public ListGamesResult listGames(String authToken) throws Exception {
-//        AuthData authData = dataAccess.getAuth(listGamesRequest.getAuthToken());
         AuthData authData = authDataAccess.getAuth(authToken);
 
         if (authData == null) {
@@ -44,6 +43,7 @@ public class GameService {
 
     public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws Exception {
         AuthData authData = authDataAccess.getAuth(joinGameRequest.getAuthToken());
+
         if (authData == null) {
             throw new UnauthorizedException();
         }

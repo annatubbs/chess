@@ -1,4 +1,4 @@
-package service;
+package service.fullPathTests;
 
 import org.junit.jupiter.api.*;
 import passoff.server.TestServerFacade;
