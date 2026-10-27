@@ -169,4 +169,8 @@ public class Server {
     public void stop() {
         javalin.stop();
     }
+
+    public int getPort() {
+        return javalin.port();
+    }
 }

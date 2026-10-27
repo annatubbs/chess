@@ -4,10 +4,9 @@ import chess.*;
 
 public class ServerMain {
     public static void main(String[] args) {
-        var port = 8080;
         Server server = new Server();
-        server.run(port);
+        server.run(0);
 
-        System.out.println("♕ 240 Chess Server running on port " + port);
+        System.out.println("♕ 240 Chess Server running on port " + server.getPort());
     }
 }
