@@ -1,16 +1,16 @@
 package services;
 
-import dataaccess.AuthMemDataAccess;
-import dataaccess.UserMemDataAccess;
+import dataaccess.AuthDataAccess;
+import dataaccess.UserDataAccess;
 import handlers.*;
 import server.AuthTokenSet;
 
 public class UserService {
     private AuthTokenSet authTokensSet;
-    private final AuthMemDataAccess authDataAccess;
-    private final UserMemDataAccess userDataAccess;
+    private final AuthDataAccess authDataAccess;
+    private final UserDataAccess userDataAccess;
 
-    public UserService(AuthMemDataAccess authDataAccess, UserMemDataAccess userDataAccess) {
+    public UserService(AuthDataAccess authDataAccess, UserDataAccess userDataAccess) {
         authTokensSet = new AuthTokenSet();
         this.userDataAccess = userDataAccess;
         this.authDataAccess = authDataAccess;

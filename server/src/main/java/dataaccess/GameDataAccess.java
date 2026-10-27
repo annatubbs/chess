@@ -1,16 +1,81 @@
 package dataaccess;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public interface GameDataAccess {
+public class GameDataAccess {
 
-    GameData getGame(int gameID) throws DataAccessException;
+    private final AuthDataAccess authDataAccess;
+    private final UserDataAccess userDataAccess;
+    private HashMap<Integer, GameData> gameDataMap;
+    private DataAccessException.GameIDGenerator gameIDGenerator;
 
-    ArrayList<GameData> listGames() throws DataAccessException;
+    public GameDataAccess(AuthDataAccess authDataAccess, UserDataAccess userDataAccess) {
+        this.authDataAccess = authDataAccess;
+        this.userDataAccess = userDataAccess;
+        this.gameDataMap = new HashMap<>();
+        this.gameIDGenerator = new DataAccessException.GameIDGenerator();
+    }
 
-    GameData createGame(String gameName) throws DataAccessException;
+    public GameData getGame(int gameID) throws DataAccessException {
+        try {
+            if (gameDataMap.containsKey(gameID)) {
+                return gameDataMap.get(gameID);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new DataAccessException("Error in game data: " + e.getMessage());
+        }
+    }
 
-    void updateGame(GameData gameData) throws DataAccessException;
+    public ArrayList<GameData> listGames() throws DataAccessException {
+        try {
+            ArrayList<GameData> gameList = new ArrayList<>();
+            for (Integer gameID : gameDataMap.keySet()) {
+                gameList.add(gameDataMap.get(gameID)); // add GameData objects to list
+            }
+            return gameList;
+        } catch (Exception e) {
+            throw new DataAccessException("Error in game data: " + e.getMessage());
+        }
+    }
 
-    void clearData() throws DataAccessException;
+    public GameData createGame(String gameName) throws DataAccessException {
+        try {
+            int gameID = gameIDGenerator.generateID();
+            GameData gameData = new GameData(gameID, null, null, gameName);
+
+            gameDataMap.put(gameID, gameData);
+            return gameData;
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
+
+    public void updateGame(GameData gameData) throws DataAccessException {
+        try {
+            int gameID = gameData.getGameID();
+
+            if (!gameDataMap.containsKey(gameID)) {
+                throw new DataAccessException("Error: Failed to update game. Game ID " + gameID +
+                        " doesn't exist.");
+            }
+
+            gameDataMap.put(gameID, gameData);
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
+
+    public void clearData() throws DataAccessException {
+        try {
+            gameDataMap = new HashMap<>();
+            authDataAccess.clearData();
+            userDataAccess.clearData();
+            gameIDGenerator = new DataAccessException.GameIDGenerator();
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
+
 }

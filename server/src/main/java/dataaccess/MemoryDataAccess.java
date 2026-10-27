@@ -2,25 +2,25 @@ package dataaccess;
 
 public class MemoryDataAccess implements DataAccess {
 
-    private final AuthMemDataAccess authDataAccess;
-    private final UserMemDataAccess userDataAccess;
-    private final GameMemDataAccess gameDataAccess;
+    private final AuthDataAccess authDataAccess;
+    private final UserDataAccess userDataAccess;
+    private final GameDataAccess gameDataAccess;
 
     public MemoryDataAccess() {
-        authDataAccess = new AuthMemDataAccess();
-        userDataAccess = new UserMemDataAccess();
-        gameDataAccess = new GameMemDataAccess(authDataAccess, userDataAccess);
+        authDataAccess = new AuthDataAccess();
+        userDataAccess = new UserDataAccess();
+        gameDataAccess = new GameDataAccess(authDataAccess, userDataAccess);
     }
 
-    public AuthMemDataAccess getAuthDataAccess() {
+    public AuthDataAccess getAuthDataAccess() {
         return authDataAccess;
     }
 
-    public UserMemDataAccess getUserDataAccess() {
+    public UserDataAccess getUserDataAccess() {
         return userDataAccess;
     }
 
-    public GameMemDataAccess getGameDataAccess() {
+    public GameDataAccess getGameDataAccess() {
         return gameDataAccess;
     }
 

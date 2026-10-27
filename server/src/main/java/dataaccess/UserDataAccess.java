@@ -2,9 +2,49 @@ package dataaccess;
 
 import handlers.UserData;
 
-public interface UserDataAccess {
+import java.util.HashMap;
+import java.util.Map;
 
-    UserData getUser(String username) throws DataAccessException;
+public class UserDataAccess {
 
-    void createUser(UserData userData) throws DataAccessException;
+    private HashMap<String, HashMap<String, String>> userDataMap; // Username: password, email
+
+    public UserDataAccess() {
+        userDataMap = new HashMap<>();
+    }
+
+    public UserData getUser(String username) throws DataAccessException {
+        try {
+            if (userDataMap.containsKey(username)) {
+                HashMap<String, String> passwordEmailLst = userDataMap.get(username);
+                return new UserData(username, passwordEmailLst.get("password"), passwordEmailLst.get("email"));
+            }
+            return null;
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
+
+    public void createUser(UserData userData) throws DataAccessException {
+        try {
+            String username = userData.getUsername();
+
+            if (userDataMap.containsKey(username)) {
+                throw new DataAccessException("Error: Username already taken.");
+            } else {
+                userDataMap.put(username,
+                        new HashMap<>(Map.of("password", userData.getPassword(), "email", userData.getEmail())));
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
+
+    public void clearData() throws DataAccessException {
+        try {
+            userDataMap = new HashMap<>();
+        } catch (Exception e) {
+            throw new DataAccessException("Error: " + e.getMessage());
+        }
+    }
 }

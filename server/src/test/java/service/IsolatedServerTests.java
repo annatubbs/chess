@@ -1,32 +1,27 @@
 package service;
 
-import dataaccess.AuthMemDataAccess;
-import dataaccess.GameMemDataAccess;
-import dataaccess.UserMemDataAccess;
-import handlers.GameHandler;
+import dataaccess.*;
 import handlers.RegisterRequest;
-import handlers.UserHandler;
 import org.junit.jupiter.api.BeforeEach;
-import services.GameService;
 import services.RegisterResult;
 import services.UserService;
 
 public abstract class IsolatedServerTests {
     static UserService userService;
 
-    static AuthMemDataAccess authMemDataAccess;
-    static UserMemDataAccess userMemDataAccess;
-    static GameMemDataAccess gameMemDataAccess;
+    static AuthDataAccess authDataAccess;
+    static UserDataAccess userDataAccess;
+    static GameDataAccess gameDataAccess;
 
     RegisterResult registerResult;
 
     @BeforeEach
     protected void setUp() {
-        userService = new UserService(authMemDataAccess, userMemDataAccess);
+        userService = new UserService(authDataAccess, userDataAccess);
 
-        authMemDataAccess = new AuthMemDataAccess();
-        userMemDataAccess = new UserMemDataAccess();
-        gameMemDataAccess = new GameMemDataAccess(authMemDataAccess, userMemDataAccess);
+        authDataAccess = new AuthDataAccess();
+        userDataAccess = new UserDataAccess();
+        gameDataAccess = new GameDataAccess(authDataAccess, userDataAccess);
     }
 
     protected void register() {
