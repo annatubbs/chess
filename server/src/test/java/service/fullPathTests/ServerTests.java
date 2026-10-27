@@ -11,10 +11,9 @@ public abstract class ServerTests {
     @BeforeAll
     static void startServer() {
         server = new Server();
-        int port = 8080;
 
-        testServerFacade = new TestServerFacade("localhost", String.valueOf(port));
-        server.run(8080);
+        testServerFacade = new TestServerFacade("localhost", "0");
+        server.run(0);
     }
 
     @AfterAll
