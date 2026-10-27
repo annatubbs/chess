@@ -1,4 +1,4 @@
-package service.fullPathTests;
+package service.fullPathTests.gitignore;
 
 import org.junit.jupiter.api.*;
 import passoff.server.TestServerFacade;
@@ -12,7 +12,7 @@ public abstract class ServerTests {
     static void startServer() {
         server = new Server();
 
-        testServerFacade = new TestServerFacade("localhost", "0");
+        testServerFacade = new TestServerFacade("localhost", "8080");
         server.run(0);
     }
 
