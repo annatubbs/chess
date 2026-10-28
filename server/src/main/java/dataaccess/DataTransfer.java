@@ -5,23 +5,23 @@ import handlers.UserData;
 
 public interface DataTransfer {
 
-    public boolean containsAuth();
+    public boolean containsAuth(String AuthToken);
 
-    public void addAuth(AuthData authData);
+    public void addAuth(AuthData authData) throws DataAccessException;
 
-    public void removeAuth(String authToken);
+    public void removeAuth(String authToken) throws DataAccessException;
 
 
-    public boolean containsUserName(String username);
+    public boolean containsUsername(String username);
 
-    public boolean addUser(UserData userData);
+    public void addUser(UserData userData) throws DataAccessException;
 
     public void clearData();
 
 
     public boolean containsGameID(int gameID);
 
-    public GameData getGameData(int gameID);
+    public GameData getGameData(int gameID) throws DataAccessException;
 
-    public void addGameData(GameData gameData);
+    public void addGameData(GameData gameData) throws DataAccessException;
 }
