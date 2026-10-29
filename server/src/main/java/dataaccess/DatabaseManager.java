@@ -74,4 +74,36 @@ public class DatabaseManager {
         var port = Integer.parseInt(props.getProperty("db.port"));
         connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
     }
+
+
+    // MY CODE // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Create tables
+     **/
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS  authDataMap (
+              `username` varchar(256) NOT NULL,
+              `authToken` varchar(256) NOT NULL
+            );
+            
+            CREATE TABLE IF NOT EXISTS  userDataMap (
+              `username` varchar(256) NOT NULL,
+              `password` varchar(256) NOT NULL;
+              `email` varchar(256) NOT NULL
+            );
+            
+            CREATE TABLE IF NOT EXISTS  gameDataMap (
+              `gameID` INTEGER NOT NULL,
+              `blackUsername` varchar(256) NOT NULL,
+              `whiteUsername` varchar(256) NOT NULL,
+              `gameName` varchar(256) NOT NULL
+            );
+            """
+            
+
+    };
+
+
 }
