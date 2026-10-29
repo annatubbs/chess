@@ -7,15 +7,17 @@ import java.util.HashMap;
 
 public class AuthDataAccess {
 
+    private DataTransfer dataTransfer;
     HashMap<String, AuthData> authDataMap; // authToken: username
 
-    public AuthDataAccess() {
+    public AuthDataAccess(DataTransfer dataTransfer) {
+        this.dataTransfer = dataTransfer;
         authDataMap = new HashMap<>();
     }
 
     public AuthData getAuth(String authToken) throws DataAccessException {
         try {
-            if (authDataMap.containsKey(authToken)) {
+            if (dataTransfer.containsAuth(authToken)) {
                 return authDataMap.get(authToken);
             }
             return null;

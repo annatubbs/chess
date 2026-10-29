@@ -5,14 +5,12 @@ import java.util.HashMap;
 
 public class GameDataAccess {
 
-    private final AuthDataAccess authDataAccess;
-    private final UserDataAccess userDataAccess;
+    private DataTransfer dataTransfer;
     private HashMap<Integer, GameData> gameDataMap;
     private DataAccessException.GameIDGenerator gameIDGenerator;
 
-    public GameDataAccess(AuthDataAccess authDataAccess, UserDataAccess userDataAccess) {
-        this.authDataAccess = authDataAccess;
-        this.userDataAccess = userDataAccess;
+    public GameDataAccess(DataTransfer dataTransfer) {
+        this.dataTransfer = dataTransfer;
         this.gameDataMap = new HashMap<>();
         this.gameIDGenerator = new DataAccessException.GameIDGenerator();
     }

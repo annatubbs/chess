@@ -7,17 +7,17 @@ import java.util.Map;
 
 public class UserDataAccess {
 
-    private HashMap<String, HashMap<String, String>> userDataMap; // Username: password, email
+    private DataTransfer dataTransfer;
 
-    public UserDataAccess() {
+    public UserDataAccess(DataTransfer dataTransfer) {
+        this.dataTransfer = dataTransfer;
         userDataMap = new HashMap<>();
     }
 
     public UserData getUser(String username) throws DataAccessException {
         try {
-            if (userDataMap.containsKey(username)) {
-                HashMap<String, String> passwordEmailLst = userDataMap.get(username);
-                return new UserData(username, passwordEmailLst.get("password"), passwordEmailLst.get("email"));
+            if (dataTransfer.containsUsername(username)) {
+                return dataTransfer.get
             }
             return null;
         } catch (Exception e) {

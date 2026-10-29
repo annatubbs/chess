@@ -43,6 +43,14 @@ public class MemoryDataTransfer implements DataTransfer {
         return userDataMap.containsKey(username);
     }
 
+    public UserData getUser(String username) throws DataAccessException { 
+        if (!containsUsername(username)) {
+            throw new DataAccessException("Error: username not in database");
+
+        }
+        return userDataMap.get(username);
+    }
+
     public void addUser(UserData userData) throws DataAccessException {
         String username = userData.getUsername();
 

@@ -19,11 +19,12 @@ public class Server {
     private final UserHandler userHandler;
     private final GameHandler gameHandler;
     private final Javalin javalin;
+    private DataTransfer dataTransfer;
 
 
     public Server() {
-
-        Service service = new Service(new MemoryDataAccess());
+        dataTransfer = new MemoryDataTransfer();
+        Service service = new Service(new DataAccess(dataTransfer));
         Handler handler = new Handler(service);
 
         userHandler = handler.getUserHandler();

@@ -14,6 +14,8 @@ public interface DataTransfer {
 
     public boolean containsUsername(String username);
 
+    public UserData getUser(String username) throws DataAccessException;
+
     public void addUser(UserData userData) throws DataAccessException;
 
     public void clearData();
