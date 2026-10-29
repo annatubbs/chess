@@ -19,11 +19,9 @@ public class Server {
     private final UserHandler userHandler;
     private final GameHandler gameHandler;
     private final Javalin javalin;
-    private DataTransfer dataTransfer;
-
 
     public Server() {
-        dataTransfer = new MemoryDataTransfer();
+        DataTransfer dataTransfer = new SQLDataTransfer();
         Service service = new Service(new DataAccess(dataTransfer));
         Handler handler = new Handler(service);
 

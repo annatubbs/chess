@@ -2,19 +2,14 @@ package dataaccess;
 
 import dataObject.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
 public class SQLDataTransfer implements DataTransfer {
 
-    private DatabaseManager databaseManager;
-
-    public SQLDataTransfer(DbSetupInfo dbSetupInfo) {
-        databaseManager = new DatabaseManager();
+    public SQLDataTransfer() {
+        configureDb();
     }
 
     // Authorization Methods
@@ -119,10 +114,18 @@ public class SQLDataTransfer implements DataTransfer {
     // Game Methods
     public void clearData() throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
-            var statement = "DELETE FROM authDataTable; DELETE FROM userDataTable; DELETE FROM gameDataTable; COMMIT";
-//            conn.executeUpdate(statement);
+            conn.setAutoCommit(false);
+
+            try (Statement statement = conn.createStatement()) {
+                statement.executeUpdate("DELETE FROM authDataTable");
+                statement.executeUpdate("DELETE FROM userDataTable");
+                statement.executeUpdate("DELETE FROM gameDataTable");
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
-            conn.rollback();
             throw new DataAccessException(e.getMessage());
         }
     }
@@ -193,13 +196,15 @@ public class SQLDataTransfer implements DataTransfer {
               `username` varchar(256) NOT NULL,
               `authToken` varchar(256) NOT NULL
             );
-            
+            """,
+            """
             CREATE TABLE IF NOT EXISTS  userDataTable (
               `username` varchar(256) NOT NULL,
               `password` varchar(256) NOT NULL;
               `email` varchar(256) NOT NULL
             );
-            
+            """,
+            """
             CREATE TABLE IF NOT EXISTS  gameDataTable (
               `gameID` INTEGER NOT NULL,
               `blackUsername` varchar(256) NOT NULL,
@@ -209,6 +214,16 @@ public class SQLDataTransfer implements DataTransfer {
             """
     };
 
-    private void dbSetup() {
+    private void configureDb() {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            DatabaseManager.createDatabase();
+            for (String statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error creating db " + e.getMessage());
+        }
     }
 }
