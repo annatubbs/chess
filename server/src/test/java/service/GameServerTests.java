@@ -20,7 +20,7 @@ public class GameServerTests extends IsolatedServerTests {
 
     @BeforeEach
     public void setUpGameTools() {
-        gameService = new GameService(authMemDataAccess, gameMemDataAccess);
+        gameService = new GameService(authDataAccess, gameDataAccess);
         gameHandler = new GameHandler(gameService);
     }
 

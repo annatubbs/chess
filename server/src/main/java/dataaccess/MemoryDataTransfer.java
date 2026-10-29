@@ -2,9 +2,9 @@ package dataaccess;
 
 import handlers.AuthData;
 import handlers.UserData;
-import services.BadRequestException;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class MemoryDataTransfer implements DataTransfer {
     private HashMap<String, AuthData> authDataMap; // authToken: username
@@ -22,19 +22,15 @@ public class MemoryDataTransfer implements DataTransfer {
         return authDataMap.containsKey(authToken);
     }
 
-    public void addAuth(AuthData authData) throws DataAccessException {
-        String authToken = authData.getAuthToken();
-
-        if (containsAuth(authToken)) {
-            throw new DataAccessException("Error: authToken already in database.");
-        }
-        authDataMap.put(authToken, authData);
+    public AuthData getAuth(String authToken) {
+        return authDataMap.get(authToken);
     }
 
-    public void removeAuth(String authToken) throws DataAccessException {
-        if (!containsAuth(authToken)) {
-            throw new DataAccessException("Error: authToken not in database");
-        }
+    public void addAuth(AuthData authData) {
+        authDataMap.put(authData.getAuthToken(), authData);
+    }
+
+    public void removeAuth(String authToken) {
         authDataMap.remove(authToken);
     }
 
@@ -43,21 +39,12 @@ public class MemoryDataTransfer implements DataTransfer {
         return userDataMap.containsKey(username);
     }
 
-    public UserData getUser(String username) throws DataAccessException { 
-        if (!containsUsername(username)) {
-            throw new DataAccessException("Error: username not in database");
-
-        }
+    public UserData getUser(String username) {
         return userDataMap.get(username);
     }
 
-    public void addUser(UserData userData) throws DataAccessException {
-        String username = userData.getUsername();
-
-        if (containsUsername(username)) {
-            throw new DataAccessException("Error: username already in database.");
-        }
-        userDataMap.put(username, userData);
+    public void addUser(UserData userData) {
+        userDataMap.put(userData.getUsername(), userData);
     }
 
     // Data Methods
@@ -71,19 +58,15 @@ public class MemoryDataTransfer implements DataTransfer {
         return gameDataMap.containsKey(gameID);
     }
 
-    public GameData getGameData(int gameID) throws DataAccessException {
-        if (!containsGameID(gameID)) {
-            throw new DataAccessException("Error: gameID not in database.");
-        }
+    public Set<Integer> getGameIDKeySet() {
+        return gameDataMap.keySet();
+    }
+
+    public GameData getGameData(int gameID) {
         return gameDataMap.get(gameID);
     }
 
-    public void addGameData(GameData gameData) throws DataAccessException {
-        int gameID = gameData.getGameID();
-
-        if (containsGameID(gameID)) {
-            throw new DataAccessException("Error: gameID not in database.");
-        }
-        gameDataMap.put(gameID, gameData);
+    public void addGameData(GameData gameData) {
+        gameDataMap.put(gameData.getGameID(), gameData);
     }
 }

@@ -13,7 +13,7 @@ public abstract class ServerTests {
         server = new Server();
 
         testServerFacade = new TestServerFacade("localhost", "8080");
-        server.run(0);
+        server.run(8080);
     }
 
     @AfterAll

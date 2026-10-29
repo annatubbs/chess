@@ -8,7 +8,7 @@ import services.UserService;
 
 public abstract class IsolatedServerTests {
     static UserService userService;
-
+    static DataTransfer dataTransfer;
     static AuthDataAccess authDataAccess;
     static UserDataAccess userDataAccess;
     static GameDataAccess gameDataAccess;
@@ -18,10 +18,10 @@ public abstract class IsolatedServerTests {
     @BeforeEach
     protected void setUp() {
         userService = new UserService(authDataAccess, userDataAccess);
-
-        authDataAccess = new AuthDataAccess();
-        userDataAccess = new UserDataAccess();
-        gameDataAccess = new GameDataAccess(authDataAccess, userDataAccess);
+        dataTransfer = new MemoryDataTransfer();
+        authDataAccess = new AuthDataAccess(dataTransfer);
+        userDataAccess = new UserDataAccess(dataTransfer);
+        gameDataAccess = new GameDataAccess(dataTransfer);
     }
 
     protected void register() {

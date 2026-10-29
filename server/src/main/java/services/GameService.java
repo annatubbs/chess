@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class GameService {
 
-    private final AuthMemDataAccess authDataAccess;
-    private final GameMemDataAccess gameDataAccess;
+    private final AuthDataAccess authDataAccess;
+    private final GameDataAccess gameDataAccess;
 
-    public GameService(AuthMemDataAccess authDataAccess, GameMemDataAccess gameDataAccess) {
+    public GameService(AuthDataAccess authDataAccess, GameDataAccess gameDataAccess) {
         this.gameDataAccess = gameDataAccess;
         this.authDataAccess = authDataAccess;
     }

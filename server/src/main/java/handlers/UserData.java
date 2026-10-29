@@ -1,20 +1,16 @@
 package handlers;
 
+import java.util.Objects;
+
 public class UserData {
     private final String username;
     private final String password;
     private final String email;
 
     public UserData(RegisterRequest registerRequest) {
-        this.username = registerRequest.getUsername();
-        this.password = registerRequest.getPassword();
-        this.email = registerRequest.getEmail();
-    }
-
-    public UserData(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+        this.username = Objects.requireNonNull(registerRequest.getUsername());
+        this.password = Objects.requireNonNull(registerRequest.getPassword());
+        this.email = Objects.requireNonNull(registerRequest.getEmail());
     }
 
     public String getUsername() {
@@ -23,10 +19,6 @@ public class UserData {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override

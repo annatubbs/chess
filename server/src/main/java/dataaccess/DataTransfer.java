@@ -3,27 +3,33 @@ package dataaccess;
 import handlers.AuthData;
 import handlers.UserData;
 
+import java.util.Set;
+
 public interface DataTransfer {
 
     public boolean containsAuth(String AuthToken);
 
-    public void addAuth(AuthData authData) throws DataAccessException;
+    public AuthData getAuth(String authToken);
 
-    public void removeAuth(String authToken) throws DataAccessException;
+    public void addAuth(AuthData authData);
+
+    public void removeAuth(String authToken);
 
 
     public boolean containsUsername(String username);
 
-    public UserData getUser(String username) throws DataAccessException;
+    public UserData getUser(String username);
 
-    public void addUser(UserData userData) throws DataAccessException;
+    public void addUser(UserData userData);
 
     public void clearData();
 
 
     public boolean containsGameID(int gameID);
 
-    public GameData getGameData(int gameID) throws DataAccessException;
+    public Set<Integer> getGameIDKeySet();
 
-    public void addGameData(GameData gameData) throws DataAccessException;
+    public GameData getGameData(int gameID);
+
+    public void addGameData(GameData gameData);
 }

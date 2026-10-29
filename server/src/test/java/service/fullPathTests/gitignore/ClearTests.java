@@ -3,7 +3,6 @@ package service.fullPathTests.gitignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.*;
-
 import java.util.Arrays;
 
 

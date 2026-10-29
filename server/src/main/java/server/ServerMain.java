@@ -5,7 +5,7 @@ import chess.*;
 public class ServerMain {
     public static void main(String[] args) {
         Server server = new Server();
-        server.run(0); // or 8080
+        server.run(0);
 
         System.out.println("♕ 240 Chess Server running on port " + server.getPort());
     }

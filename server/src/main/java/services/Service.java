@@ -1,7 +1,6 @@
 package services;
 
 import dataaccess.DataAccess;
-import dataaccess.MemoryDataAccess;
 
 public class Service {
     private final UserService userService;
