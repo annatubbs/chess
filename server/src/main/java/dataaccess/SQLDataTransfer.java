@@ -2,6 +2,11 @@ package dataaccess;
 
 import dataObject.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SQLDataTransfer implements DataTransfer {
@@ -13,29 +18,197 @@ public class SQLDataTransfer implements DataTransfer {
     }
 
     // Authorization Methods
-    public boolean containsAuth(String AuthToken);
+    public boolean containsAuth(String authToken) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM authDataMap WHERE authToken=?");
+            preparedStatement.setString(1, authToken);
 
-    public AuthData getAuth(String authToken);
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next(); // if not null, there is an entry for that username, return true; if null, return false
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
-    public void addAuth(AuthData authData);
+    public AuthData getAuth(String authToken) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM authDataMap WHERE authToken=?");
+            preparedStatement.setString(1, authToken);
 
-    public void removeAuth(String authToken);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return new AuthData(rs.getString("username"), rs.getString("authToken"));
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    public void addAuth(AuthData authData) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO authDataTable (authToken, username) VALUES (?,?)");
+            preparedStatement.setString(1, authData.getAuthToken());
+            preparedStatement.setString(2, authData.getUsername());
+
+            preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    public void removeAuth(String authToken) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "DELETE FROM authDataTable WHERE authToken=?");
+            preparedStatement.setString(1, authToken);
+
+            preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
     // User Methods
-    public boolean containsUsername(String username);
+    public boolean containsUsername(String username) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM userDataMap WHERE username=?");
+            preparedStatement.setString(1, username);
 
-    public UserData getUser(String username);
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next(); // if not null, there is an entry for that username, return true; if null, return false
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
-    public void addUser(UserData userData);
+    public UserData getUser(String username) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM userDataMap WHERE username=?");
+            preparedStatement.setString(1, username);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return new UserData(rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"));
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    public void addUser(UserData userData) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            conn.setAutoCommit(false);
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO userDataTable (username,password,email) VALUES (?,?,?)");
+            preparedStatement.setString(1, userData.getUsername());
+            preparedStatement.setString(2, userData.getPassword());
+            preparedStatement.setString(3, userData.getEmail());
+
+            preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
     // Game Methods
-    public void clearData();
+    public void clearData() throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            var statement = "DELETE FROM authDataTable; DELETE FROM userDataTable; DELETE FROM gameDataTable; COMMIT";
+//            conn.executeUpdate(statement);
+        } catch (SQLException e) {
+            conn.rollback();
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
-    public boolean containsGameID(int gameID);
+    public boolean containsGameID(int gameID) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM gameDataMap WHERE gameID=?");
+            preparedStatement.setInt(1, gameID);
 
-    public Set<Integer> getGameIDKeySet();
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next(); // if not null, there is an entry for that gameID, return true; if null, return false
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
-    public GameData getGameData(int gameID);
+    public Set<Integer> getGameIDKeySet() throws DataAccessException {
+        Set<Integer> gameIDSet = new HashSet<>();
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM gameDataMap");
+            ResultSet rs = preparedStatement.executeQuery();
 
-    public void addGameData(GameData gameData);
+            while (rs.next()) {
+                gameIDSet.add(rs.getInt("gameID"));
+            }
+            return gameIDSet;
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    public GameData getGameData(int gameID) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT *, json FROM gameDataMap WHERE gameID=?");
+            preparedStatement.setInt(1, gameID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return new GameData(rs.getInt("gameID"), rs.getString("blackUsername"),
+                    rs.getString("whiteUsername"), rs.getString("gameName"));
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    public void addGameData(GameData gameData) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO gameDataTable (gameID,blackUsername,whiteUsername,gameName) VALUES (?,?,?,?)");
+            preparedStatement.setInt(1, gameData.getGameID());
+            preparedStatement.setString(2, gameData.getBlackUsername());
+            preparedStatement.setString(3, gameData.getWhiteUsername());
+            preparedStatement.setString(4, gameData.getGameName());
+
+            preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    // Database Setup
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS  authDataTable (
+              `username` varchar(256) NOT NULL,
+              `authToken` varchar(256) NOT NULL
+            );
+            
+            CREATE TABLE IF NOT EXISTS  userDataTable (
+              `username` varchar(256) NOT NULL,
+              `password` varchar(256) NOT NULL;
+              `email` varchar(256) NOT NULL
+            );
+            
+            CREATE TABLE IF NOT EXISTS  gameDataTable (
+              `gameID` INTEGER NOT NULL,
+              `blackUsername` varchar(256) NOT NULL,
+              `whiteUsername` varchar(256) NOT NULL,
+              `gameName` varchar(256) NOT NULL
+            );
+            """
+    };
+
+    private void dbSetup() {
+    }
 }

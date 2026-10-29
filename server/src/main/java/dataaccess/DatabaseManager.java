@@ -1,5 +1,7 @@
 package dataaccess;
 
+import dataObject.AuthData;
+
 import java.sql.*;
 import java.util.Properties;
 
@@ -12,7 +14,7 @@ public class DatabaseManager {
     /*
      * Load the database information for the db.properties file.
      */
-    static {
+    static { // gets info from db.properties file in server/src/main/resources/
         loadPropertiesFromResources();
     }
 
@@ -77,33 +79,4 @@ public class DatabaseManager {
 
 
     // MY CODE // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Create tables
-     **/
-    private final String[] createStatements = {
-            """
-            CREATE TABLE IF NOT EXISTS  authDataMap (
-              `username` varchar(256) NOT NULL,
-              `authToken` varchar(256) NOT NULL
-            );
-            
-            CREATE TABLE IF NOT EXISTS  userDataMap (
-              `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL;
-              `email` varchar(256) NOT NULL
-            );
-            
-            CREATE TABLE IF NOT EXISTS  gameDataMap (
-              `gameID` INTEGER NOT NULL,
-              `blackUsername` varchar(256) NOT NULL,
-              `whiteUsername` varchar(256) NOT NULL,
-              `gameName` varchar(256) NOT NULL
-            );
-            """
-            
-
-    };
-
-
 }

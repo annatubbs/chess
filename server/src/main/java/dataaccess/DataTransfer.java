@@ -8,29 +8,29 @@ import java.util.Set;
 
 public interface DataTransfer {
     // Authorization Methods
-    public boolean containsAuth(String AuthToken);
+    public boolean containsAuth(String AuthToken) throws DataAccessException;
 
-    public AuthData getAuth(String authToken);
+    public AuthData getAuth(String authToken) throws DataAccessException;
 
-    public void addAuth(AuthData authData);
+    public void addAuth(AuthData authData) throws DataAccessException;
 
-    public void removeAuth(String authToken);
+    public void removeAuth(String authToken) throws DataAccessException;
 
     // User Methods
-    public boolean containsUsername(String username);
+    public boolean containsUsername(String username) throws DataAccessException;
 
-    public UserData getUser(String username);
+    public UserData getUser(String username) throws DataAccessException;
 
-    public void addUser(UserData userData);
+    public void addUser(UserData userData) throws DataAccessException;
 
     // Game Methods
-    public void clearData();
+    public void clearData() throws DataAccessException;
 
-    public boolean containsGameID(int gameID);
+    public boolean containsGameID(int gameID) throws DataAccessException;
 
-    public Set<Integer> getGameIDKeySet();
+    public Set<Integer> getGameIDKeySet() throws DataAccessException;
 
-    public GameData getGameData(int gameID);
+    public GameData getGameData(int gameID) throws DataAccessException;
 
-    public void addGameData(GameData gameData);
+    public void addGameData(GameData gameData) throws DataAccessException;
 }

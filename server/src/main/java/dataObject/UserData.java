@@ -15,12 +15,22 @@ public class UserData {
         this.email = Objects.requireNonNull(registerRequest.getEmail());
     }
 
+    public UserData(String username, String password, String email) {
+        this.username = Objects.requireNonNull(username);
+        this.password = Objects.requireNonNull(password);
+        this.email = Objects.requireNonNull(password);
+    }
+
     public String getUsername() {
         return username;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
