@@ -1,8 +1,6 @@
 package dataaccess;
 
-import handlers.AuthData;
-
-import java.util.HashMap;
+import dataObject.AuthData;
 
 
 public class AuthDataAccess {

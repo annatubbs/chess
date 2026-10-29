@@ -1,9 +1,6 @@
 package dataaccess;
 
-import handlers.UserData;
-
-import java.util.HashMap;
-import java.util.Map;
+import dataObject.UserData;
 
 public class UserDataAccess {
 

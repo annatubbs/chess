@@ -1,7 +1,8 @@
 package dataaccess;
 
-import handlers.AuthData;
-import handlers.UserData;
+import dataObject.GameData;
+import dataObject.AuthData;
+import dataObject.UserData;
 
 import java.util.HashMap;
 import java.util.Set;

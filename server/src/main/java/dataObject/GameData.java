@@ -1,9 +1,6 @@
-package dataaccess;
+package dataObject;
 
 import chess.ChessGame;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 // **** usernames must be "" when empty! not null *****

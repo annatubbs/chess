@@ -1,9 +1,8 @@
 package services;
 
-import dataaccess.GameData;
+import dataObject.GameData;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ListGamesResult {
     private final ArrayList<GameData> gameList; //* dt

@@ -1,7 +1,7 @@
 package service.fullPathTests.gitignore;
 
 import chess.ChessGame;
-import dataaccess.GameData;
+import dataObject.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import passoff.model.*;

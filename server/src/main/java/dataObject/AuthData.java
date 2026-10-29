@@ -1,4 +1,4 @@
-package handlers;
+package dataObject;
 
 
 public class AuthData {

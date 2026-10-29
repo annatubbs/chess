@@ -1,4 +1,6 @@
-package handlers;
+package dataObject;
+
+import handlers.RegisterRequest;
 
 import java.util.Objects;
 

@@ -1,7 +1,6 @@
 package services;
 
-import handlers.AuthData;
-import server.AuthTokenSet;
+import dataObject.AuthData;
 
 public class RegisterResult {
     private final String username;

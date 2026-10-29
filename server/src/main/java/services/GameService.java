@@ -1,8 +1,9 @@
 package services;
 
 import chess.ChessGame;
+import dataObject.GameData;
 import dataaccess.*;
-import handlers.AuthData;
+import dataObject.AuthData;
 import handlers.CreateGameRequest;
 import handlers.JoinGameRequest;
 

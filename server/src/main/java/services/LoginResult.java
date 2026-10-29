@@ -1,6 +1,6 @@
 package services;
 
-import handlers.AuthData;
+import dataObject.AuthData;
 
 public class LoginResult {
     private final String username;
