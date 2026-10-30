@@ -1,5 +1,7 @@
-package dataaccess;
+package dataaccess.sql;
 
+import dataaccess.DataAccessException;
+import dataaccess.DataTransfer;
 import dataobject.*;
 
 import java.sql.*;

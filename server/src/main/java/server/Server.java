@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.*;
+import dataaccess.sql.SQLDataTransfer;
 import handlers.GameHandler;
 import handlers.UserHandler;
 import io.javalin.*;
