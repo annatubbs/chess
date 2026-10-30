@@ -1,7 +1,5 @@
 package dataaccess;
 
-import dataObject.AuthData;
-
 import java.sql.*;
 import java.util.Properties;
 

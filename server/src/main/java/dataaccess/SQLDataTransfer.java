@@ -12,7 +12,6 @@ public class SQLDataTransfer implements DataTransfer {
         try {
             configureDb();
         } catch (Exception e) {
-//            throw new DataAccessException(e.getMessage());
             System.out.println("Error: creating database connection. " + e.getMessage());
         }
     }
