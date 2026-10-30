@@ -22,7 +22,7 @@ public class UserData {
     public UserData(String username, String password, String email) {
         this.username = Objects.requireNonNull(username);
         this.password = Objects.requireNonNull(password);
-        this.email = Objects.requireNonNull(password);
+        this.email = Objects.requireNonNull(email);
     }
 
     public String getUsername() {
