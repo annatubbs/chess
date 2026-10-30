@@ -1,4 +1,4 @@
-package service.fullPathTests.gitignore;
+package dataaccess.fullPathTests.gitignore;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

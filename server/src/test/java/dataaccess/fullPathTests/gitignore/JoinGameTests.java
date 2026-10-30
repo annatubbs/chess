@@ -1,4 +1,4 @@
-package service.fullPathTests.gitignore;
+package dataaccess.fullPathTests.gitignore;
 
 import chess.ChessGame;
 import dataObject.GameData;

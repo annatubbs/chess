@@ -1,4 +1,4 @@
-package service;
+package dataaccess;
 
 import dataObject.LoginResult;
 import dataObject.LoginRequest;

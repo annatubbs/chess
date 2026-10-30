@@ -1,6 +1,5 @@
-package service;
+package dataaccess;
 
-import dataaccess.*;
 import dataObject.RegisterRequest;
 import dataObject.RegisterResult;
 import services.UserService;
