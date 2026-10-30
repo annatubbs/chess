@@ -23,7 +23,7 @@ public class MemoryDataTransfer implements DataTransfer {
         try {
             return authDataMap.containsKey(authToken);
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -31,7 +31,7 @@ public class MemoryDataTransfer implements DataTransfer {
         try {
             return authDataMap.get(authToken);
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -39,7 +39,7 @@ public class MemoryDataTransfer implements DataTransfer {
         try {
             authDataMap.put(authData.getAuthToken(), authData);
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class MemoryDataTransfer implements DataTransfer {
         try {
             authDataMap.remove(authToken);
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ public class MemoryDataTransfer implements DataTransfer {
         try {
             return userDataMap.containsKey(username);
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class MemoryDataTransfer implements DataTransfer {
         try {
             return userDataMap.get(username);
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 

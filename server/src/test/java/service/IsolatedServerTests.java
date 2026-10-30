@@ -1,11 +1,8 @@
 package service;
 
 import dataaccess.*;
-import handlers.RegisterRequest;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import services.RegisterResult;
+import dataObject.RegisterRequest;
+import dataObject.RegisterResult;
 import services.UserService;
 
 public abstract class IsolatedServerTests {

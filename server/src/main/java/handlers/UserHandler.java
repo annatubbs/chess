@@ -1,8 +1,11 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataObject.LoginRequest;
+import dataObject.LoginResult;
+import dataObject.RegisterRequest;
+import dataObject.RegisterResult;
 import services.*;
-import server.AuthTokenSet.*;
 
 import java.util.HashMap;
 import java.util.Map;

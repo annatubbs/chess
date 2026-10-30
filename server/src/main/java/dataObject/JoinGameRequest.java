@@ -1,7 +1,6 @@
-package handlers;
+package dataObject;
 
 import chess.ChessGame;
-import server.AuthTokenSet;
 import chess.ChessGame.TeamColor;
 import services.BadRequestException;
 

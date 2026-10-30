@@ -23,7 +23,7 @@ public class AuthTokenSet {
         authTokenSet.add(authToken);
         return authToken;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

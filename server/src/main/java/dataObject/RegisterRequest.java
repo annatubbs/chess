@@ -1,4 +1,4 @@
-package handlers;
+package dataObject;
 
 import services.BadRequestException;
 

@@ -1,6 +1,4 @@
-package services;
-
-import dataObject.AuthData;
+package dataObject;
 
 public class LoginResult {
     private final String username;

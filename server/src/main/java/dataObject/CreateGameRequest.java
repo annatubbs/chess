@@ -1,6 +1,5 @@
-package handlers;
+package dataObject;
 
-import server.AuthTokenSet;
 import services.BadRequestException;
 
 

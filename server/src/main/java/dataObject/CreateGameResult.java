@@ -1,4 +1,4 @@
-package services;
+package dataObject;
 
 public class CreateGameResult {
     private final int gameID;

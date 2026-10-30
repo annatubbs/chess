@@ -1,6 +1,4 @@
-package services;
-
-import dataObject.GameData;
+package dataObject;
 
 import java.util.ArrayList;
 

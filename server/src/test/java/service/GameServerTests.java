@@ -1,13 +1,13 @@
 package service;
 
 import chess.ChessGame;
-import handlers.CreateGameRequest;
+import dataObject.CreateGameResult;
+import dataObject.JoinGameResult;
+import dataObject.ListGamesResult;
+import dataObject.CreateGameRequest;
 import handlers.GameHandler;
-import handlers.JoinGameRequest;
-import handlers.LoginRequest;
+import dataObject.JoinGameRequest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import services.*;

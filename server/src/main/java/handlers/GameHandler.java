@@ -1,9 +1,10 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataObject.*;
 import services.*;
-import handlers.CreateGameRequest.GameName;
-import handlers.JoinGameRequest.JoinGameHelperInfo;
+import dataObject.CreateGameRequest.GameName;
+import dataObject.JoinGameRequest.JoinGameHelperInfo;
 
 import java.util.HashMap;
 import java.util.Map;

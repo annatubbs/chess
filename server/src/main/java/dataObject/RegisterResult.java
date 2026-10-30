@@ -1,6 +1,4 @@
-package services;
-
-import dataObject.AuthData;
+package dataObject;
 
 public class RegisterResult {
     private final String username;

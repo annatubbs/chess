@@ -1,10 +1,9 @@
 package services;
 
-import dataObject.AuthData;
-import dataObject.UserData;
+import dataObject.*;
 import dataaccess.AuthDataAccess;
 import dataaccess.UserDataAccess;
-import handlers.*;
+import org.mindrot.jbcrypt.BCrypt;
 import server.AuthTokenSet;
 
 public class UserService {
@@ -45,7 +44,7 @@ public class UserService {
 
     public LoginResult login(LoginRequest loginRequest) throws Exception {
         String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword();
+        String providedClearTextPassword = loginRequest.getPassword();
 
         UserData userData = userDataAccess.getUser(username);
 
@@ -53,7 +52,8 @@ public class UserService {
             throw new UnauthorizedException();
         }
 
-        if (!userData.getPassword().equals(password)) {
+        String hashedPassword = userData.getPassword();
+        if (!BCrypt.checkpw(providedClearTextPassword, hashedPassword)) {
             throw new UnauthorizedException();
         }
 

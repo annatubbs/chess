@@ -1,6 +1,6 @@
 package dataObject;
 
-import handlers.RegisterRequest;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Objects;
 
@@ -11,8 +11,12 @@ public class UserData {
 
     public UserData(RegisterRequest registerRequest) {
         this.username = Objects.requireNonNull(registerRequest.getUsername());
-        this.password = Objects.requireNonNull(registerRequest.getPassword());
+        this.password = hashPassword(Objects.requireNonNull(registerRequest.getPassword()));
         this.email = Objects.requireNonNull(registerRequest.getEmail());
+    }
+
+    private String hashPassword(String plainTextPassword) {
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
     }
 
     public UserData(String username, String password, String email) {
