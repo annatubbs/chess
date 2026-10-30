@@ -6,13 +6,13 @@ import dataaccess.*;
 import services.UserService;
 
 public abstract class IsolatedServerTests {
-    static UserService userService;
+    public static UserService userService;
     static DataTransfer dataTransfer;
-    static AuthDataAccess authDataAccess;
+    public static AuthDataAccess authDataAccess;
     static UserDataAccess userDataAccess;
-    static GameDataAccess gameDataAccess;
+    public static GameDataAccess gameDataAccess;
 
-    RegisterResult registerResult;
+    public RegisterResult registerResult;
 
     public enum Path {
         MEMORY,
