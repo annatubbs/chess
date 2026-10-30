@@ -12,8 +12,8 @@ public abstract class ServerTests {
     static void startServer() {
         server = new Server();
 
-        testServerFacade = new TestServerFacade("localhost", "8080");
-        server.run(8080);
+        testServerFacade = new TestServerFacade("localhost", "8081");
+        server.run(8081);
     }
 
     @AfterAll
