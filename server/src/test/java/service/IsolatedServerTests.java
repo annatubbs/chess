@@ -2,6 +2,8 @@ package service;
 
 import dataaccess.*;
 import handlers.RegisterRequest;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import services.RegisterResult;
 import services.UserService;
@@ -15,13 +17,31 @@ public abstract class IsolatedServerTests {
 
     RegisterResult registerResult;
 
-    @BeforeEach
-    protected void setUp() {
-        userService = new UserService(authDataAccess, userDataAccess);
-        dataTransfer = new MemoryDataTransfer();
+    public enum Path {
+        MEMORY,
+        SQL
+    }
+
+    //    @BeforeEach
+    protected void setUp(Path path) {
+        clearData();
+        if (path == Path.MEMORY) {
+            dataTransfer = new MemoryDataTransfer();
+        } else { // path = Path.SQL
+            dataTransfer = new SQLDataTransfer();
+        }
         authDataAccess = new AuthDataAccess(dataTransfer);
         userDataAccess = new UserDataAccess(dataTransfer);
         gameDataAccess = new GameDataAccess(dataTransfer);
+        userService = new UserService(authDataAccess, userDataAccess);
+    }
+
+    protected void clearData() {
+        try {
+            gameDataAccess.clearData();
+        } catch (Exception e) {
+            System.out.println("Exception in tests: " + e.getMessage());
+        }
     }
 
     protected void register() {
@@ -29,7 +49,7 @@ public abstract class IsolatedServerTests {
             registerResult = userService.register(new RegisterRequest(
                     "Jeffrey", "chessLord", "jeffrey@fakeemail.com"));
         } catch (Exception e) {
-            System.out.println("Exception");
+            System.out.println("Exception in tests: " + e.getMessage());
         }
     }
 }

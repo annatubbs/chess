@@ -6,6 +6,8 @@ import handlers.UserHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import services.*;
 
 public class UserServerTests extends IsolatedServerTests {
@@ -16,27 +18,30 @@ public class UserServerTests extends IsolatedServerTests {
         userHandler = new UserHandler(userService);
     }
 
-    @Test
-    public void registerSuccessTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void registerSuccessTest(Path path) {
+        setUp(path);
         register();
 
         Assertions.assertEquals("Jeffrey", registerResult.getUsername());
         Assertions.assertNotNull(registerResult.getAuthToken());
     }
 
-    @Test
-    public void registerBadRequestTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void registerBadRequestTest(Path path) {
+        setUp(path);
 
         Assertions.assertThrows(BadRequestException.class, () -> userService.register(new RegisterRequest(
                 "Jeffrey", "chessLord", null)));
     }
 
-    @Test
-    public void loginSuccessTest() {
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void loginSuccessTest(Path path) {
         try {
-            setUp();
+            setUp(path);
             register();
 
             LoginResult loginResult = userService.login(new LoginRequest(
@@ -49,18 +54,20 @@ public class UserServerTests extends IsolatedServerTests {
         }
     }
 
-    @Test
-    public void loginUnauthorizedTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void loginUnauthorizedTest(Path path) {
+        setUp(path);
         register();
 
         Assertions.assertThrows(UnauthorizedException.class, () -> userService.login(new LoginRequest(
                 "Jeffrey", "BAD_PASSWORD")));
     }
 
-    @Test
-    public void logoutSuccessTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void logoutSuccessTest(Path path) {
+        setUp(path);
         register();
 
         try {
@@ -71,12 +78,12 @@ public class UserServerTests extends IsolatedServerTests {
         }
     }
 
-    @Test
-    public void logoutUnauthorizedTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void logoutUnauthorizedTest(Path path) {
+        setUp(path);
         register();
 
         Assertions.assertThrows(UnauthorizedException.class, () -> userService.logout("12345"));
     }
-
 }

@@ -8,6 +8,8 @@ import handlers.LoginRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import services.*;
 
 import java.util.ArrayList;
@@ -18,8 +20,9 @@ public class GameServerTests extends IsolatedServerTests {
     CreateGameResult createGameResult;
     ListGamesResult listGamesResult;
 
-    @BeforeEach
-    public void setUpGameTools() {
+
+    public void setUpGameTools(Path path) {
+        setUp(path);
         gameService = new GameService(authDataAccess, gameDataAccess);
         gameHandler = new GameHandler(gameService);
     }
@@ -30,13 +33,14 @@ public class GameServerTests extends IsolatedServerTests {
                     new CreateGameRequest.GameName("myGame"));
             createGameResult = gameService.createGame(createGameRequest);
         } catch (Exception e) {
-            System.out.println("Exception");
+            System.out.println("Exception in gameServerTests: " + e.getMessage());
         }
     }
 
-    @Test
-    public void listGamesSuccessTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void listGamesSuccessTest(Path path) {
+        setUpGameTools(path);
         register();
         createGame();
 
@@ -44,40 +48,44 @@ public class GameServerTests extends IsolatedServerTests {
             listGamesResult = gameService.listGames(registerResult.getAuthToken());
             Assertions.assertNotEquals(new ArrayList<>(), listGamesResult.getGameList());
         } catch (Exception e) {
-            System.out.println("Exception");
+            System.out.println("Exception in gameServerTests: " + e.getMessage());
         }
     }
 
-    @Test
-    public void listGameUnauthorizedTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void listGameUnauthorizedTest(Path path) {
+        setUpGameTools(path);
         register();
         createGame();
 
         Assertions.assertThrows(UnauthorizedException.class, () -> gameService.listGames("FAKE_TOKEN"));
     }
 
-    @Test
-    public void createGameSuccessTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void createGameSuccessTest(Path path) {
+        setUpGameTools(path);
         register();
         createGame();
 
         Assertions.assertNotNull(createGameResult.getGameID());
     }
 
-    @Test
-    public void createGameBadRequestTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void createGameBadRequestTest(Path path) {
+        setUpGameTools(path);
         register();
 
         Assertions.assertThrows(BadRequestException.class, () -> gameService.createGame(
                 new CreateGameRequest(registerResult.getAuthToken(), null)));
     }
 
-    @Test
-    public void joinGameSuccessTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void joinGameSuccessTest(Path path) {
+        setUpGameTools(path);
         register();
         createGame();
 
@@ -90,13 +98,14 @@ public class GameServerTests extends IsolatedServerTests {
             Assertions.assertEquals(ChessGame.TeamColor.BLACK, joinGameResult.getPlayerColor());
             Assertions.assertEquals(createGameResult.getGameID(), joinGameResult.getGameID());
         } catch (Exception e) {
-            System.out.println("Exception");
+            System.out.println("Exception in gameServerTests: " + e.getMessage());
         }
     }
 
-    @Test
-    public void joinGameAlreadyTakenTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void joinGameAlreadyTakenTest(Path path) {
+        setUpGameTools(path);
         register();
         createGame();
 
@@ -106,15 +115,16 @@ public class GameServerTests extends IsolatedServerTests {
         try {
             JoinGameResult joinGameResult = gameService.joinGame(joinGameRequest);
         } catch (Exception e) {
-            System.out.println("Exception");
+            System.out.println("Exception in gameServerTests: " + e.getMessage());
         }
 
         Assertions.assertThrows(AlreadyTakenException.class, () -> gameService.joinGame(joinGameRequest));
     }
 
-    @Test
-    public void clearSuccessTest() {
-        setUp();
+    @ParameterizedTest
+    @EnumSource(Path.class)
+    public void clearSuccessTest(Path path) {
+        setUpGameTools(path);
         register();
         createGame();
 
@@ -122,7 +132,7 @@ public class GameServerTests extends IsolatedServerTests {
             gameService.clear();
             Assertions.assertEquals(new ArrayList<>(), listGamesResult.getGameList());
         } catch (Exception e) {
-            System.out.println("Exception");
+            System.out.println("Exception in gameServerTests: " + e.getMessage());
         }
     }
 
