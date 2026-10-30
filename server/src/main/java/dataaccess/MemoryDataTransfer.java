@@ -37,7 +37,7 @@ public class MemoryDataTransfer implements DataTransfer {
 
     public void addAuth(AuthData authData) throws DataAccessException {
         try {
-        authDataMap.put(authData.getAuthToken(), authData);
+            authDataMap.put(authData.getAuthToken(), authData);
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -58,7 +58,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     public UserData getUser(String username) throws DataAccessException {
         try {
@@ -66,7 +66,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     public void addUser(UserData userData) throws DataAccessException {
         try {
@@ -74,7 +74,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     // Data Methods
     public void clearData() throws DataAccessException {
@@ -85,7 +85,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     public boolean containsGameID(int gameID) throws DataAccessException {
         try {
@@ -93,7 +93,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     public Set<Integer> getGameIDKeySet() throws DataAccessException {
         try {
@@ -101,7 +101,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     public GameData getGameData(int gameID) throws DataAccessException {
         try {
@@ -109,7 +109,7 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
 
     public void addGameData(GameData gameData) throws DataAccessException {
         try {
@@ -117,5 +117,9 @@ public class MemoryDataTransfer implements DataTransfer {
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
-}
+    }
+
+    public void updateGameData(GameData gameData) throws DataAccessException {
+        addGameData(gameData);
+    }
 }

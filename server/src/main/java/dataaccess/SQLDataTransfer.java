@@ -167,7 +167,7 @@ public class SQLDataTransfer implements DataTransfer {
     public GameData getGameData(int gameID) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT * FROM gameDateTable WHERE gameID=?");
+                    "SELECT * FROM gameDataTable WHERE gameID=?");
             preparedStatement.setInt(1, gameID);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -194,24 +194,38 @@ public class SQLDataTransfer implements DataTransfer {
         }
     }
 
+    public void updateGameData(GameData gameData) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "UPDATE gameDataTable SET blackUsername=?, whiteUsername=? WHERE gameID=?");
+            preparedStatement.setString(1, gameData.getBlackUsername());
+            preparedStatement.setString(2, gameData.getWhiteUsername());
+            preparedStatement.setInt(3, gameData.getGameID());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
     // Database Setup
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS  authDataTable (
               `username` varchar(256) NOT NULL,
-              `authToken` varchar(256) NOT NULL
+              `authToken` varchar(256) NOT NULL PRIMARY KEY
             );
             """,
             """
             CREATE TABLE IF NOT EXISTS  userDataTable (
-              `username` varchar(256) NOT NULL,
+              `username` varchar(256) NOT NULL PRIMARY KEY,
               `password` varchar(256) NOT NULL,
               `email` varchar(256) NOT NULL
             );
             """,
             """
             CREATE TABLE IF NOT EXISTS  gameDataTable (
-              `gameID` INTEGER NOT NULL,
+              `gameID` INTEGER NOT NULL PRIMARY KEY,
               `blackUsername` varchar(256),
               `whiteUsername` varchar(256),
               `gameName` varchar(256) NOT NULL

@@ -60,7 +60,7 @@ public class GameDataAccess {
                 throw new DataAccessException("Error: Failed to update game. Game ID " + gameID +
                         " doesn't exist.");
             }
-            dataTransfer.addGameData(gameData);
+            dataTransfer.updateGameData(gameData);
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }

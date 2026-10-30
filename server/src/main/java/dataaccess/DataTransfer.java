@@ -33,4 +33,6 @@ public interface DataTransfer {
     public GameData getGameData(int gameID) throws DataAccessException;
 
     public void addGameData(GameData gameData) throws DataAccessException;
+
+    public void updateGameData(GameData gameData) throws DataAccessException;
 }
