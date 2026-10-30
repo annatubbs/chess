@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface DataTransfer {
     // Authorization Methods
-    public boolean containsAuth(String AuthToken) throws DataAccessException;
+    public boolean containsAuth(String authToken) throws DataAccessException;
 
     public AuthData getAuth(String authToken) throws DataAccessException;
 
