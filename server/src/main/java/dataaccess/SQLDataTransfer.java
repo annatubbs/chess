@@ -9,14 +9,19 @@ import java.util.Set;
 public class SQLDataTransfer implements DataTransfer {
 
     public SQLDataTransfer() {
-        configureDb();
+        try {
+            configureDb();
+        } catch (Exception e) {
+//            throw new DataAccessException(e.getMessage());
+            System.out.println("Error: creating database connection. " + e.getMessage());
+        }
     }
 
     // Authorization Methods
     public boolean containsAuth(String authToken) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM authDataMap WHERE authToken=?");
+                    "SELECT * FROM authDataTable WHERE authToken=?");
             preparedStatement.setString(1, authToken);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -29,7 +34,7 @@ public class SQLDataTransfer implements DataTransfer {
     public AuthData getAuth(String authToken) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM authDataMap WHERE authToken=?");
+                    "SELECT * FROM authDataTable WHERE authToken=?");
             preparedStatement.setString(1, authToken);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -47,7 +52,7 @@ public class SQLDataTransfer implements DataTransfer {
             preparedStatement.setString(1, authData.getAuthToken());
             preparedStatement.setString(2, authData.getUsername());
 
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -59,7 +64,7 @@ public class SQLDataTransfer implements DataTransfer {
                     "DELETE FROM authDataTable WHERE authToken=?");
             preparedStatement.setString(1, authToken);
 
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -69,7 +74,7 @@ public class SQLDataTransfer implements DataTransfer {
     public boolean containsUsername(String username) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM userDataMap WHERE username=?");
+                    "SELECT * FROM userDataTable WHERE username=?");
             preparedStatement.setString(1, username);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -82,7 +87,7 @@ public class SQLDataTransfer implements DataTransfer {
     public UserData getUser(String username) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM userDataMap WHERE username=?");
+                    "SELECT * FROM userDataTable WHERE username=?");
             preparedStatement.setString(1, username);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -97,7 +102,6 @@ public class SQLDataTransfer implements DataTransfer {
 
     public void addUser(UserData userData) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
-            conn.setAutoCommit(false);
 
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "INSERT INTO userDataTable (username,password,email) VALUES (?,?,?)");
@@ -105,7 +109,7 @@ public class SQLDataTransfer implements DataTransfer {
             preparedStatement.setString(2, userData.getPassword());
             preparedStatement.setString(3, userData.getEmail());
 
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -133,7 +137,7 @@ public class SQLDataTransfer implements DataTransfer {
     public boolean containsGameID(int gameID) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM gameDataMap WHERE gameID=?");
+                    "SELECT * FROM gameDataTable WHERE gameID=?");
             preparedStatement.setInt(1, gameID);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -147,7 +151,7 @@ public class SQLDataTransfer implements DataTransfer {
         Set<Integer> gameIDSet = new HashSet<>();
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM gameDataMap");
+                    "SELECT * FROM gameDataTable");
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -162,7 +166,7 @@ public class SQLDataTransfer implements DataTransfer {
     public GameData getGameData(int gameID) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT *, json FROM gameDataMap WHERE gameID=?");
+                    "SELECT * FROM gameDateTable WHERE gameID=?");
             preparedStatement.setInt(1, gameID);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -183,7 +187,7 @@ public class SQLDataTransfer implements DataTransfer {
             preparedStatement.setString(3, gameData.getWhiteUsername());
             preparedStatement.setString(4, gameData.getGameName());
 
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -200,23 +204,24 @@ public class SQLDataTransfer implements DataTransfer {
             """
             CREATE TABLE IF NOT EXISTS  userDataTable (
               `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL;
+              `password` varchar(256) NOT NULL,
               `email` varchar(256) NOT NULL
             );
             """,
             """
             CREATE TABLE IF NOT EXISTS  gameDataTable (
               `gameID` INTEGER NOT NULL,
-              `blackUsername` varchar(256) NOT NULL,
-              `whiteUsername` varchar(256) NOT NULL,
+              `blackUsername` varchar(256),
+              `whiteUsername` varchar(256),
               `gameName` varchar(256) NOT NULL
             );
             """
     };
 
-    private void configureDb() {
+    private void configureDb() throws Exception {
+        DatabaseManager.createDatabase();
+
         try (Connection conn = DatabaseManager.getConnection()) {
-            DatabaseManager.createDatabase();
             for (String statement : createStatements) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
