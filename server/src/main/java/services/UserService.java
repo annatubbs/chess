@@ -1,6 +1,6 @@
 package services;
 
-import dataObject.*;
+import dataobject.*;
 import dataaccess.AuthDataAccess;
 import dataaccess.UserDataAccess;
 import org.mindrot.jbcrypt.BCrypt;

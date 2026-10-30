@@ -1,4 +1,4 @@
-package dataObject;
+package dataobject;
 
 import chess.ChessGame.TeamColor;
 

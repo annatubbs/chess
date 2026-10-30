@@ -1,10 +1,10 @@
 package services;
 
 import chess.ChessGame;
-import dataObject.*;
+import dataobject.*;
 import dataaccess.*;
-import dataObject.CreateGameRequest;
-import dataObject.JoinGameRequest;
+import dataobject.CreateGameRequest;
+import dataobject.JoinGameRequest;
 
 import java.util.ArrayList;
 

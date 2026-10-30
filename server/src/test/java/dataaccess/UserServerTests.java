@@ -1,8 +1,8 @@
 package dataaccess;
 
-import dataObject.LoginResult;
-import dataObject.LoginRequest;
-import dataObject.RegisterRequest;
+import dataobject.LoginResult;
+import dataobject.LoginRequest;
+import dataobject.RegisterRequest;
 import handlers.UserHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

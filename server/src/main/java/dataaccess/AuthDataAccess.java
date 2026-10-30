@@ -1,6 +1,6 @@
 package dataaccess;
 
-import dataObject.AuthData;
+import dataobject.AuthData;
 
 
 public class AuthDataAccess {

@@ -1,10 +1,10 @@
 package handlers;
 
 import com.google.gson.Gson;
-import dataObject.LoginRequest;
-import dataObject.LoginResult;
-import dataObject.RegisterRequest;
-import dataObject.RegisterResult;
+import dataobject.LoginRequest;
+import dataobject.LoginResult;
+import dataobject.RegisterRequest;
+import dataobject.RegisterResult;
 import services.*;
 
 import java.util.HashMap;

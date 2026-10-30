@@ -1,7 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataObject.*;
+import dataobject.*;
 import handlers.GameHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;

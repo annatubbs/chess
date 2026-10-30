@@ -1,7 +1,7 @@
 package dataaccess;
 
-import dataObject.RegisterRequest;
-import dataObject.RegisterResult;
+import dataobject.RegisterRequest;
+import dataobject.RegisterResult;
 import services.UserService;
 
 public abstract class IsolatedServerTests {

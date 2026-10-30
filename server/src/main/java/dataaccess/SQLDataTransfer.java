@@ -1,6 +1,6 @@
 package dataaccess;
 
-import dataObject.*;
+import dataobject.*;
 
 import java.sql.*;
 import java.util.HashSet;

@@ -1,12 +1,12 @@
 package dataaccess;
 
 import chess.ChessGame;
-import dataObject.CreateGameResult;
-import dataObject.JoinGameResult;
-import dataObject.ListGamesResult;
-import dataObject.CreateGameRequest;
+import dataobject.CreateGameResult;
+import dataobject.JoinGameResult;
+import dataobject.ListGamesResult;
+import dataobject.CreateGameRequest;
 import handlers.GameHandler;
-import dataObject.JoinGameRequest;
+import dataobject.JoinGameRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;

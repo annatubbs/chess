@@ -1,6 +1,6 @@
 package dataaccess;
 
-import dataObject.GameData;
+import dataobject.GameData;
 
 import java.util.ArrayList;
 

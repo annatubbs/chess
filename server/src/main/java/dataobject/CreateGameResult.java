@@ -1,4 +1,4 @@
-package dataObject;
+package dataobject;
 
 public class CreateGameResult {
     private final int gameID;

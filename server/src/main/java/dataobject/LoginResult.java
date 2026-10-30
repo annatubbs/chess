@@ -1,4 +1,4 @@
-package dataObject;
+package dataobject;
 
 public class LoginResult {
     private final String username;

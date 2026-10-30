@@ -1,4 +1,4 @@
-package dataObject;
+package dataobject;
 
 public class RegisterResult {
     private final String username;

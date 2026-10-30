@@ -1,6 +1,6 @@
 package dataaccess;
 
-import dataObject.UserData;
+import dataobject.UserData;
 
 public class UserDataAccess {
 
