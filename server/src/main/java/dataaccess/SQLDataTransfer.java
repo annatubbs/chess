@@ -121,15 +121,16 @@ public class SQLDataTransfer implements DataTransfer {
             conn.setAutoCommit(false);
 
             try (Statement statement = conn.createStatement()) {
-                statement.executeUpdate("DELETE FROM authDataTable");
-                statement.executeUpdate("DELETE FROM userDataTable");
-                statement.executeUpdate("DELETE FROM gameDataTable");
+                statement.executeUpdate("DROP TABLE if EXISTS authDataTable");
+                statement.executeUpdate("DROP TABLE if EXISTS userDataTable");
+                statement.executeUpdate("DROP TABLE if EXISTS gameDataTable");
                 conn.commit();
             } catch (Exception e) {
                 conn.rollback();
                 throw e;
             }
-        } catch (SQLException e) {
+            configureDb();
+        } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
     }
