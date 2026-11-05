@@ -6,6 +6,7 @@ import dataobject.UserData;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class MemoryDataTransfer implements DataTransfer {
     private HashMap<String, AuthData> authDataMap; // authToken: username
@@ -95,9 +96,9 @@ public class MemoryDataTransfer implements DataTransfer {
         }
     }
 
-    public Set<Integer> getGameIDKeySet() throws DataAccessException {
+    public TreeSet<Integer> getGameIDKeySet() throws DataAccessException {
         try {
-            return gameDataMap.keySet();
+            return new TreeSet<>(gameDataMap.keySet());
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }

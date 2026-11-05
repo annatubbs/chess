@@ -21,7 +21,7 @@ public class GameServerTests extends service.GameServerTests {
     ListGamesResult listGamesResult;
 
 
-    public void setUpGameTools(Path path) {
+    public void setUpGameTools(Path path) throws Exception {
         super.setUpGameTools(path);
     }
 
@@ -31,43 +31,43 @@ public class GameServerTests extends service.GameServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void listGamesSuccessTest(Path path) {
+    public void listGamesSuccessTest(Path path) throws Exception {
         super.listGamesSuccessTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void listGameUnauthorizedTest(Path path) {
+    public void listGameUnauthorizedTest(Path path) throws Exception {
         super.listGameUnauthorizedTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void createGameSuccessTest(Path path) {
+    public void createGameSuccessTest(Path path) throws Exception {
         super.createGameSuccessTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void createGameBadRequestTest(Path path) {
+    public void createGameBadRequestTest(Path path) throws Exception {
         super.createGameBadRequestTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void joinGameSuccessTest(Path path) {
+    public void joinGameSuccessTest(Path path) throws Exception {
         super.joinGameSuccessTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void joinGameAlreadyTakenTest(Path path) {
+    public void joinGameAlreadyTakenTest(Path path) throws Exception {
         super.joinGameAlreadyTakenTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void clearSuccessTest(Path path) {
+    public void clearSuccessTest(Path path) throws Exception {
         super.clearSuccessTest(path);
     }
 

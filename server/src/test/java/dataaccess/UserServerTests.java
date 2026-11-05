@@ -20,13 +20,13 @@ public class UserServerTests extends service.UserServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void registerSuccessTest(Path path) {
+    public void registerSuccessTest(Path path) throws Exception {
         super.registerSuccessTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void registerBadRequestTest(Path path) {
+    public void registerBadRequestTest(Path path) throws Exception {
         super.registerBadRequestTest(path);
     }
 
@@ -38,19 +38,19 @@ public class UserServerTests extends service.UserServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void loginUnauthorizedTest(Path path) {
+    public void loginUnauthorizedTest(Path path) throws Exception {
         super.loginUnauthorizedTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void logoutSuccessTest(Path path) {
+    public void logoutSuccessTest(Path path) throws Exception {
         super.logoutSuccessTest(path);
     }
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void logoutUnauthorizedTest(Path path) {
+    public void logoutUnauthorizedTest(Path path) throws Exception {
         super.logoutUnauthorizedTest(path);
     }
 }

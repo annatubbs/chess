@@ -1,17 +1,23 @@
 package dataaccess;
 
 import dataobject.GameData;
+import dataobject.GameIDGenerator;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class GameDataAccess {
 
     private DataTransfer dataTransfer;
-    private DataAccessException.GameIDGenerator gameIDGenerator;
+    private GameIDGenerator gameIDGenerator;
 
-    public GameDataAccess(DataTransfer dataTransfer) {
+    public GameDataAccess(DataTransfer dataTransfer) throws DataAccessException {
         this.dataTransfer = dataTransfer;
-        this.gameIDGenerator = new DataAccessException.GameIDGenerator();
+        try {
+            this.gameIDGenerator = new GameIDGenerator(dataTransfer.getGameIDKeySet());
+        } catch (Exception e) {
+            throw new DataAccessException("Error in game data: " + e.getMessage());
+        }
     }
 
     public GameData getGame(int gameID) throws DataAccessException {
@@ -69,7 +75,7 @@ public class GameDataAccess {
     public void clearData() throws DataAccessException {
         try {
             dataTransfer.clearData();
-            gameIDGenerator = new DataAccessException.GameIDGenerator();
+            gameIDGenerator = new GameIDGenerator();
         } catch (Exception e) {
             throw new DataAccessException("Error: " + e.getMessage());
         }

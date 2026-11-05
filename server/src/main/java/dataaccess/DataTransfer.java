@@ -5,6 +5,7 @@ import dataobject.AuthData;
 import dataobject.UserData;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 public interface DataTransfer {
     // Authorization Methods
@@ -28,7 +29,7 @@ public interface DataTransfer {
 
     public boolean containsGameID(int gameID) throws DataAccessException;
 
-    public Set<Integer> getGameIDKeySet() throws DataAccessException;
+    public TreeSet<Integer> getGameIDKeySet() throws DataAccessException;
 
     public GameData getGameData(int gameID) throws DataAccessException;
 

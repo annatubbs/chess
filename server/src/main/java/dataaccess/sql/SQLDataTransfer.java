@@ -5,8 +5,7 @@ import dataaccess.DataTransfer;
 import dataobject.*;
 
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.TreeSet;
 
 public class SQLDataTransfer implements DataTransfer {
 
@@ -149,8 +148,8 @@ public class SQLDataTransfer implements DataTransfer {
         }
     }
 
-    public Set<Integer> getGameIDKeySet() throws DataAccessException {
-        Set<Integer> gameIDSet = new HashSet<>();
+    public TreeSet<Integer> getGameIDKeySet() throws DataAccessException {
+        TreeSet<Integer> gameIDSet = new TreeSet<>();
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "SELECT * FROM gameDataTable");
@@ -237,14 +236,11 @@ public class SQLDataTransfer implements DataTransfer {
     private void configureDb() throws Exception {
         DatabaseManager.createDatabase();
 
-        try (Connection conn = DatabaseManager.getConnection()) {
-            for (String statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
+        Connection conn = DatabaseManager.getConnection();
+        for (String statement : createStatements) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
             }
-        } catch (Exception e) {
-            System.out.println("Error creating db " + e.getMessage());
         }
     }
 }

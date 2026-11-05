@@ -21,7 +21,7 @@ public abstract class IsolatedServerTests {
     }
 
     //    @BeforeEach
-    protected void setUp(Path path) {
+    protected void setUp(Path path) throws Exception {
         clearData();
         if (path == Path.MEMORY) {
             dataTransfer = new MemoryDataTransfer();

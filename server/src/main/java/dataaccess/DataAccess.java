@@ -6,7 +6,7 @@ public class DataAccess {
     private final UserDataAccess userDataAccess;
     private final GameDataAccess gameDataAccess;
 
-    public DataAccess(DataTransfer dataTransfer) {
+    public DataAccess(DataTransfer dataTransfer) throws DataAccessException {
         authDataAccess = new AuthDataAccess(dataTransfer);
         userDataAccess = new UserDataAccess(dataTransfer);
         gameDataAccess = new GameDataAccess(dataTransfer);

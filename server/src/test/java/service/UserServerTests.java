@@ -21,7 +21,7 @@ public class UserServerTests extends IsolatedServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void registerSuccessTest(Path path) {
+    public void registerSuccessTest(Path path) throws Exception {
         setUp(path);
         register();
 
@@ -31,7 +31,7 @@ public class UserServerTests extends IsolatedServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void registerBadRequestTest(Path path) {
+    public void registerBadRequestTest(Path path) throws Exception {
         setUp(path);
 
         Assertions.assertThrows(BadRequestException.class, () -> userService.register(new RegisterRequest(
@@ -57,7 +57,7 @@ public class UserServerTests extends IsolatedServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void loginUnauthorizedTest(Path path) {
+    public void loginUnauthorizedTest(Path path) throws Exception {
         setUp(path);
         register();
 
@@ -67,7 +67,7 @@ public class UserServerTests extends IsolatedServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void logoutSuccessTest(Path path) {
+    public void logoutSuccessTest(Path path) throws Exception {
         setUp(path);
         register();
 
@@ -81,7 +81,7 @@ public class UserServerTests extends IsolatedServerTests {
 
     @ParameterizedTest
     @EnumSource(Path.class)
-    public void logoutUnauthorizedTest(Path path) {
+    public void logoutUnauthorizedTest(Path path) throws Exception {
         setUp(path);
         register();
 

@@ -21,23 +21,27 @@ public class Server {
     private final GameHandler gameHandler;
     private final Javalin javalin;
 
-    public Server() {
-        DataTransfer dataTransfer = new SQLDataTransfer();
-        Service service = new Service(new DataAccess(dataTransfer));
-        Handler handler = new Handler(service);
+    public Server() throws RuntimeException {
+        try {
+            DataTransfer dataTransfer = new SQLDataTransfer();
+            Service service = new Service(new DataAccess(dataTransfer));
+            Handler handler = new Handler(service);
 
-        userHandler = handler.getUserHandler();
-        gameHandler = handler.getGameHandler();
-        javalin = Javalin.create(config -> config.staticFiles.add("web"));
+            userHandler = handler.getUserHandler();
+            gameHandler = handler.getGameHandler();
+            javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        // each request takes url path and handler
-        javalin.post("/user", this::register);
-        javalin.post("/session", this::login);
-        javalin.delete("/session", this::logout);
-        javalin.get("/game", this::listGames);
-        javalin.post("/game", this::createGame);
-        javalin.put("/game", this::joinGame);
-        javalin.delete("/db", this::clearDb);
+            // each request takes url path and handler
+            javalin.post("/user", this::register);
+            javalin.post("/session", this::login);
+            javalin.delete("/session", this::logout);
+            javalin.get("/game", this::listGames);
+            javalin.post("/game", this::createGame);
+            javalin.put("/game", this::joinGame);
+            javalin.delete("/db", this::clearDb);
+        } catch (Exception e) {
+            throw new RuntimeException("Error starting server: " + e.getMessage());
+        }
     }
 
 
