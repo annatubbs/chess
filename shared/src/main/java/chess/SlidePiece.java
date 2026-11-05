@@ -31,6 +31,7 @@ public abstract class SlidePiece extends ChessPiece {
                 if (pieceAtPos != null) { // position has piece
                     if (pieceAtPos.getPieceType() == ChessPiece.PieceType.KING) { // attacks other team's king
                         moves.add(new ChessMove(myPosition, currPos, null, true));
+                        break; // stop iteration. hit king
                     } else { // not king here
                         moves.add(new ChessMove(myPosition, currPos, null, false));
                         break; // stop iteration. hit a piece
