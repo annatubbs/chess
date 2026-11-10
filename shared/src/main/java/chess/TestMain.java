@@ -1,5 +1,7 @@
 package chess;
 
+import static ui.EscapeSequences.*;
+
 public class TestMain {
     public static void main(String[] args) {
 //        ChessPiece king = new King(ChessGame.TeamColor.BLACK);
@@ -10,6 +12,9 @@ public class TestMain {
 
         ChessBoard board = new ChessBoard();
         board.resetBoard();
+        System.out.println(RESET_BG_COLOR);
         System.out.println(board);
+
+//        System.out.println(SET_BG_COLOR_LIGHT_GREY + "Hello");
     }
 }

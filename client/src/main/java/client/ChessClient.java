@@ -1,5 +1,7 @@
 package client;
 
+import server.ServerFacade;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
@@ -24,7 +26,7 @@ public class ChessClient {
     ;
 
     public ChessClient() {
-//        server = new ServerFacade();
+//        server = new ServerFacade("localhost");
         userState = UserState.LOGGED_OUT;
         stopProg = false;
     }

@@ -1,8 +1,6 @@
 package chess;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Objects;
+import java.util.*;
 
 import static ui.EscapeSequences.*;
 
@@ -143,31 +141,47 @@ public class ChessBoard {
         return Arrays.deepHashCode(board);
     }
 
+    private String setSquareColor(boolean lightSquare) {
+        if (lightSquare) {
+            return SET_BG_COLOR_LIGHT_BROWN + SET_TEXT_COLOR_BLACK;
+        } else {
+            return SET_BG_COLOR_DARK_BROWN + SET_TEXT_COLOR_BLACK;
+        }
+    }
+
+    private String setSquarePiece(ChessPiece colVal) {
+        if (colVal == null) {
+            return EMPTY;
+        } else {
+            return colVal.toString(); // fill pieces in row
+        }
+    }
+
     @Override
     public String toString() {
         String boardStr = "";
-        boolean lightSquare = true;
+        boolean startLightSquare = true;
+        int colIndex = 8;
 
         // reverse concatenation of rows to print in correct order
         for (ChessPiece[] row : board) {
-            String rowStr = "";
-            for (ChessPiece colVal : row) {
-                if (lightSquare) {
-                    boardStr += SET_BG_COLOR_LIGHT_GREY;
-                } else {
-                    boardStr += SET_TEXT_COLOR_DARK_GREY;
-                }
-                lightSquare = !lightSquare;
+            String rowStr = String.valueOf(colIndex) + " ";
+            boolean lightSquare = startLightSquare;
 
-                if (colVal == null) {
-                    rowStr += EMPTY;
-                } else {
-                    rowStr += colVal.toString(); // fill pieces in row
-                }
+            for (ChessPiece colVal : row) {
+                rowStr += setSquareColor(lightSquare) + setSquarePiece(colVal);
+
+                lightSquare = !lightSquare;
             }
-            boardStr = rowStr + "\n" + boardStr; // add row above existing rows in board
+
+            rowStr += RESET_BG_COLOR + RESET_TEXT_COLOR + " " + String.valueOf(colIndex);
+            // add row above existing rows in board
+            boardStr = rowStr + "\n" + boardStr;
+
+            colIndex--;
+            startLightSquare = !startLightSquare;
         }
 
-        return "Board:\n" + boardStr + RESET_BG_COLOR;
+        return COL_INDICES + "\n" + boardStr + COL_INDICES;
     }
 }
