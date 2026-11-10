@@ -18,6 +18,7 @@ public class ChessClient {
             "create", "Create game: \"create\" <GAMENAME>",
             "list", "List all games: \"list\"",
             "play", "Play game: \"play\" <GAMEID> <PLAYERCOLOR>",
+            "observe", "Observe a game: \"observe\" <GAMEID>",
             "quit", "Quit: \"quit\"",
             "help", "Help: \"help\"");
     ;
@@ -57,6 +58,7 @@ public class ChessClient {
             case "create" -> create(params);
             case "list" -> list();
             case "play" -> play(params);
+            case "observe" -> observe(params);
             case "quit" -> quit();
             default -> help();
         };
@@ -118,6 +120,16 @@ public class ChessClient {
         return "Playing game [gameID] [gameName] as [playerColor].";
     }
 
+    private String observe(String[] params) {
+        if (userState == LOGGED_OUT) {
+            return "Please log in to observe games.";
+        }
+        if (params.length != 1) {
+            return "Incorrect format \n " + inputFormatStrs.get("observe");
+        }
+        return "Observing game [gameID] [gameName].";
+    }
+
     private String quit() {
         stopProg = true;
         return "\nHave a great day! Come back soon.";
@@ -138,4 +150,7 @@ public class ChessClient {
 
         return msg;
     }
+
+    private String renderBoard();
+
 }
