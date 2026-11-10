@@ -2,6 +2,8 @@ package chess;
 
 import java.util.Collection;
 
+import static ui.EscapeSequences.*;
+
 public class Rook extends SlidePiece {
 
     public Rook(ChessGame.TeamColor pieceColor) {
@@ -13,11 +15,11 @@ public class Rook extends SlidePiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         // Add vertical moves
-        Collection<ChessMove> moves = slideMoves(board, myPosition, new int[]{1,0});
-        moves.addAll(slideMoves(board, myPosition, new int[]{-1,0}));
+        Collection<ChessMove> moves = slideMoves(board, myPosition, new int[]{1, 0});
+        moves.addAll(slideMoves(board, myPosition, new int[]{-1, 0}));
         // Add horizontal moves
-        moves.addAll(slideMoves(board, myPosition, new int[]{0,1}));
-        moves.addAll(slideMoves(board, myPosition, new int[]{0,-1}));
+        moves.addAll(slideMoves(board, myPosition, new int[]{0, 1}));
+        moves.addAll(slideMoves(board, myPosition, new int[]{0, -1}));
 
         return moves;
     }
@@ -25,5 +27,13 @@ public class Rook extends SlidePiece {
     @Override
     public Rook deepCopy() {
         return new Rook(getTeamColor());
+    }
+
+    @Override
+    public String toString() {
+        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            return WHITE_ROOK;
+        }
+        return BLACK_ROOK;
     }
 }

@@ -151,6 +151,8 @@ public class ChessClient {
         return msg;
     }
 
-    private String renderBoard();
+//    private String renderBoard() {
+//
+//    }
 
 }

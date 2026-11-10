@@ -2,6 +2,8 @@ package chess;
 
 import java.util.Collection;
 
+import static ui.EscapeSequences.*;
+
 public class Knight extends SingleStepPiece {
 
     public Knight(ChessGame.TeamColor pieceColor) {
@@ -11,19 +13,19 @@ public class Knight extends SingleStepPiece {
     // return array of all possible moves for piece
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        
+
         // up
-        Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{2,1});
-        moves.addAll(singleStepMove(board, myPosition, new int[]{2,-1}));
+        Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{2, 1});
+        moves.addAll(singleStepMove(board, myPosition, new int[]{2, -1}));
         // down
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-2,1}));
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-2,-1}));
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-2, 1}));
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-2, -1}));
         // right
-        moves.addAll(singleStepMove(board, myPosition, new int[]{1,2}));
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-1,2}));
+        moves.addAll(singleStepMove(board, myPosition, new int[]{1, 2}));
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-1, 2}));
         // left
-        moves.addAll(singleStepMove(board, myPosition, new int[]{1,-2}));
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-1,-2}));
+        moves.addAll(singleStepMove(board, myPosition, new int[]{1, -2}));
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-1, -2}));
 
         return moves;
     }
@@ -31,5 +33,13 @@ public class Knight extends SingleStepPiece {
     @Override
     public Knight deepCopy() {
         return new Knight(getTeamColor());
+    }
+
+    @Override
+    public String toString() {
+        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            return WHITE_KNIGHT;
+        }
+        return BLACK_KNIGHT;
     }
 }

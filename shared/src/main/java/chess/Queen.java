@@ -2,6 +2,8 @@ package chess;
 
 import java.util.Collection;
 
+import static ui.EscapeSequences.*;
+
 public class Queen extends SlidePiece {
 
     public Queen(ChessGame.TeamColor pieceColor) {
@@ -13,16 +15,16 @@ public class Queen extends SlidePiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         // Add vertical moves
-        Collection<ChessMove> moves = super.slideMoves(board, myPosition, new int[]{1,0}); // up
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1,0})); // down
+        Collection<ChessMove> moves = super.slideMoves(board, myPosition, new int[]{1, 0}); // up
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1, 0})); // down
         // Add horizontal moves
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{0,1})); // right
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{0,-1})); // left
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{0, 1})); // right
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{0, -1})); // left
         // Add diagonal moves
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{1,1})); // up-right
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{1,-1})); // up-left
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1,1})); // down-right
-        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1,-1})); // down-left
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{1, 1})); // up-right
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{1, -1})); // up-left
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1, 1})); // down-right
+        moves.addAll(super.slideMoves(board, myPosition, new int[]{-1, -1})); // down-left
 
         return moves;
     }
@@ -30,5 +32,13 @@ public class Queen extends SlidePiece {
     @Override
     public Queen deepCopy() {
         return new Queen(getTeamColor());
+    }
+
+    @Override
+    public String toString() {
+        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            return WHITE_QUEEN;
+        }
+        return BLACK_QUEEN;
     }
 }

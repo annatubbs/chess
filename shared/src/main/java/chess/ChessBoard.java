@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 
+import static ui.EscapeSequences.*;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -110,7 +112,7 @@ public class ChessBoard {
 
         board = startBoard;
     }
-    
+
     // get positions of all a team's pieces
     public LinkedHashSet<ChessPosition> getTeamPositions(ChessGame.TeamColor color) {
         LinkedHashSet<ChessPosition> positions = new LinkedHashSet<>();
@@ -144,20 +146,28 @@ public class ChessBoard {
     @Override
     public String toString() {
         String boardStr = "";
+        boolean lightSquare = true;
 
         // reverse concatenation of rows to print in correct order
         for (ChessPiece[] row : board) {
             String rowStr = "";
             for (ChessPiece colVal : row) {
-                if (colVal == null) {
-                    rowStr += "           | ";
+                if (lightSquare) {
+                    boardStr += SET_BG_COLOR_LIGHT_GREY;
                 } else {
-                    rowStr += colVal.toString() + " | "; // fill pieces in row
+                    boardStr += SET_TEXT_COLOR_DARK_GREY;
+                }
+                lightSquare = !lightSquare;
+
+                if (colVal == null) {
+                    rowStr += EMPTY;
+                } else {
+                    rowStr += colVal.toString(); // fill pieces in row
                 }
             }
             boardStr = rowStr + "\n" + boardStr; // add row above existing rows in board
         }
 
-        return "Board:\n" + boardStr;
+        return "Board:\n" + boardStr + RESET_BG_COLOR;
     }
 }

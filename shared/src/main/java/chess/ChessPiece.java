@@ -99,10 +99,6 @@ public class ChessPiece {
      */
     // Checks if the piece can move to this spot
     public boolean canMoveHere(ChessPosition currPos, ChessBoard board) {
-        // check if in board's range
-        int currRow = currPos.getRow();
-        int currCol = currPos.getColumn();
-
         // check if move in range of board
         if (!currPos.inRange()) {
             return false;

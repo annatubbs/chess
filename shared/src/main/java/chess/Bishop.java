@@ -2,6 +2,8 @@ package chess;
 
 import java.util.Collection;
 
+import static ui.EscapeSequences.*;
+
 public class Bishop extends SlidePiece {
 
     public Bishop(ChessGame.TeamColor pieceColor) {
@@ -13,10 +15,10 @@ public class Bishop extends SlidePiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         // Add diagonal moves
-        Collection<ChessMove> moves = slideMoves(board, myPosition, new int[]{1,1}); // up-right
-        moves.addAll(slideMoves(board, myPosition, new int[]{1,-1})); // up-left
-        moves.addAll(slideMoves(board, myPosition, new int[]{-1,1})); // down-right
-        moves.addAll(slideMoves(board, myPosition, new int[]{-1,-1})); // down-left
+        Collection<ChessMove> moves = slideMoves(board, myPosition, new int[]{1, 1}); // up-right
+        moves.addAll(slideMoves(board, myPosition, new int[]{1, -1})); // up-left
+        moves.addAll(slideMoves(board, myPosition, new int[]{-1, 1})); // down-right
+        moves.addAll(slideMoves(board, myPosition, new int[]{-1, -1})); // down-left
 
         return moves;
     }
@@ -24,5 +26,13 @@ public class Bishop extends SlidePiece {
     @Override
     public Bishop deepCopy() {
         return new Bishop(getTeamColor());
+    }
+
+    @Override
+    public String toString() {
+        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            return WHITE_BISHOP;
+        }
+        return BLACK_BISHOP;
     }
 }

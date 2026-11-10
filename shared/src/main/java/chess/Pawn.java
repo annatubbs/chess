@@ -3,6 +3,8 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static ui.EscapeSequences.*;
+
 public class Pawn extends ChessPiece {
     private boolean firstMove;
 
@@ -118,5 +120,13 @@ public class Pawn extends ChessPiece {
     @Override
     public Pawn deepCopy() {
         return new Pawn(getTeamColor(), firstMove);
+    }
+
+    @Override
+    public String toString() {
+        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            return WHITE_PAWN;
+        }
+        return BLACK_PAWN;
     }
 }

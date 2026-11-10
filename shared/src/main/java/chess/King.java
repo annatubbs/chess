@@ -1,10 +1,12 @@
 package chess;
 
 import java.util.Collection;
+import chess.ChessGame.TeamColor;
+import static ui.EscapeSequences.*;
 
 public class King extends SingleStepPiece {
 
-    public King(ChessGame.TeamColor pieceColor) {
+    public King(TeamColor pieceColor) {
         super(pieceColor, PieceType.KING);
     }
 
@@ -30,5 +32,13 @@ public class King extends SingleStepPiece {
     @Override
     public King deepCopy() {
         return new King(getTeamColor());
+    }
+
+    @Override
+    public String toString() {
+        if (super.getTeamColor() == TeamColor.WHITE) {
+            return WHITE_KING;
+        }
+        return BLACK_KING;
     }
 }
