@@ -157,31 +157,52 @@ public class ChessBoard {
         }
     }
 
+
+    public String getRowStr(int colIndex, boolean startLightSquare, ChessPiece[] row) {
+        String rowStr = String.valueOf(colIndex) + " ";
+        boolean lightSquare = startLightSquare;
+
+        for (ChessPiece colVal : row) {
+            rowStr += setSquareColor(lightSquare) + setSquarePiece(colVal);
+
+            lightSquare = !lightSquare;
+        }
+        rowStr += RESET_BG_COLOR + RESET_TEXT_COLOR + " " + String.valueOf(colIndex);
+
+        return rowStr;
+    }
+
     @Override
     public String toString() {
         String boardStr = "";
         boolean startLightSquare = true;
-        int colIndex = 8;
+        int colIndex = 1;
 
         // reverse concatenation of rows to print in correct order
         for (ChessPiece[] row : board) {
-            String rowStr = String.valueOf(colIndex) + " ";
-            boolean lightSquare = startLightSquare;
+            String rowStr = getRowStr(colIndex, startLightSquare, row);
 
-            for (ChessPiece colVal : row) {
-                rowStr += setSquareColor(lightSquare) + setSquarePiece(colVal);
-
-                lightSquare = !lightSquare;
-            }
-
-            rowStr += RESET_BG_COLOR + RESET_TEXT_COLOR + " " + String.valueOf(colIndex);
-            // add row above existing rows in board
             boardStr = rowStr + "\n" + boardStr;
 
-            colIndex--;
+            colIndex++;
             startLightSquare = !startLightSquare;
         }
+        return COL_INDICES + "\n" + boardStr + COL_INDICES;
+    }
 
+    public String toStringBlackPerspective() {
+        String boardStr = "";
+        boolean startLightSquare = true;
+        int colIndex = 1;
+
+        // reverse concatenation of rows to print in correct order
+        for (ChessPiece[] row : board) {
+            String rowStr = getRowStr(colIndex, startLightSquare, row);
+            boardStr = boardStr + rowStr + "\n";
+
+            colIndex++;
+            startLightSquare = !startLightSquare;
+        }
         return COL_INDICES + "\n" + boardStr + COL_INDICES;
     }
 }

@@ -12,8 +12,8 @@ public class TestMain {
 
         ChessBoard board = new ChessBoard();
         board.resetBoard();
-        System.out.println(RESET_BG_COLOR);
-        System.out.println(board);
+        System.out.println(board.toStringBlackPerspective());
+//        System.out.println(board);
 
 //        System.out.println(SET_BG_COLOR_LIGHT_GREY + "Hello");
     }
