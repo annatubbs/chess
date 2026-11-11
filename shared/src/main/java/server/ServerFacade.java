@@ -5,11 +5,11 @@ import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.http.*;
+import java.util.ArrayList;
 import java.util.Map;
 import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpRequest.Builder;
-import java.util.TreeMap;
 
 public class ServerFacade {
     private final HttpClient client = HttpClient.newHttpClient();
@@ -39,6 +39,22 @@ public class ServerFacade {
         HttpRequest request = buildRequestWithHeader("DELETE", "/session", authToken, null);
         HttpResponse<String> response = sendRequest(request);
         return handleResponse(response, Map.class);
+    }
+
+    public Map<String, String> create(String authToken, String[] params) throws Exception {
+        Map<String, String> body = Map.of("gameName", params[0]);
+        HttpRequest request = buildRequestWithHeader("POST", "/game", authToken, body);
+        HttpResponse<String> response = sendRequest(request);
+        return handleResponse(response, Map.class);
+    }
+
+    public ArrayList<String> list(String authToken) throws Exception { // ***COME BACK TO THIS
+        HttpRequest request = buildRequestWithHeader("GET", "/game", authToken, null);
+        HttpResponse<String> response = sendRequest(request);
+        Map<String, String> responseMap = handleResponse(response, Map.class);
+        System.out.println(responseMap);
+
+        return new ArrayList<>();
     }
 
     public void clear() throws Exception {

@@ -3,9 +3,7 @@ package client;
 import server.ResponseException;
 import server.ServerFacade;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static client.UserState.*;
 import static ui.EscapeSequences.*;
@@ -35,11 +33,11 @@ public class ChessClient {
     }
 
     private String printPrompt() {
-        String prompt = "";
+        String prompt = "\n";
         if (!authToken.isEmpty()) {
             prompt += "[LOGGED_IN]";
         }
-        return prompt + ">> ";
+        return prompt + ">>";
     }
 
     public void run() {
@@ -64,7 +62,8 @@ public class ChessClient {
     }
 
     private String eval(String input) throws Exception {
-        String[] tokens = input.toLowerCase().split(" ");
+        String[] tokens = input.split(" ");
+//        String[] tokens = input.toLowerCase().split(" ");
         String cmd = (tokens.length > 0) ? tokens[0] : "help";
         String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
 
@@ -132,7 +131,7 @@ public class ChessClient {
         }
     }
 
-    private String create(String[] params) {
+    private String create(String[] params) throws Exception {
         if (authToken.isEmpty()) {
             return "Please log in to create games.";
         }
@@ -140,11 +139,27 @@ public class ChessClient {
             return "Incorrect format \n " + inputFormatStrs.get("create");
         }
 
-        return "Created game: " + params[0]; // list game data
+        try {
+            Map<String, String> result = server.create(authToken, params);
+            return gameDataStr(params[0], "", "");
+        } catch (ResponseException e) {
+            return e.getMessage();
+        }
+
     }
 
-    private String list() {
-        return "Games:\n";
+    private String list() throws Exception {
+        if (authToken.isEmpty()) {
+            return "Not logged in.";
+        }
+
+        try {
+            ArrayList<String> result = server.list(authToken);
+            String message = "Games:\n";
+            return message;
+        } catch (ResponseException e) {
+            return e.getMessage();
+        }
     }
 
     private String play(String[] params) {
@@ -172,20 +187,6 @@ public class ChessClient {
         return "\nHave a great day! Come back soon.";
     }
 
-    private boolean wantsToClear() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Are you sure you want to clear the database? (y/n)");
-
-        String line = scanner.nextLine();
-        if (line.equalsIgnoreCase("y")) {
-            return true;
-        } else if (line.equalsIgnoreCase("n")) {
-            return false;
-        } else { // bad input
-            return wantsToClear();
-        }
-    }
-
     private String clear() throws Exception {
         if (wantsToClear()) {
             logout();
@@ -207,9 +208,30 @@ public class ChessClient {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }
-        msg += "Quit: \"quit\" \nHelp: \"help\"";
 
-        return msg;
+        return msg.replaceFirst("\\R$", "");
+    }
+
+    // Helper functions
+
+    private String gameDataStr(String gameName, String whiteUserName, String blackUserName) {
+        return "Created game: " + gameName + "\n" +
+                "\tWHITE_PLAYER: " + whiteUserName + "\n" +
+                "\tBLACK_PLAYER: " + blackUserName;
+    }
+
+    private boolean wantsToClear() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Are you sure you want to clear the database? (y/n)");
+
+        String line = scanner.nextLine();
+        if (line.equalsIgnoreCase("y")) {
+            return true;
+        } else if (line.equalsIgnoreCase("n")) {
+            return false;
+        } else { // bad input
+            return wantsToClear();
+        }
     }
 
 //    private String renderBoard() {
