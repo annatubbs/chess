@@ -22,6 +22,15 @@ public class ServerFacade {
         Map<String, String> body = Map.of("username", params[0], "password", params[1], "email", params[2]);
         HttpRequest request = buildRequest("POST", "/user", body);
         HttpResponse<String> response = sendRequest(request);
+
+        return handleResponse(response, Map.class);
+    }
+
+    public Map<String, String> login(String[] params) throws Exception {
+        Map<String, String> body = Map.of("username", params[0], "password", params[1]);
+        HttpRequest request = buildRequest("POST", "/session", body);
+        HttpResponse<String> response = sendRequest(request);
+
         return handleResponse(response, Map.class);
     }
 

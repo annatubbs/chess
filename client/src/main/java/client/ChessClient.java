@@ -34,23 +34,27 @@ public class ChessClient {
     }
 
     public void run() {
-        System.out.println("\n" + WHITE_KING + SET_TEXT_BOLD + "Welcome to Chess:" +
-                SET_TEXT_FAINT + WHITE_QUEEN + "\n");
-        System.out.println(help());
+        try {
+            System.out.println("\n" + WHITE_KING + SET_TEXT_BOLD + "Welcome to Chess:" +
+                    SET_TEXT_FAINT + WHITE_QUEEN + "\n");
+            System.out.println(help());
 
-        Scanner scanner = new Scanner(System.in);
-        String resultMsg = "";
-        while (!stopProg) {
-            System.out.print(">> ");
-            String line = scanner.nextLine();
+            Scanner scanner = new Scanner(System.in);
+            String resultMsg = "";
+            while (!stopProg) {
+                System.out.print(">> ");
+                String line = scanner.nextLine();
 
-            resultMsg = eval(line);
-            System.out.println(resultMsg);
+                resultMsg = eval(line);
+                System.out.println(resultMsg);
+            }
+            System.out.println();
+        } catch (Exception e) {
+            System.out.println(e.getMessage()); //****
         }
-        System.out.println();
     }
 
-    private String eval(String input) {
+    private String eval(String input) throws Exception {
         String[] tokens = input.toLowerCase().split(" ");
         String cmd = (tokens.length > 0) ? tokens[0] : "help";
         String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -68,32 +72,32 @@ public class ChessClient {
         };
     }
 
-    private String login(String[] params) {
+    private String register(String[] params) throws Exception {
+        if (!authToken.isEmpty()) {
+            return "Already logged in.";
+        }
+        if (params.length != 3) {
+            return "Incorrect format\n " + inputFormatStrs.get("register");
+        }
+
+        Map<String, String> result = server.register(params);
+        authToken = result.get("authToken");
+
+        return "Welcome " + result.get("username") + "!";
+    }
+
+    private String login(String[] params) throws Exception {
         if (!authToken.isEmpty()) {
             return "Already logged in.";
         }
         if (params.length != 2) {
             return "Incorrect format\n " + inputFormatStrs.get("login");
         }
-//        userState = LOGGED_IN;
-        return "Welcome " + params[0] + "!";
-    }
 
-    private String register(String[] params) {
-        try {
-            if (!authToken.isEmpty()) {
-                return "Already logged in.";
-            }
-            if (params.length != 3) {
-                return "Incorrect format\n " + inputFormatStrs.get("register");
-            }
-            // if success
-            var result = server.register(params);
-            authToken = "token";
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return "Welcome " + params[0] + "!";
+        Map<String, String> result = server.login(params);
+        authToken = result.get("authToken");
+
+        return "Welcome " + result.get("username") + "!";
     }
 
     private String logout() {
