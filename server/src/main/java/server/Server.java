@@ -85,10 +85,11 @@ public class Server {
 
     private void logout(Context ctx) throws Exception { // authToken
         try {
-            userHandler.logout(ctx.header("Authorization"));
+            HashMap<String, String> resultMap = userHandler.logout(ctx.header("Authorization"));
 
             ctx.status(200);
             ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(resultMap));
         } catch (UnauthorizedException e) {
             ctx.status(401);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));

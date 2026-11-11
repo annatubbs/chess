@@ -63,7 +63,7 @@ public class UserService {
         return new LoginResult(authData);
     }
 
-    public void logout(String authToken) throws Exception {
+    public String logout(String authToken) throws Exception {
         AuthData authData = authDataAccess.getAuth(authToken);
 
         if (authData == null) {
@@ -71,5 +71,6 @@ public class UserService {
         }
 
         authDataAccess.deleteAuth(authToken);
+        return authData.getUsername();
     }
 }

@@ -1,10 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
-import dataobject.LoginRequest;
-import dataobject.LoginResult;
-import dataobject.RegisterRequest;
-import dataobject.RegisterResult;
+import dataobject.*;
 import services.*;
 
 import java.util.HashMap;
@@ -40,8 +37,10 @@ public class UserHandler {
                 "authToken", loginResult.getAuthToken()));
     }
 
-    public void logout(String authToken) throws Exception {
-        userService.logout(authToken);
+    public HashMap<String, String> logout(String authToken) throws Exception {
+        String logoutResult = userService.logout(authToken);
+
+        return new HashMap<>(Map.of("username", logoutResult));
     }
 
 }

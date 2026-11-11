@@ -1,5 +1,6 @@
 package client;
 
+import server.ResponseException;
 import server.ServerFacade;
 
 import java.util.Arrays;
@@ -80,10 +81,14 @@ public class ChessClient {
             return "Incorrect format\n " + inputFormatStrs.get("register");
         }
 
-        Map<String, String> result = server.register(params);
-        authToken = result.get("authToken");
+        try {
+            Map<String, String> result = server.register(params);
 
-        return "Welcome " + result.get("username") + "!";
+            authToken = result.get("authToken");
+            return "Welcome " + result.get("username") + "!";
+        } catch (ResponseException e) {
+            return e.getMessage();
+        }
     }
 
     private String login(String[] params) throws Exception {
@@ -94,18 +99,27 @@ public class ChessClient {
             return "Incorrect format\n " + inputFormatStrs.get("login");
         }
 
-        Map<String, String> result = server.login(params);
-        authToken = result.get("authToken");
+        try {
+            Map<String, String> result = server.login(params);
 
-        return "Welcome " + result.get("username") + "!";
+            authToken = result.get("authToken");
+            return "Welcome " + result.get("username") + "!";
+        } catch (ResponseException e) {
+            return e.getMessage();
+        }
     }
 
-    private String logout() {
+    private String logout() throws Exception { //********** TEST and COMMIT
         if (authToken.isEmpty()) {
             return "Not logged in.";
         }
-//        userState = LOGGED_OUT;
-        return "Logged out [username].";
+
+        try {
+            Map<String, String> result = server.logout(authToken);
+            return "Logged out " + result.get("username") + ".";
+        } catch (ResponseException e) {
+            return e.getMessage();
+        }
     }
 
     private String create(String[] params) {
