@@ -10,8 +10,9 @@ import static client.UserState.*;
 import static ui.EscapeSequences.*;
 
 public class ChessClient {
-    //    private final ServerFacade server;
-    private UserState userState;
+    private final ServerFacade server;
+    private String authToken;
+    //    private UserState userState;
     private boolean stopProg;
     private final Map<String, String> inputFormatStrs = Map.of(
             "login", "Login as an existing user: \"login\" <USERNAME> <PASSWORD>",
@@ -25,9 +26,10 @@ public class ChessClient {
             "help", "Help: \"help\"");
     ;
 
-    public ChessClient() {
-//        server = new ServerFacade("localhost");
-        userState = UserState.LOGGED_OUT;
+    public ChessClient(String serverUrl) {
+        server = new ServerFacade(serverUrl);
+        authToken = "";
+//        userState = UserState.LOGGED_OUT;
         stopProg = false;
     }
 
@@ -67,38 +69,43 @@ public class ChessClient {
     }
 
     private String login(String[] params) {
-        if (userState == LOGGED_IN) {
+        if (!authToken.isEmpty()) {
             return "Already logged in.";
         }
         if (params.length != 2) {
             return "Incorrect format\n " + inputFormatStrs.get("login");
         }
-        userState = LOGGED_IN;
+//        userState = LOGGED_IN;
         return "Welcome " + params[0] + "!";
     }
 
     private String register(String[] params) {
-        if (userState == LOGGED_IN) {
-            return "Already logged in.";
+        try {
+            if (!authToken.isEmpty()) {
+                return "Already logged in.";
+            }
+            if (params.length != 3) {
+                return "Incorrect format\n " + inputFormatStrs.get("register");
+            }
+            // if success
+            var result = server.register(params);
+            authToken = "token";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        if (params.length != 3) {
-            return "Incorrect format\n " + inputFormatStrs.get("register");
-        }
-        // if success
-        userState = LOGGED_IN;
         return "Welcome " + params[0] + "!";
     }
 
     private String logout() {
-        if (userState == LOGGED_OUT) {
+        if (authToken.isEmpty()) {
             return "Not logged in.";
         }
-        userState = LOGGED_OUT;
+//        userState = LOGGED_OUT;
         return "Logged out [username].";
     }
 
     private String create(String[] params) {
-        if (userState == LOGGED_OUT) {
+        if (authToken.isEmpty()) {
             return "Please log in to create games.";
         }
         if (params.length != 1) {
@@ -113,7 +120,7 @@ public class ChessClient {
     }
 
     private String play(String[] params) {
-        if (userState == LOGGED_OUT) {
+        if (authToken.isEmpty()) {
             return "Please log in to play games.";
         }
         if (params.length != 2) {
@@ -123,7 +130,7 @@ public class ChessClient {
     }
 
     private String observe(String[] params) {
-        if (userState == LOGGED_OUT) {
+        if (authToken.isEmpty()) {
             return "Please log in to observe games.";
         }
         if (params.length != 1) {
@@ -139,7 +146,7 @@ public class ChessClient {
 
     private String help() {
         String msg = SET_TEXT_BOLD + "Options:" + SET_TEXT_FAINT + "\n";
-        if (userState == UserState.LOGGED_OUT) {
+        if (authToken.isEmpty()) {
             for (String option : new String[]{"login", "register", "list", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
