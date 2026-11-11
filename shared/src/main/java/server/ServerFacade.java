@@ -41,6 +41,12 @@ public class ServerFacade {
         return handleResponse(response, Map.class);
     }
 
+    public void clear() throws Exception {
+        HttpRequest request = buildRequest("DELETE", "/db", null);
+        HttpResponse<String> response = sendRequest(request);
+        handleResponse(response, null);
+    }
+
     // Process Requests
     private HttpRequest buildRequest(String method, String path, Object body) {
         return buildRequestWithHeader(method, path, "", body);

@@ -24,14 +24,22 @@ public class ChessClient {
             "play", "Play game: \"play\" <GAMEID> <PLAYERCOLOR>",
             "observe", "Observe a game: \"observe\" <GAMEID>",
             "quit", "Quit: \"quit\"",
+            "clear", "Clear: \"clear\"",
             "help", "Help: \"help\"");
     ;
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
         authToken = "";
-//        userState = UserState.LOGGED_OUT;
         stopProg = false;
+    }
+
+    private String printPrompt() {
+        String prompt = "";
+        if (!authToken.isEmpty()) {
+            prompt += "[LOGGED_IN]";
+        }
+        return prompt + ">> ";
     }
 
     public void run() {
@@ -41,9 +49,9 @@ public class ChessClient {
             System.out.println(help());
 
             Scanner scanner = new Scanner(System.in);
-            String resultMsg = "";
+            String resultMsg;
             while (!stopProg) {
-                System.out.print(">> ");
+                System.out.print(printPrompt());
                 String line = scanner.nextLine();
 
                 resultMsg = eval(line);
@@ -69,6 +77,7 @@ public class ChessClient {
             case "play" -> play(params);
             case "observe" -> observe(params);
             case "quit" -> quit();
+            case "clear" -> clear();
             default -> help();
         };
     }
@@ -109,13 +118,14 @@ public class ChessClient {
         }
     }
 
-    private String logout() throws Exception { //********** TEST and COMMIT
+    private String logout() throws Exception {
         if (authToken.isEmpty()) {
             return "Not logged in.";
         }
 
         try {
             Map<String, String> result = server.logout(authToken);
+            authToken = "";
             return "Logged out " + result.get("username") + ".";
         } catch (ResponseException e) {
             return e.getMessage();
@@ -162,14 +172,38 @@ public class ChessClient {
         return "\nHave a great day! Come back soon.";
     }
 
+    private boolean wantsToClear() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Are you sure you want to clear the database? (y/n)");
+
+        String line = scanner.nextLine();
+        if (line.equalsIgnoreCase("y")) {
+            return true;
+        } else if (line.equalsIgnoreCase("n")) {
+            return false;
+        } else { // bad input
+            return wantsToClear();
+        }
+    }
+
+    private String clear() throws Exception {
+        if (wantsToClear()) {
+            logout();
+            server.clear();
+            return "Cleared database.";
+        } else {
+            return "Did NOT clear the database. Close save.";
+        }
+    }
+
     private String help() {
         String msg = SET_TEXT_BOLD + "Options:" + SET_TEXT_FAINT + "\n";
         if (authToken.isEmpty()) {
-            for (String option : new String[]{"login", "register", "list", "quit", "help"}) {
+            for (String option : new String[]{"login", "register", "list", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else {
-            for (String option : new String[]{"logout", "create", "list", "play", "quit", "help"}) {
+            for (String option : new String[]{"logout", "create", "list", "play", "observe", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }
