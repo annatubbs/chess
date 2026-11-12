@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import dataobject.GameData;
 import dataobject.AuthData;
 import dataobject.UserData;
@@ -33,7 +34,9 @@ public interface DataTransfer {
 
     public GameData getGameData(int gameID) throws DataAccessException;
 
-    public void addGameData(GameData gameData) throws DataAccessException;
+    public ChessGame getGame(int gameID) throws DataAccessException;
+
+    public void addGameData(GameData gameData, ChessGame game) throws DataAccessException;
 
     public void updateGameData(GameData gameData) throws DataAccessException;
 }

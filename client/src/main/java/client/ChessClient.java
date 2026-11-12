@@ -184,17 +184,20 @@ public class ChessClient {
         }
         try {
             String gameIndex = params[1]; // use index to get game's data
-            Map<String, Object> gameData = getGameByIndex(gameIndex);
-            String gameID = gameData.get("gameID").toString();
+            Map<String, Object> gameDataMap = getGameByIndex(gameIndex);
+            String gameID = gameDataMap.get("gameID").toString();
 
             params[1] = gameID;
             Map<String, String> result = server.play(authToken, params);
 
-            gameData = getGameByIndex(gameIndex); // get most recent game data
-            return "Playing " + formatGameDataStr(gameData.get("gameName").toString(),
-                    gameData.get("whiteUsername").toString(),
-                    gameData.get("blackUsername").toString());
+            gameDataMap = getGameByIndex(gameIndex); // get most recent game data
 
+//            System.out.println(gameDataMap.get("game").getClass());
+
+            String msg = "Playing " + formatGameDataStr(gameDataMap.get("gameName").toString(),
+                    switchNullToEmptyObj(gameDataMap.get("whiteUsername")),
+                    switchNullToEmptyObj(gameDataMap.get("blackUsername")));
+            return msg.replaceFirst("\\R$", "");
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -207,7 +210,11 @@ public class ChessClient {
         if (params.length != 1) {
             return "Incorrect format \n " + inputFormatStrs.get("observe");
         }
-        return "Observing game [gameID] [gameName].";
+        try {
+            return "Observing game " + params[0] + ".\n" + renderBoard(params[0]);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     private String quit() {
@@ -254,10 +261,18 @@ public class ChessClient {
         }
     }
 
+    private String switchNullToEmptyObj(Object str) {
+        if (str == null) {
+            return "";
+        } else {
+            return str.toString();
+        }
+    }
+
     private String formatGameDataStr(String gameName, String whiteUserName, String blackUserName) {
         return "game: " + gameName + "\n" +
                 "\tWHITE_PLAYER: " + switchNullToEmptyStr(whiteUserName) + "\n" +
-                "\tBLACK_PLAYER: " + switchNullToEmptyStr(blackUserName);
+                "\tBLACK_PLAYER: " + switchNullToEmptyStr(blackUserName) + "\n";
     }
 
     private String gameListToString(ArrayList<Map<String, Object>> gameList) {
@@ -266,11 +281,11 @@ public class ChessClient {
         for (Map<String, Object> gameDataMap : gameList) {
             gameListStr += String.valueOf(index) + ". " +
                     formatGameDataStr(String.valueOf(gameDataMap.get("gameName")),
-                            String.valueOf(gameDataMap.get("whiteUserName")),
-                            String.valueOf(gameDataMap.get("blackUserName")));
+                            switchNullToEmptyObj(gameDataMap.get("whiteUsername")),
+                            switchNullToEmptyObj(gameDataMap.get("blackUsername")));
             index++;
         }
-        return gameListStr;
+        return gameListStr.replaceFirst("\\R$", "");
     }
 
     private boolean wantsToClear() {
@@ -287,8 +302,10 @@ public class ChessClient {
         }
     }
 
-//    private String renderBoard() {
-//
-//    }
+    private String renderBoard(String gameIndex) throws Exception {
+        Map<String, Object> gameData = getGameByIndex(gameIndex);
+
+        return gameData.get("game").toString();
+    }
 
 }

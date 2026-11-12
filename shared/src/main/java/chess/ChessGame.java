@@ -1,13 +1,9 @@
 package chess;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Objects;
+import com.google.gson.Gson;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -15,7 +11,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessGame {
+public class ChessGame implements Serializable {
     private TeamColor teamTurn;
     private ChessBoard board;
     private ArrayList<ChessBoard> boardHistory;
@@ -28,6 +24,21 @@ public class ChessGame {
 
         boardHistory = new ArrayList<>();
         boardHistory.add(board.deepCopy());
+    }
+
+    public ChessGame(byte[] byteArray) throws Exception {
+        try (ObjectInputStream objInStrm = new ObjectInputStream(new ByteArrayInputStream(byteArray))) {
+            ChessGame restoredGame = (ChessGame) objInStrm.readObject();
+
+            this.teamTurn = restoredGame.teamTurn;
+            this.board = restoredGame.board;
+            this.boardHistory = restoredGame.boardHistory;
+        }
+//
+//        Map<String, String> gameMap = new Gson().fromJson(new Gson().toJson(byteArray), Map.class);
+//        teamTurn = TeamColor.fromString(gameMap.get("teamTurn");
+//        board = gameMap.get("board")
+
     }
 
     /**
@@ -256,26 +267,6 @@ public class ChessGame {
         return board.deepCopy();
     }
 
-    public byte[] serializeBoard() throws Exception {
-        ByteArrayOutputStream arrayOutStrm = new ByteArrayOutputStream();
-
-        try (ObjectOutputStream objectOutStrm = new ObjectOutputStream(arrayOutStrm)) {
-            objectOutStrm.writeObject(board);
-        }
-
-        byte[] byteArray = arrayOutStrm.toByteArray();
-
-        return byteArray;
-    }
-
-    public ChessBoard restoreSerializedBoard(byte[] byteArray) throws Exception {
-        try (ObjectInputStream objInStrm = new ObjectInputStream(new ByteArrayInputStream(byteArray))) {
-            ChessBoard restoredBoard = (ChessBoard) objInStrm.readObject();
-
-            return restoredBoard;
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -288,5 +279,18 @@ public class ChessGame {
     @Override
     public int hashCode() {
         return Objects.hash(teamTurn, board, boardHistory);
+    }
+
+
+    public byte[] getGameSerialized() throws Exception { // move to chessgame
+        ByteArrayOutputStream arrayOutStrm = new ByteArrayOutputStream();
+
+        try (ObjectOutputStream objectOutStrm = new ObjectOutputStream(arrayOutStrm)) {
+            objectOutStrm.writeObject(this);
+        }
+
+        byte[] byteArray = arrayOutStrm.toByteArray();
+
+        return byteArray;
     }
 }

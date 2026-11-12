@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import dataobject.GameData;
 import dataobject.AuthData;
 import dataobject.UserData;
@@ -12,11 +13,13 @@ public class MemoryDataTransfer implements DataTransfer {
     private HashMap<String, AuthData> authDataMap; // authToken: username
     private HashMap<String, UserData> userDataMap; // Username: password, email
     private HashMap<Integer, GameData> gameDataMap;
+    private HashMap<Integer, ChessGame> gameMap;
 
     public MemoryDataTransfer() {
         authDataMap = new HashMap<>();
         userDataMap = new HashMap<>();
         gameDataMap = new HashMap<>();
+        gameMap = new HashMap<>();
     }
 
     // Authorization Methods
@@ -112,15 +115,24 @@ public class MemoryDataTransfer implements DataTransfer {
         }
     }
 
-    public void addGameData(GameData gameData) throws DataAccessException {
+    public ChessGame getGame(int gameID) throws DataAccessException {
+        return gameMap.get(gameID);
+    }
+
+    public void addGameData(GameData gameData, ChessGame game) throws DataAccessException {
         try {
             gameDataMap.put(gameData.getGameID(), gameData);
+            gameMap.put(gameData.getGameID(), game);
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
     }
 
     public void updateGameData(GameData gameData) throws DataAccessException {
-        addGameData(gameData);
+        try {
+            gameDataMap.put(gameData.getGameID(), gameData);
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 }

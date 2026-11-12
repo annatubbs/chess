@@ -1,5 +1,6 @@
 package dataaccess.sql;
 
+import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.DataTransfer;
 import dataobject.*;
@@ -167,29 +168,44 @@ public class SQLDataTransfer implements DataTransfer {
     public GameData getGameData(int gameID) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT * FROM gameDataTable WHERE gameID=?");
+                    "SELECT gameID, gameName, whiteUsername, blackUsername FROM gameDataTable WHERE gameID=?");
             preparedStatement.setInt(1, gameID);
 
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             return new GameData(rs.getInt("gameID"), rs.getString("blackUsername"),
                     rs.getString("whiteUsername"), rs.getString("gameName"));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
     }
 
-    public void addGameData(GameData gameData) throws DataAccessException {
+    public ChessGame getGame(int gameID) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "INSERT INTO gameDataTable (gameID,blackUsername,whiteUsername,gameName) VALUES (?,?,?,?)");
+                    "SELECT game FROM gameDataTable WHERE gameID=?");
+            preparedStatement.setInt(1, gameID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return new ChessGame(rs.getBytes("game"));
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    public void addGameData(GameData gameData, ChessGame game) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO gameDataTable (gameID,blackUsername,whiteUsername,gameName,game) VALUES (?,?,?,?,?)");
             preparedStatement.setInt(1, gameData.getGameID());
             preparedStatement.setString(2, gameData.getBlackUsername());
             preparedStatement.setString(3, gameData.getWhiteUsername());
             preparedStatement.setString(4, gameData.getGameName());
+            preparedStatement.setBytes(5, game.getGameSerialized());
 
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
     }
@@ -228,7 +244,8 @@ public class SQLDataTransfer implements DataTransfer {
               `gameID` INTEGER NOT NULL PRIMARY KEY,
               `blackUsername` varchar(256),
               `whiteUsername` varchar(256),
-              `gameName` varchar(256) NOT NULL
+              `gameName` varchar(256) NOT NULL,
+              `game` VARBINARY(10000) NOT NULL
             );
             """
     };

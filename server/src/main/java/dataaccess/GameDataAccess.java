@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import dataobject.GameData;
 import dataobject.GameIDGenerator;
 
@@ -20,7 +21,19 @@ public class GameDataAccess {
         }
     }
 
-    public GameData getGame(int gameID) throws DataAccessException {
+    public ChessGame getGame(int gameID) throws DataAccessException {
+        try {
+            if (dataTransfer.containsGameID(gameID)) {
+                return dataTransfer.getGame(gameID);
+            } else {
+                throw new DataAccessException("Error: couldn't find game");
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Error in game data: " + e.getMessage());
+        }
+    }
+
+    public GameData getGameData(int gameID) throws DataAccessException {
         try {
             if (dataTransfer.containsGameID(gameID)) {
                 return dataTransfer.getGameData(gameID);
@@ -51,7 +64,7 @@ public class GameDataAccess {
             }
 
             GameData gameData = new GameData(gameID, null, null, gameName);
-            dataTransfer.addGameData(gameData);
+            dataTransfer.addGameData(gameData, new ChessGame());
 
             return gameData;
         } catch (Exception e) {
