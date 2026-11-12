@@ -60,7 +60,6 @@ public class ChessGame {
             return this == WHITE ? BLACK : WHITE;
         }
 
-        /// //
         public static TeamColor fromString(String colorStr) {
             for (TeamColor teamColor : values()) {
                 if (teamColor.toString().equalsIgnoreCase(colorStr)) {
@@ -69,8 +68,6 @@ public class ChessGame {
             }
             throw new IllegalArgumentException("TeamColor " + colorStr + " unknown.");
         }
-
-        /// /
 
         @Override
         public String toString() {

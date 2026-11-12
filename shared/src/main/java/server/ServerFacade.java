@@ -1,5 +1,6 @@
 package server;
 
+import chess.ChessGame;
 import client.ChessClient;
 import com.google.gson.Gson;
 
@@ -14,6 +15,7 @@ import java.net.http.HttpRequest.Builder;
 public class ServerFacade {
     private final HttpClient client = HttpClient.newHttpClient();
     private final String serverUrl;
+
 
     public ServerFacade(String serverUrl) {
         this.serverUrl = serverUrl;
@@ -48,13 +50,20 @@ public class ServerFacade {
         return handleResponse(response, Map.class);
     }
 
-    public ArrayList<String> list(String authToken) throws Exception { // ***COME BACK TO THIS
+    public ArrayList<Map<String, Object>> list(String authToken) throws Exception { // ***COME BACK TO THIS
         HttpRequest request = buildRequestWithHeader("GET", "/game", authToken, null);
         HttpResponse<String> response = sendRequest(request);
-        Map<String, String> responseMap = handleResponse(response, Map.class);
-        System.out.println(responseMap);
+        Map<String, ArrayList> responseMap = handleResponse(response, Map.class);
 
-        return new ArrayList<>();
+        return responseMap.get("games");
+    }
+
+    public Map<String, String> play(String authToken, String[] params) throws Exception {
+        Map<String, String> body = Map.of("playerColor", params[0], "gameID", params[1]);
+        HttpRequest request = buildRequestWithHeader("PUT", "/game", authToken, body);
+        HttpResponse<String> response = sendRequest(request);
+
+        return handleResponse(response, Map.class);
     }
 
     public void clear() throws Exception {
@@ -103,7 +112,7 @@ public class ServerFacade {
 
         if (errorStatus(status)) {
             if (body != null) {
-                throw ResponseException.fromJson(body);
+                throw ResponseException.fromJson(body, status);
             }
         }
 
