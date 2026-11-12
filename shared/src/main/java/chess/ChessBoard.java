@@ -1,5 +1,6 @@
 package chess;
 
+import java.io.*;
 import java.util.*;
 
 import static ui.EscapeSequences.*;
@@ -10,7 +11,7 @@ import static ui.EscapeSequences.*;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Serializable {
     private ChessPiece[][] board;
 
     public ChessBoard() {

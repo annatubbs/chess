@@ -1,5 +1,9 @@
 package chess;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -250,6 +254,26 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board.deepCopy();
+    }
+
+    public byte[] serializeBoard() throws Exception {
+        ByteArrayOutputStream arrayOutStrm = new ByteArrayOutputStream();
+
+        try (ObjectOutputStream objectOutStrm = new ObjectOutputStream(arrayOutStrm)) {
+            objectOutStrm.writeObject(board);
+        }
+
+        byte[] byteArray = arrayOutStrm.toByteArray();
+
+        return byteArray;
+    }
+
+    public ChessBoard restoreSerializedBoard(byte[] byteArray) throws Exception {
+        try (ObjectInputStream objInStrm = new ObjectInputStream(new ByteArrayInputStream(byteArray))) {
+            ChessBoard restoredBoard = (ChessBoard) objInStrm.readObject();
+
+            return restoredBoard;
+        }
     }
 
     @Override
