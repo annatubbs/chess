@@ -3,7 +3,7 @@ package dataobject;
 import java.util.ArrayList;
 
 public class ListGamesResult {
-    private final ArrayList<GameData> gameList; //* dt
+    private final ArrayList<GameData> gameList;
 
     public ListGamesResult(ArrayList<GameData> gameList) {
         this.gameList = gameList;

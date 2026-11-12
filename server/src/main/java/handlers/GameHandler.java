@@ -1,5 +1,6 @@
 package handlers;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import dataobject.*;
 import services.*;
@@ -35,6 +36,12 @@ public class GameHandler {
         CreateGameResult createGameResult = gameService.createGame(createGameRequest);
 
         return new HashMap<>(Map.of("gameID", createGameResult.getGameID()));
+    }
+
+    public ChessGame getGame(String authToken, String json) throws Exception {
+        GetGameRequest getGameRequest = new Gson().fromJson(json, GetGameRequest.class);
+        getGameRequest.setAuthToken(authToken);
+        return gameService.getGame(getGameRequest);
     }
 
     public HashMap<String, Object> joinGame(String authToken, String json) throws Exception {

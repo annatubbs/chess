@@ -1,5 +1,6 @@
 package client;
 
+import chess.ChessBoard;
 import com.google.gson.Gson;
 import server.ResponseException;
 import server.ServerFacade;
@@ -23,8 +24,9 @@ public class ChessClient {
             "list", "List all games: \"list\"",
             "play", "Play game: \"play\" <PLAYERCOLOR:black/white> <GAMEID> ",
             "observe", "Observe a game: \"observe\" <GAMEID>",
+            "board", "Render chess board: \"board\" <GAMEID>",
             "quit", "Quit: \"quit\"",
-            "clear", "Clear: \"clear\"",
+//            "clear", "Clear: \"clear\"",
             "help", "Help: \"help\"");
     ;
 
@@ -76,7 +78,8 @@ public class ChessClient {
             case "create" -> create(params);
             case "list" -> list();
             case "play" -> play(params);
-            case "observe" -> observe(params);
+//            case "observe" -> observe(params);
+            case "board" -> renderBoard(params);
             case "quit" -> quit();
             case "clear" -> clear();
             default -> help();
@@ -165,7 +168,7 @@ public class ChessClient {
         }
     }
 
-    private Map<String, Object> getGameByIndex(String gameNumberStr) throws Exception {
+    private Map<String, Object> getGameByIndex(String gameNumberStr) throws Exception { // has gameName, w+b usernames
         try {
             ArrayList<Map<String, Object>> gameList = getGameList();
             int gameNumber = Integer.parseInt(gameNumberStr);
@@ -203,18 +206,32 @@ public class ChessClient {
         }
     }
 
-    private String observe(String[] params) {
+//    private String observe(String[] params) {
+//        if (authToken.isEmpty()) {
+//            return "Please log in to observe games.";
+//        }
+//        if (params.length != 1) {
+//            return "Incorrect format \n " + inputFormatStrs.get("observe");
+//        }
+//        try {
+//            return "Observing: " + params[0] + ".\n" + renderBoard(params);
+//        } catch (Exception e) {
+//            return e.getMessage();
+//        }
+//    }
+
+    private String renderBoard(String[] params) throws Exception {
         if (authToken.isEmpty()) {
-            return "Please log in to observe games.";
+            return "Please log in to view games.";
         }
         if (params.length != 1) {
-            return "Incorrect format \n " + inputFormatStrs.get("observe");
+            return "Incorrect format \n " + inputFormatStrs.get("board");
         }
-        try {
-            return "Observing game " + params[0] + ".\n" + renderBoard(params[0]);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        Map<String, Object> gameDataMap = getGameByIndex(params[0]);
+        String gameID = gameDataMap.get("gameID").toString();
+
+        String boardStr = server.getGameBoard(authToken, gameID);
+        return "Game: " + gameDataMap.get("gameName") + boardStr;
     }
 
     private String quit() {
@@ -239,7 +256,7 @@ public class ChessClient {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else {
-            for (String option : new String[]{"logout", "create", "list", "play", "observe", "quit", "clear", "help"}) {
+            for (String option : new String[]{"logout", "create", "list", "play", "board", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }
@@ -300,12 +317,6 @@ public class ChessClient {
         } else { // bad input
             return wantsToClear();
         }
-    }
-
-    private String renderBoard(String gameIndex) throws Exception {
-        Map<String, Object> gameData = getGameByIndex(gameIndex);
-
-        return gameData.get("game").toString();
     }
 
 }

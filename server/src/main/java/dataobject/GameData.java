@@ -15,7 +15,6 @@ public class GameData {
     private ChessGame game;
 
     public GameData(int gameID, String blackUsername, String whiteUsername, String gameName) {
-        System.out.println("Create gameData from default");
         this.gameID = gameID;
         this.blackUsername = blackUsername;
         this.whiteUsername = whiteUsername;
@@ -23,22 +22,11 @@ public class GameData {
         this.game = new ChessGame();
     }
 
-//    public GameData(int gameID, String blackUsername, String whiteUsername, String gameName, byte[] gameBytes) throws Exception {
-//        System.out.println("Create gameData from Bytes");
-//        this.gameID = gameID;
-//        this.blackUsername = blackUsername;
-//        this.whiteUsername = whiteUsername;
-//        this.gameName = gameName;
-//        this.game = restoreSerializedGame(gameBytes);
-//    }
-
     public GameData(int gameID, String blackUsername, String whiteUsername, String gameName, ChessGame game) {
-        System.out.println("Create gameData from gameObj");
         this.gameID = gameID;
         this.blackUsername = blackUsername;
         this.whiteUsername = whiteUsername;
         this.gameName = gameName;
-//        this.game = game;
     }
 
     public int getGameID() {
@@ -57,15 +45,7 @@ public class GameData {
         return gameName;
     }
 
-//    public ChessGame getGame() {
-//        return game;
-//    }
 
-//    public void setGame(ChessGame game) {
-//        this.game = game;
-//    }
-
-    
 //    public ChessGame restoreSerializedGame(byte[] byteArray) throws Exception {
 //        try (ObjectInputStream objInStrm = new ObjectInputStream(new ByteArrayInputStream(byteArray))) {
 //            ChessGame restoredGame = (ChessGame) objInStrm.readObject();

@@ -41,7 +41,22 @@ public class GameService {
         return new CreateGameResult(gameData.getGameID());
     }
 
-    public ChessGame getGame()
+    public ChessGame getGame(GetGameRequest getGameRequest) throws Exception {
+        AuthData authData = authDataAccess.getAuth(getGameRequest.getAuthToken());
+        if (authData == null) {
+            throw new UnauthorizedException();
+        }
+
+        ChessGame game = gameDataAccess.getGame(getGameRequest.getGameID());
+        if (game == null) {
+            throw new BadRequestException();
+        }
+
+        System.out.println(game);
+        System.out.println(game.getClass());
+
+        return game;
+    }
 
     public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws Exception {
         AuthData authData = authDataAccess.getAuth(joinGameRequest.getAuthToken());
@@ -55,7 +70,6 @@ public class GameService {
         if (gameData == null) {
             throw new BadRequestException();
         }
-//        gameData.setGame(gameDataAccess.getGame(gameID));
 
         // check if color available
         ChessGame.TeamColor playerColor = joinGameRequest.getPlayerColor();

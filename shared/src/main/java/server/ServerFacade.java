@@ -1,5 +1,6 @@
 package server;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import client.ChessClient;
 import com.google.gson.Gson;
@@ -50,12 +51,21 @@ public class ServerFacade {
         return handleResponse(response, Map.class);
     }
 
-    public ArrayList<Map<String, Object>> list(String authToken) throws Exception { // ***COME BACK TO THIS
+    public ArrayList<Map<String, Object>> list(String authToken) throws Exception {
         HttpRequest request = buildRequestWithHeader("GET", "/game", authToken, null);
         HttpResponse<String> response = sendRequest(request);
         Map<String, ArrayList> responseMap = handleResponse(response, Map.class);
 
         return responseMap.get("games");
+    }
+
+    public String getGameBoard(String authToken, String gameID) throws Exception {
+        Map<String, String> body = Map.of("gameID", gameID);
+        HttpRequest request = buildRequestWithHeader("GET", "/image", authToken, body);
+        HttpResponse<String> response = sendRequest(request);
+        ChessGame game = handleResponse(response, ChessGame.class);
+
+        return game.getBoard().toString();
     }
 
     public Map<String, String> play(String authToken, String[] params) throws Exception {

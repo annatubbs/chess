@@ -1,5 +1,6 @@
 package server;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.*;
 import dataaccess.sql.SQLDataTransfer;
@@ -37,6 +38,7 @@ public class Server {
             javalin.delete("/session", this::logout);
             javalin.get("/game", this::listGames);
             javalin.post("/game", this::createGame);
+            javalin.get("/image", this::getGame);
             javalin.put("/game", this::joinGame);
             javalin.delete("/db", this::clearDb);
         } catch (Exception e) {
@@ -127,6 +129,28 @@ public class Server {
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (UnauthorizedException e) {
             ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (DataAccessException e) {
+            ctx.status(500);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
+        }
+    }
+
+    private void getGame(Context ctx) throws Exception { // authToken, playerColor, gameID // make classes here
+        try {
+            ChessGame game = gameHandler.getGame(ctx.header("Authorization"), ctx.body());
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(new Gson().toJson(game));
+        } catch (BadRequestException e) {
+            ctx.status(400);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (UnauthorizedException e) {
+            ctx.status(401);
+            ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         } catch (DataAccessException e) {
             ctx.status(500);
