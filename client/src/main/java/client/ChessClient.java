@@ -192,8 +192,8 @@ public class ChessClient {
 
             gameData = getGameByIndex(gameIndex); // get most recent game data
             return "Playing " + formatGameDataStr(gameData.get("gameName").toString(),
-                    gameData.get("whiteUserName").toString(),
-                    gameData.get("blackUserName").toString());
+                    gameData.get("whiteUsername").toString(),
+                    gameData.get("blackUsername").toString());
 
         } catch (Exception e) {
             return e.getMessage();
