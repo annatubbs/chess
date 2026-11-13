@@ -61,7 +61,8 @@ public class ChessClient {
             }
             System.out.println();
         } catch (Exception e) {
-            System.out.println(e.getMessage()); //****
+            System.out.println("Server Error - quitting program..");
+            stopProg = true;
         }
     }
 
