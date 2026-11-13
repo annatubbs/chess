@@ -1,14 +1,12 @@
 package client;
 
-import chess.ChessBoard;
-import com.google.gson.Gson;
+import chess.ChessGame;
 import server.ResponseException;
 import server.ServerFacade;
+import chess.ChessGame.TeamColor;
 
 import java.util.*;
 
-import static client.UserState.*;
-import static java.lang.Integer.parseInt;
 import static ui.EscapeSequences.*;
 
 public class ChessClient {
@@ -24,7 +22,7 @@ public class ChessClient {
             "list", "List all games: \"list\"",
             "play", "Play game: \"play\" <PLAYERCOLOR:black/white> <GAMEID> ",
             "observe", "Observe a game: \"observe\" <GAMEID>",
-            "board", "Render chess board: \"board\" <GAMEID>",
+            "board", "Render chess board: \"board\"",
             "quit", "Quit: \"quit\"",
 //            "clear", "Clear: \"clear\"",
             "help", "Help: \"help\"");
@@ -39,14 +37,12 @@ public class ChessClient {
 
     private String printPrompt() {
         String prompt = "\n";
-        prompt += switch (state) {
+        prompt += switch (clientInfo.getState()) {
             case LOGGED_OUT -> "";
             case LOGGED_IN -> "[LOGGED_IN]";
-            case PLAYING -> "[PLAYING-" +
-        }
-        if (state == LOGGED_IN) {
-            prompt += "[LOGGED_IN]";
-        } else if
+            case PLAYING -> "[PLAYING-" + gameInfo.getGameName() + "]";
+            case OBSERVING -> "[OBSERVING-" + gameInfo.getGameName() + "]";
+        };
         return prompt + ">>";
     }
 
@@ -73,7 +69,6 @@ public class ChessClient {
 
     private String eval(String input) throws Exception {
         String[] tokens = input.split(" ");
-//        String[] tokens = input.toLowerCase().split(" ");
         String cmd = (tokens.length > 0) ? tokens[0] : "help";
         String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
 
@@ -84,16 +79,16 @@ public class ChessClient {
             case "create" -> create(params);
             case "list" -> list();
             case "play" -> play(params);
-//            case "observe" -> observe(params);
-            case "board" -> renderBoard(params);
+            case "observe" -> observe(params);
+            case "board" -> renderBoard();
             case "quit" -> quit();
             case "clear" -> clear();
             default -> help();
         };
     }
 
-    private String register(String[] params) throws Exception {
-        if (!authToken.isEmpty()) {
+    private String register(String[] params) throws Exception { // unauthorized create game***
+        if (clientInfo.getState() != ClientState.LOGGED_OUT) {
             return "Already logged in.";
         }
         if (params.length != 3) {
@@ -102,42 +97,43 @@ public class ChessClient {
 
         try {
             Map<String, String> result = server.register(params);
+            clientInfo = new ClientInfo(result.get("username"), result.get("authToken"), ClientState.LOGGED_IN);
 
-            authToken = result.get("authToken");
-            return "Welcome " + result.get("username") + "!";
+            return "Welcome " + clientInfo.getUsername() + "!";
         } catch (ResponseException e) {
             return e.getMessage();
         }
     }
 
     private String login(String[] params) throws Exception {
-        if (!authToken.isEmpty()) {
+        if (clientInfo.getState() != ClientState.LOGGED_OUT) {
             return "Already logged in.";
         }
+
         if (params.length != 2) {
             return "Incorrect format\n " + inputFormatStrs.get("login");
         }
 
         try {
             Map<String, String> result = server.login(params);
+            clientInfo = new ClientInfo(result.get("username"), result.get("authToken"), ClientState.LOGGED_IN);
+            return "Welcome " + clientInfo.getUsername() + "!";
 
-            authToken = result.get("authToken");
-            username = result.get("username");
-            return "Welcome " + username + "!";
         } catch (ResponseException e) {
             return e.getMessage();
         }
     }
 
     private String logout() throws Exception {
-        if (authToken.isEmpty()) {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             return "Not logged in.";
+        } else if (clientInfo.getState() == ClientState.PLAYING) {
+            return "Please exit game before logging out.";
         }
 
         try {
-            Map<String, String> result = server.logout(authToken);
-            authToken = "";
-            username = "";
+            Map<String, String> result = server.logout(clientInfo.getAuthToken());
+            clientInfo = new ClientInfo();
             return "Logged out " + result.get("username") + ".";
         } catch (ResponseException e) {
             return e.getMessage();
@@ -145,15 +141,18 @@ public class ChessClient {
     }
 
     private String create(String[] params) throws Exception {
-        if (authToken.isEmpty()) {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             return "Please log in to create games.";
+        }
+        if (clientInfo.getState() != ClientState.LOGGED_IN) {
+            return "Please leave current name to create another";
         }
         if (params.length != 1) {
             return "Incorrect format \n " + inputFormatStrs.get("create");
         }
 
         try {
-            Map<String, String> result = server.create(authToken, params);
+            Map<String, String> result = server.create(clientInfo.getAuthToken(), params);
             return "Created " + formatGameDataStr(params[0], "", "");
         } catch (ResponseException e) {
             return e.getMessage();
@@ -162,7 +161,7 @@ public class ChessClient {
     }
 
     private String list() throws Exception {
-        if (authToken.isEmpty()) {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             return "Please log in to view games.";
         }
 
@@ -174,70 +173,75 @@ public class ChessClient {
         }
     }
 
-    private Map<String, Object> getGameByIndex(String gameNumberStr) throws Exception { // has gameName, w+b usernames
-        try {
-            ArrayList<Map<String, Object>> gameList = getGameList();
-            int gameNumber = Integer.parseInt(gameNumberStr);
-            return gameList.get(gameNumber - 1);
-        } catch (Exception e) {
-            throw new ResponseException("Please type a game number from the list of games.", 400);
-        }
-    }
-
     private String play(String[] params) throws Exception {
-        if (authToken.isEmpty()) {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             return "Please log in to play games.";
         }
         if (params.length != 2) {
             return "Incorrect format \n " + inputFormatStrs.get("play");
         }
         try {
+            TeamColor playerColor = TeamColor.fromString(params[0]);
             String gameIndex = params[1]; // use index to get game's data
             Map<String, Object> gameDataMap = getGameByIndex(gameIndex);
-            String gameID = gameDataMap.get("gameID").toString();
 
-            params[1] = gameID;
-            Map<String, String> result = server.play(authToken, params);
+            if (!alreadyPlayer(gameDataMap, playerColor)) {
+                String gameID = gameDataMap.get("gameID").toString();
+                params[1] = gameID;
+                Map<String, String> result = server.play(clientInfo.getAuthToken(), params);
 
-            gameDataMap = getGameByIndex(gameIndex); // get most recent game data
-
-//            System.out.println(gameDataMap.get("game").getClass());
+                gameDataMap = getGameByIndex(gameIndex); // get most recent game data
+            }
+            clientInfo.setState(ClientState.PLAYING);
+            gameInfo = new ClientGameInfo(((Double) gameDataMap.get("gameID")).intValue(),
+                    gameDataMap.get("gameName").toString(), ClientGameInfo.Role.PLAYER,
+                    TeamColor.fromString(params[0]));
 
             String msg = "Playing " + formatGameDataStr(gameDataMap.get("gameName").toString(),
                     switchNullToEmptyObj(gameDataMap.get("whiteUsername")),
-                    switchNullToEmptyObj(gameDataMap.get("blackUsername")));
-            return msg.replaceFirst("\\R$", "");
+                    switchNullToEmptyObj(gameDataMap.get("blackUsername"))) + "\n";
+            return msg.replaceFirst("\\R$", "") + "\n" + renderBoard();
+
         } catch (Exception e) {
             return e.getMessage();
         }
     }
 
-//    private String observe(String[] params) {
-//        if (authToken.isEmpty()) {
-//            return "Please log in to observe games.";
-//        }
-//        if (params.length != 1) {
-//            return "Incorrect format \n " + inputFormatStrs.get("observe");
-//        }
-//        try {
-//            return "Observing: " + params[0] + ".\n" + renderBoard(params);
-//        } catch (Exception e) {
-//            return e.getMessage();
-//        }
-//    }
-
-    private String renderBoard(String[] params) throws Exception {
-        if (authToken.isEmpty()) {
-            return "Please log in to view games.";
+    private String observe(String[] params) {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
+            return "Please log in to observe games.";
+        }
+        if (clientInfo.getState() != ClientState.LOGGED_IN) {
+            return "Please leave current game to observe a different game.";
         }
         if (params.length != 1) {
-            return "Incorrect format \n " + inputFormatStrs.get("board");
+            return "Incorrect format \n " + inputFormatStrs.get("observe");
         }
-        Map<String, Object> gameDataMap = getGameByIndex(params[0]);
-        String gameID = gameDataMap.get("gameID").toString();
+        try {
+            String gameIndex = params[0]; // use index to get game's data
+            Map<String, Object> gameDataMap = getGameByIndex(gameIndex);
+            int gameID = (int) Double.parseDouble(gameDataMap.get("gameID").toString());
+            String gameName = gameDataMap.get("gameName").toString();
 
-        String boardStr = server.getGameBoard(authToken, gameID);
-        return "Game: " + gameDataMap.get("gameName") + boardStr;
+            clientInfo.setState(ClientState.OBSERVING);
+            gameInfo = new ClientGameInfo(gameID, gameName, ClientGameInfo.Role.OBSERVER);
+
+            return "Observing:\n" + renderBoard();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    private String renderBoard() throws Exception {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
+            return "Please log in to view chess boards.";
+        } else if (clientInfo.getState() == ClientState.LOGGED_IN) {
+            return "Please join a game to view the board.";
+        }
+        String boardStr = server.getGameBoard(clientInfo.getAuthToken(), String.valueOf(gameInfo.getGameID()),
+                gameInfo.getPlayerColor());
+
+        return "Game: " + gameInfo.getGameName() + "\n" + boardStr;
     }
 
     private String quit() {
@@ -257,12 +261,20 @@ public class ChessClient {
 
     private String help() {
         String msg = SET_TEXT_BOLD + "Options:" + SET_TEXT_FAINT + "\n";
-        if (authToken.isEmpty()) {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             for (String option : new String[]{"login", "register", "list", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
+        } else if (clientInfo.getState() == ClientState.LOGGED_IN) {
+            for (String option : new String[]{"logout", "create", "list", "play", "quit", "clear", "help"}) {
+                msg += inputFormatStrs.get(option) + "\n";
+            }
+        } else if (clientInfo.getState() == ClientState.PLAYING) {
+            for (String option : new String[]{"board", "list", "quit", "list", "clear", "help"}) {
+                msg += inputFormatStrs.get(option) + "\n";
+            }
         } else {
-            for (String option : new String[]{"logout", "create", "list", "play", "board", "quit", "clear", "help"}) {
+            for (String option : new String[]{"logout", "board", "list", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }
@@ -273,14 +285,14 @@ public class ChessClient {
     // Helper functions
 
     private ArrayList<Map<String, Object>> getGameList() throws Exception {
-        return server.list(authToken);
+        return server.list(clientInfo.getAuthToken());
     }
 
     private String switchNullToEmptyStr(String str) {
         if (str == null || str.equals("null")) {
             return "";
         } else {
-            return str.toString();
+            return str;
         }
     }
 
@@ -309,6 +321,22 @@ public class ChessClient {
             index++;
         }
         return gameListStr.replaceFirst("\\R$", "");
+    }
+
+    private Map<String, Object> getGameByIndex(String gameNumberStr) throws Exception { // has gameName, w+b usernames
+        try {
+            ArrayList<Map<String, Object>> gameList = getGameList();
+            int gameNumber = Integer.parseInt(gameNumberStr);
+            return gameList.get(gameNumber - 1);
+        } catch (Exception e) {
+            throw new ResponseException("Please type a game number from the list of games.", 400);
+        }
+    }
+
+    private boolean alreadyPlayer(Map<String, Object> gameDataMap, TeamColor playerColor) {
+        String username = clientInfo.getUsername();
+        return (playerColor == TeamColor.WHITE && username.equals(gameDataMap.get("whiteUsername"))) ||
+                (playerColor == TeamColor.BLACK && username.equals(gameDataMap.get("blackUsername")));
     }
 
     private boolean wantsToClear() {

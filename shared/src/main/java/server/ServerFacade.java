@@ -57,13 +57,17 @@ public class ServerFacade {
         return responseMap.get("games");
     }
 
-    public String getGameBoard(String authToken, String gameID) throws Exception {
+    public String getGameBoard(String authToken, String gameID, ChessGame.TeamColor playerColor) throws Exception {
         Map<String, String> body = Map.of("gameID", gameID);
         HttpRequest request = buildRequestWithHeader("GET", "/image", authToken, body);
         HttpResponse<String> response = sendRequest(request);
         ChessGame game = handleResponse(response, ChessGame.class);
 
-        return game.getBoard().toString();
+        if (playerColor == ChessGame.TeamColor.BLACK) {
+            return game.getBoard().toStringBlackPerspective();
+        } else { // team color white or observing
+            return game.getBoard().toString();
+        }
     }
 
     public Map<String, String> play(String authToken, String[] params) throws Exception {
@@ -138,7 +142,6 @@ public class ServerFacade {
                 .registerTypeAdapter(ChessPiece.class, (JsonDeserializer<ChessPiece>)
                         (json, type, context) -> {
                             JsonObject object = json.getAsJsonObject();
-                            System.out.println(object);
 
                             String pieceType = object.get("type").getAsString();
                             return switch (pieceType) {
