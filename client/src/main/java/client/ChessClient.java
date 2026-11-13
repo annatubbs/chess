@@ -13,8 +13,8 @@ import static ui.EscapeSequences.*;
 
 public class ChessClient {
     private final ServerFacade server;
-    private String authToken;
-    private String username;
+    private ClientInfo clientInfo;
+    private ClientGameInfo gameInfo;
     private boolean stopProg;
     private final Map<String, String> inputFormatStrs = Map.of(
             "login", "Login as an existing user: \"login\" <USERNAME> <PASSWORD>",
@@ -32,15 +32,21 @@ public class ChessClient {
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
-        authToken = "";
+        clientInfo = new ClientInfo();
+        gameInfo = new ClientGameInfo();
         stopProg = false;
     }
 
     private String printPrompt() {
         String prompt = "\n";
-        if (!authToken.isEmpty()) {
-            prompt += "[LOGGED_IN]";
+        prompt += switch (state) {
+            case LOGGED_OUT -> "";
+            case LOGGED_IN -> "[LOGGED_IN]";
+            case PLAYING -> "[PLAYING-" +
         }
+        if (state == LOGGED_IN) {
+            prompt += "[LOGGED_IN]";
+        } else if
         return prompt + ">>";
     }
 

@@ -52,9 +52,6 @@ public class GameService {
             throw new BadRequestException();
         }
 
-        System.out.println(game);
-        System.out.println(game.getClass());
-
         return game;
     }
 

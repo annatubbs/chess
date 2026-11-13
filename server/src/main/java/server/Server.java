@@ -1,7 +1,7 @@
 package server;
 
-import chess.ChessGame;
-import com.google.gson.Gson;
+import chess.*;
+import com.google.gson.*;
 import dataaccess.*;
 import dataaccess.sql.SQLDataTransfer;
 import handlers.GameHandler;
@@ -178,6 +178,26 @@ public class Server {
             ctx.status(500);
             ctx.json(new Gson().toJson(Map.of("message", e.getMessage())));
         }
+    }
+
+    private Gson makeChessPieceGsonBuilder() throws Exception {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ChessPiece.class, (JsonDeserializer<ChessPiece>)
+                        (json, type, context) -> {
+                            JsonObject object = json.getAsJsonObject();
+                            String pieceType = object.get("pieceType").getAsString();
+
+                            return switch (pieceType) {
+                                case "PAWN" -> context.deserialize(json, Pawn.class);
+                                case "ROOK" -> context.deserialize(json, Rook.class);
+                                case "KNIGHT" -> context.deserialize(json, Knight.class);
+                                case "BISHOP" -> context.deserialize(json, Bishop.class);
+                                case "KING" -> context.deserialize(json, King.class);
+                                case "QUEEN" -> context.deserialize(json, Queen.class);
+                                default -> throw new JsonParseException("Error in data conversion.");
+                            };
+                        }).create();
+        return gson;
     }
 
     private void clearDb(Context ctx) throws Exception {
