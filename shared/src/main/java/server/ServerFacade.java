@@ -70,7 +70,7 @@ public class ServerFacade {
         }
     }
 
-    public Map<String, String> play(String authToken, String[] params) throws Exception {
+    public Map<String, Object> play(String authToken, String[] params) throws Exception {
         Map<String, String> body = Map.of("playerColor", params[0], "gameID", params[1]);
         HttpRequest request = buildRequestWithHeader("PUT", "/game", authToken, body);
         HttpResponse<String> response = sendRequest(request);
@@ -85,6 +85,7 @@ public class ServerFacade {
     }
 
     // Process Requests
+
     private HttpRequest buildRequest(String method, String path, Object body) {
         return buildRequestWithHeader(method, path, "", body);
     }

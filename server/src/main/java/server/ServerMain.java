@@ -1,12 +1,16 @@
 package server;
 
 import chess.*;
+import client.ChessClient;
 
 public class ServerMain {
     public static void main(String[] args) {
         Server server = new Server();
-        server.run(8080);
+        int port = server.run(0);
 
-        System.out.println("♕ 240 Chess Server running on port " + server.getPort());
+        ChessClient client = new ChessClient("http://localhost:" + port);
+        client.run();
+
+//        System.out.println("♕ 240 Chess Server running on port " + port);
     }
 }

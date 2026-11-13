@@ -188,7 +188,7 @@ public class ChessClient {
             if (!alreadyPlayer(gameDataMap, playerColor)) {
                 String gameID = gameDataMap.get("gameID").toString();
                 params[1] = gameID;
-                Map<String, String> result = server.play(clientInfo.getAuthToken(), params);
+                Map<String, Object> result = server.play(clientInfo.getAuthToken(), params);
 
                 gameDataMap = getGameByIndex(gameIndex); // get most recent game data
             }
