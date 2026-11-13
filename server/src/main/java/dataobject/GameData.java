@@ -5,8 +5,6 @@ import chess.ChessGame;
 import java.io.*;
 
 
-// **** usernames must be "" when empty! not null *****
-
 public class GameData {
     private final int gameID;
     private String blackUsername;
@@ -44,15 +42,6 @@ public class GameData {
     public String getGameName() {
         return gameName;
     }
-
-
-//    public ChessGame restoreSerializedGame(byte[] byteArray) throws Exception {
-//        try (ObjectInputStream objInStrm = new ObjectInputStream(new ByteArrayInputStream(byteArray))) {
-//            ChessGame restoredGame = (ChessGame) objInStrm.readObject();
-//
-//            return restoredGame;
-//        }
-//    }
 
     public boolean isTaken(ChessGame.TeamColor color) {
         if (color == ChessGame.TeamColor.BLACK) {

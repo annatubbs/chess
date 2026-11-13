@@ -31,14 +31,4 @@ public class Queen extends SlidePiece {
     public Queen deepCopy() {
         return new Queen(getTeamColor());
     }
-
-    @Override
-    public String toString() {
-        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            String WHITE_QUEEN = " ♕ ";
-            return WHITE_QUEEN;
-        }
-        String BLACK_QUEEN = " ♛ ";
-        return BLACK_QUEEN;
-    }
 }

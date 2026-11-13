@@ -1,7 +1,5 @@
 package chess;
 
-import com.google.gson.Gson;
-
 import java.io.*;
 import java.util.*;
 
@@ -34,11 +32,6 @@ public class ChessGame implements Serializable {
             this.board = restoredGame.board;
             this.boardHistory = restoredGame.boardHistory;
         }
-//
-//        Map<String, String> gameMap = new Gson().fromJson(new Gson().toJson(byteArray), Map.class);
-//        teamTurn = TeamColor.fromString(gameMap.get("teamTurn");
-//        board = gameMap.get("board")
-
     }
 
     /**
