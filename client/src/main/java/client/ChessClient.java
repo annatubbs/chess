@@ -1,6 +1,5 @@
 package client;
 
-import chess.ChessGame;
 import server.ResponseException;
 import server.ServerFacade;
 import chess.ChessGame.TeamColor;
@@ -14,19 +13,18 @@ public class ChessClient {
     private ClientInfo clientInfo;
     private ClientGameInfo gameInfo;
     private boolean stopProg;
-    private final Map<String, String> inputFormatStrs = Map.of(
-            "login", "Login as an existing user: \"login\" <USERNAME> <PASSWORD>",
-            "register", "Register as a new user: \"register\" <USERNAME> <PASSWORD> <EMAIL>",
-            "logout", "Logout: \"logout\"",
-            "create", "Create game: \"create\" <GAMENAME>",
-            "list", "List all games: \"list\"",
-            "play", "Play game: \"play\" <PLAYERCOLOR:black/white> <GAMEID> ",
-            "observe", "Observe a game: \"observe\" <GAMEID>",
-            "board", "Render chess board: \"board\"",
-            "quit", "Quit: \"quit\"",
-//            "clear", "Clear: \"clear\"",
-            "help", "Help: \"help\"");
-    ;
+    private final Map<String, String> inputFormatStrs = Map.ofEntries(
+            Map.entry("login", "Login as an existing user: \"login\" <USERNAME> <PASSWORD>"),
+            Map.entry("register", "Register as a new user: \"register\" <USERNAME> <PASSWORD> <EMAIL>"),
+            Map.entry("logout", "Logout: \"logout\""),
+            Map.entry("create", "Create game: \"create\" <GAMENAME>"),
+            Map.entry("list", "List all games: \"list\""),
+            Map.entry("play", "Play game: \"play\" <PLAYERCOLOR:black/white> <GAMEID> "),
+            Map.entry("observe", "Observe a game: \"observe\" <GAMEID>"),
+            Map.entry("board", "Render chess board: \"board\""),
+            Map.entry("leave", "Leave current game: \"leave\""),
+            Map.entry("quit", "Quit: \"quit\""),
+            Map.entry("help", "Help: \"help\""));
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -81,6 +79,7 @@ public class ChessClient {
             case "play" -> play(params);
             case "observe" -> observe(params);
             case "board" -> renderBoard();
+            case "leave" -> leave();
             case "quit" -> quit();
             case "clear" -> clear();
             default -> help();
@@ -244,6 +243,18 @@ public class ChessClient {
         return "Game: " + gameInfo.getGameName() + "\n" + boardStr;
     }
 
+    public String leave() {
+        if (clientInfo.getState() == ClientState.LOGGED_OUT) {
+            return "Not logged in.";
+        } else if (clientInfo.getState() == ClientState.LOGGED_IN) {
+            return "You are not in a game.";
+        }
+        clientInfo.setState(ClientState.LOGGED_IN);
+        gameInfo = new ClientGameInfo();
+
+        return "Leaving game...";
+    }
+
     private String quit() {
         stopProg = true;
         return "\nHave a great day!";
@@ -270,11 +281,11 @@ public class ChessClient {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else if (clientInfo.getState() == ClientState.PLAYING) {
-            for (String option : new String[]{"board", "list", "quit", "list", "clear", "help"}) {
+            for (String option : new String[]{"board", "list", "leave", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else {
-            for (String option : new String[]{"logout", "board", "list", "quit", "clear", "help"}) {
+            for (String option : new String[]{"logout", "board", "list", "leave", "quit", "clear", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }
