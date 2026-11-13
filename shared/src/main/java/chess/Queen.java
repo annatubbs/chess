@@ -2,8 +2,6 @@ package chess;
 
 import java.util.Collection;
 
-import static ui.EscapeSequences.*;
-
 public class Queen extends SlidePiece {
 
     public Queen(ChessGame.TeamColor pieceColor) {
@@ -37,8 +35,10 @@ public class Queen extends SlidePiece {
     @Override
     public String toString() {
         if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            String WHITE_QUEEN = " ♕ ";
             return WHITE_QUEEN;
         }
+        String BLACK_QUEEN = " ♛ ";
         return BLACK_QUEEN;
     }
 }

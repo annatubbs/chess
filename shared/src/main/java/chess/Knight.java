@@ -37,6 +37,9 @@ public class Knight extends SingleStepPiece {
 
     @Override
     public String toString() {
+        String WHITE_KNIGHT = " ♘ ";
+        String BLACK_KNIGHT = " ♞ ";
+
         if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
             return WHITE_KNIGHT;
         }

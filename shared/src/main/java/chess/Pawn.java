@@ -3,7 +3,6 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static ui.EscapeSequences.*;
 
 public class Pawn extends ChessPiece {
     private boolean firstMove;
@@ -124,6 +123,9 @@ public class Pawn extends ChessPiece {
 
     @Override
     public String toString() {
+        String WHITE_PAWN = " ♙ ";
+        String BLACK_PAWN = " ♟ ";
+
         if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
             return WHITE_PAWN;
         }

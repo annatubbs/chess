@@ -1,9 +1,8 @@
-package server;
+package client;
 
 import chess.ChessGame.TeamColor;
-import client.ClientGameInfo;
-import client.ClientInfo;
-import client.ClientState;
+import server.ResponseException;
+import server.ServerFacade;
 
 import java.util.*;
 

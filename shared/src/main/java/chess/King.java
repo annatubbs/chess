@@ -1,8 +1,8 @@
 package chess;
 
 import java.util.Collection;
+
 import chess.ChessGame.TeamColor;
-import static ui.EscapeSequences.*;
 
 public class King extends SingleStepPiece {
 
@@ -15,16 +15,16 @@ public class King extends SingleStepPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         // Add horizontal moves
-        Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{1,0}); // up
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-1,0})); // down
+        Collection<ChessMove> moves = singleStepMove(board, myPosition, new int[]{1, 0}); // up
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-1, 0})); // down
         // Add horizontal moves
-        moves.addAll(singleStepMove(board, myPosition, new int[]{0,1})); // right
-        moves.addAll(singleStepMove(board, myPosition, new int[]{0,-1})); // left
+        moves.addAll(singleStepMove(board, myPosition, new int[]{0, 1})); // right
+        moves.addAll(singleStepMove(board, myPosition, new int[]{0, -1})); // left
         // Add diagonal moves
-        moves.addAll(singleStepMove(board, myPosition, new int[]{1,1})); // up-right
-        moves.addAll(singleStepMove(board, myPosition, new int[]{1,-1})); // up-left
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-1,1})); // down-right
-        moves.addAll(singleStepMove(board, myPosition, new int[]{-1,-1})); // down-left
+        moves.addAll(singleStepMove(board, myPosition, new int[]{1, 1})); // up-right
+        moves.addAll(singleStepMove(board, myPosition, new int[]{1, -1})); // up-left
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-1, 1})); // down-right
+        moves.addAll(singleStepMove(board, myPosition, new int[]{-1, -1})); // down-left
 
         return moves;
     }
@@ -37,8 +37,10 @@ public class King extends SingleStepPiece {
     @Override
     public String toString() {
         if (super.getTeamColor() == TeamColor.WHITE) {
+            String WHITE_KING = " ♔ ";
             return WHITE_KING;
         }
+        String BLACK_KING = " ♚ ";
         return BLACK_KING;
     }
 }

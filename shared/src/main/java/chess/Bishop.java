@@ -2,8 +2,6 @@ package chess;
 
 import java.util.Collection;
 
-import static ui.EscapeSequences.*;
-
 public class Bishop extends SlidePiece {
 
     public Bishop(ChessGame.TeamColor pieceColor) {
@@ -30,6 +28,9 @@ public class Bishop extends SlidePiece {
 
     @Override
     public String toString() {
+        String WHITE_BISHOP = " ♗ ";
+        String BLACK_BISHOP = " ♝ ";
+
         if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
             return WHITE_BISHOP;
         }

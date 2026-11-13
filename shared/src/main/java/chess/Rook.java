@@ -2,7 +2,6 @@ package chess;
 
 import java.util.Collection;
 
-import static ui.EscapeSequences.*;
 
 public class Rook extends SlidePiece {
 
@@ -31,6 +30,9 @@ public class Rook extends SlidePiece {
 
     @Override
     public String toString() {
+        String WHITE_ROOK = " ♖ ";
+        String BLACK_ROOK = " ♜ ";
+
         if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
             return WHITE_ROOK;
         }
