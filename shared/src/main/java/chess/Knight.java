@@ -2,7 +2,6 @@ package chess;
 
 import java.util.Collection;
 
-import static ui.EscapeSequences.*;
 
 public class Knight extends SingleStepPiece {
 

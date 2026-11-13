@@ -3,7 +3,6 @@ package chess;
 import java.io.*;
 import java.util.*;
 
-import static ui.EscapeSequences.*;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -12,6 +11,21 @@ import static ui.EscapeSequences.*;
  * signature of the existing methods.
  */
 public class ChessBoard implements Serializable {
+    private final String UNICODE_ESCAPE = "\u001b";
+    private final String SET_TEXT_BOLD = UNICODE_ESCAPE + "[1m";
+    private final String SET_TEXT_FAINT = UNICODE_ESCAPE + "[2m";
+    private final String SET_TEXT_COLOR = UNICODE_ESCAPE + "[38;5;";
+    private final String SET_BG_COLOR = UNICODE_ESCAPE + "[48;5;";
+    private final String SET_BG_COLOR_LIGHT_BROWN = SET_BG_COLOR + "180m";
+    private final String SET_BG_COLOR_DARK_BROWN = SET_BG_COLOR + "94m";
+    private final String SET_TEXT_COLOR_BLACK = SET_TEXT_COLOR + "0m";
+    private final String EMPTY = " \u2003 ";
+    private final String RESET_TEXT_COLOR = UNICODE_ESCAPE + "[39m";
+    private final String RESET_BG_COLOR = UNICODE_ESCAPE + "[49m";
+    private final String THIN_EMPTY = "\u2009";
+    private final String COL_INDICES = "   A   B " + THIN_EMPTY + " C   D  " + THIN_EMPTY + "E   F  G   H ";
+
+
     private ChessPiece[][] board;
 
     public ChessBoard() {
