@@ -33,14 +33,4 @@ public class King extends SingleStepPiece {
     public King deepCopy() {
         return new King(getTeamColor());
     }
-
-    @Override
-    public String toString() {
-        if (super.getTeamColor() == TeamColor.WHITE) {
-            String WHITE_KING = " ♔ ";
-            return WHITE_KING;
-        }
-        String BLACK_KING = " ♚ ";
-        return BLACK_KING;
-    }
 }

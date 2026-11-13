@@ -11,6 +11,8 @@ import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpRequest.Builder;
 
+import static ui.EscapeSequences.*;
+
 public class ServerFacade {
     private final HttpClient client = HttpClient.newHttpClient();
     private final String serverUrl;
@@ -64,9 +66,9 @@ public class ServerFacade {
         ChessGame game = handleResponse(response, ChessGame.class);
 
         if (playerColor == ChessGame.TeamColor.BLACK) {
-            return game.getBoard().toStringBlackPerspective();
+            return toStringBlackPerspective(game.getBoard());
         } else { // team color white or observing
-            return game.getBoard().toString();
+            return toStringWhitePerspective(game.getBoard());
         }
     }
 
@@ -157,5 +159,82 @@ public class ServerFacade {
                         }).create();
         return gson;
     }
+
+    private String getUIString(ChessPiece piece) {
+        return switch (piece.getPieceType()) {
+            case KING -> piece.getTeamColor() == ChessGame.TeamColor.WHITE ? WHITE_KING : BLACK_KING;
+            case QUEEN -> piece.getTeamColor() == ChessGame.TeamColor.WHITE ? WHITE_QUEEN : BLACK_QUEEN;
+            case BISHOP -> piece.getTeamColor() == ChessGame.TeamColor.WHITE ? WHITE_BISHOP : BLACK_BISHOP;
+            case KNIGHT -> piece.getTeamColor() == ChessGame.TeamColor.WHITE ? WHITE_KNIGHT : BLACK_KNIGHT;
+            case ROOK -> piece.getTeamColor() == ChessGame.TeamColor.WHITE ? WHITE_ROOK : BLACK_ROOK;
+            case PAWN -> piece.getTeamColor() == ChessGame.TeamColor.WHITE ? WHITE_PAWN : BLACK_PAWN;
+        };
+    }
+
+    private String setSquareColor(boolean lightSquare) {
+        if (lightSquare) {
+            return SET_BG_COLOR_LIGHT_BROWN + SET_TEXT_COLOR_BLACK;
+        } else {
+            return SET_BG_COLOR_DARK_BROWN + SET_TEXT_COLOR_BLACK;
+        }
+    }
+
+    private String setSquarePiece(ChessPiece colVal) {
+        if (colVal == null) {
+            return EMPTY;
+        } else {
+            return getUIString(colVal); // fill pieces in row
+        }
+    }
+
+    public String getRowStr(int colIndex, boolean startLightSquare, ChessPiece[] row) {
+        String rowStr = String.valueOf(colIndex) + " ";
+        boolean lightSquare = startLightSquare;
+
+        for (ChessPiece colVal : row) {
+            rowStr += setSquareColor(lightSquare) + setSquarePiece(colVal);
+
+            lightSquare = !lightSquare;
+        }
+        rowStr += RESET_BG_COLOR + RESET_TEXT_COLOR + " " + String.valueOf(colIndex);
+
+        return rowStr;
+    }
+
+    public String toStringWhitePerspective(ChessBoard board) {
+        ChessPiece[][] boardArr = board.getBoardArray();
+        String boardStr = "";
+        boolean startLightSquare = true;
+        int colIndex = 1;
+
+        // reverse concatenation of rows to print in correct order
+        for (ChessPiece[] row : boardArr) {
+            String rowStr = getRowStr(colIndex, startLightSquare, row);
+
+            boardStr = rowStr + "\n" + boardStr;
+
+            colIndex++;
+            startLightSquare = !startLightSquare;
+        }
+        return COL_INDICES + "\n" + boardStr + COL_INDICES;
+    }
+
+    public String toStringBlackPerspective(ChessBoard board) {
+        ChessPiece[][] boardArr = board.getBoardArray();
+        String boardStr = "";
+        boolean startLightSquare = true;
+        int colIndex = 1;
+
+        // reverse concatenation of rows to print in correct order
+        for (ChessPiece[] row : boardArr) {
+            String rowStr = getRowStr(colIndex, startLightSquare, row);
+            boardStr = boardStr + rowStr + "\n";
+
+            colIndex++;
+            startLightSquare = !startLightSquare;
+        }
+        return COL_INDICES + "\n" + boardStr + COL_INDICES;
+    }
+
 }
 

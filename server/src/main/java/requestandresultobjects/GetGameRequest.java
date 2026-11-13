@@ -1,4 +1,4 @@
-package dataobject;
+package requestandresultobjects;
 
 public class GetGameRequest {
     private String authToken;

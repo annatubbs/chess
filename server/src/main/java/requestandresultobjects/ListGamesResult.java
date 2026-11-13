@@ -1,4 +1,6 @@
-package dataobject;
+package requestandresultobjects;
+
+import dataobject.GameData;
 
 import java.util.ArrayList;
 

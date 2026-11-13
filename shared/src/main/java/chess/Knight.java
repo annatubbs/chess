@@ -33,15 +33,4 @@ public class Knight extends SingleStepPiece {
     public Knight deepCopy() {
         return new Knight(getTeamColor());
     }
-
-    @Override
-    public String toString() {
-        String WHITE_KNIGHT = " ♘ ";
-        String BLACK_KNIGHT = " ♞ ";
-
-        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            return WHITE_KNIGHT;
-        }
-        return BLACK_KNIGHT;
-    }
 }

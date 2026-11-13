@@ -25,15 +25,4 @@ public class Bishop extends SlidePiece {
     public Bishop deepCopy() {
         return new Bishop(getTeamColor());
     }
-
-    @Override
-    public String toString() {
-        String WHITE_BISHOP = " ♗ ";
-        String BLACK_BISHOP = " ♝ ";
-
-        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            return WHITE_BISHOP;
-        }
-        return BLACK_BISHOP;
-    }
 }

@@ -1,4 +1,4 @@
-package dataobject;
+package requestandresultobjects;
 
 import services.BadRequestException;
 

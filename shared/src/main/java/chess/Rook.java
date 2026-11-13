@@ -27,15 +27,4 @@ public class Rook extends SlidePiece {
     public Rook deepCopy() {
         return new Rook(getTeamColor());
     }
-
-    @Override
-    public String toString() {
-        String WHITE_ROOK = " ♖ ";
-        String BLACK_ROOK = " ♜ ";
-
-        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            return WHITE_ROOK;
-        }
-        return BLACK_ROOK;
-    }
 }

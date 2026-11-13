@@ -1,13 +1,12 @@
 package handlers;
 
+import requestandresultobjects.*;
 import chess.ChessGame;
 import com.google.gson.Gson;
-import dataobject.*;
 import services.*;
-import dataobject.CreateGameRequest.GameName;
-import dataobject.JoinGameRequest.JoinGameHelperInfo;
+import requestandresultobjects.CreateGameRequest.GameName;
+import requestandresultobjects.JoinGameRequest.JoinGameHelperInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

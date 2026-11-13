@@ -180,26 +180,6 @@ public class Server {
         }
     }
 
-    private Gson makeChessPieceGsonBuilder() throws Exception {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(ChessPiece.class, (JsonDeserializer<ChessPiece>)
-                        (json, type, context) -> {
-                            JsonObject object = json.getAsJsonObject();
-                            String pieceType = object.get("pieceType").getAsString();
-
-                            return switch (pieceType) {
-                                case "PAWN" -> context.deserialize(json, Pawn.class);
-                                case "ROOK" -> context.deserialize(json, Rook.class);
-                                case "KNIGHT" -> context.deserialize(json, Knight.class);
-                                case "BISHOP" -> context.deserialize(json, Bishop.class);
-                                case "KING" -> context.deserialize(json, King.class);
-                                case "QUEEN" -> context.deserialize(json, Queen.class);
-                                default -> throw new JsonParseException("Error in data conversion.");
-                            };
-                        }).create();
-        return gson;
-    }
-
     private void clearDb(Context ctx) throws Exception {
         try {
             gameHandler.clear();
@@ -217,9 +197,5 @@ public class Server {
 
     public void stop() {
         javalin.stop();
-    }
-
-    public int getPort() {
-        return javalin.port();
     }
 }

@@ -1,8 +1,8 @@
 package service;
 
 import dataaccess.sql.SQLDataTransfer;
-import dataobject.RegisterRequest;
-import dataobject.RegisterResult;
+import requestandresultobjects.RegisterRequest;
+import requestandresultobjects.RegisterResult;
 import dataaccess.*;
 import services.UserService;
 

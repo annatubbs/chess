@@ -1,18 +1,11 @@
 package dataaccess;
 
-import chess.ChessGame;
-import dataobject.CreateGameResult;
-import dataobject.JoinGameResult;
-import dataobject.ListGamesResult;
-import dataobject.CreateGameRequest;
+import requestandresultobjects.CreateGameResult;
+import requestandresultobjects.ListGamesResult;
 import handlers.GameHandler;
-import dataobject.JoinGameRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import services.*;
-
-import java.util.ArrayList;
 
 public class GameServerTests extends service.GameServerTests {
     static GameService gameService;

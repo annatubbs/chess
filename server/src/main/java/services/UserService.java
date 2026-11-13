@@ -1,5 +1,9 @@
 package services;
 
+import requestandresultobjects.LoginRequest;
+import requestandresultobjects.LoginResult;
+import requestandresultobjects.RegisterRequest;
+import requestandresultobjects.RegisterResult;
 import dataobject.*;
 import dataaccess.AuthDataAccess;
 import dataaccess.UserDataAccess;

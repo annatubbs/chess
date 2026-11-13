@@ -1,8 +1,8 @@
 package service;
 
-import dataobject.LoginRequest;
-import dataobject.LoginResult;
-import dataobject.RegisterRequest;
+import requestandresultobjects.LoginRequest;
+import requestandresultobjects.LoginResult;
+import requestandresultobjects.RegisterRequest;
 import handlers.UserHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

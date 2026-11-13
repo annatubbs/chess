@@ -1,5 +1,6 @@
 package dataobject;
 
+import requestandresultobjects.RegisterRequest;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Objects;

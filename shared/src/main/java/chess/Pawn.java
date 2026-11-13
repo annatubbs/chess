@@ -120,15 +120,4 @@ public class Pawn extends ChessPiece {
     public Pawn deepCopy() {
         return new Pawn(getTeamColor(), firstMove);
     }
-
-    @Override
-    public String toString() {
-        String WHITE_PAWN = " ♙ ";
-        String BLACK_PAWN = " ♟ ";
-
-        if (super.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            return WHITE_PAWN;
-        }
-        return BLACK_PAWN;
-    }
 }
