@@ -85,7 +85,15 @@ public class ChessBoard implements Serializable {
      * (How the game of chess normally starts)
      */
     // return back row of pieces at starting positions
-    private ChessPiece[] resetBackRow(ChessGame.TeamColor color) {
+    private ChessPiece[] resetBackRowWhite() {
+        ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
+        return new ChessPiece[]{new Rook(color), new Knight(color), new Bishop(color), new Queen(color),
+                new King(color), new Bishop(color), new Knight(color), new Rook(color)};
+
+    }
+
+    private ChessPiece[] resetBackRowBlack() {
+        ChessGame.TeamColor color = ChessGame.TeamColor.BLACK;
         return new ChessPiece[]{new Rook(color), new Knight(color), new Bishop(color), new Queen(color),
                 new King(color), new Bishop(color), new Knight(color), new Rook(color)};
 
@@ -101,11 +109,11 @@ public class ChessBoard implements Serializable {
         ChessPiece[][] startBoard = new ChessPiece[8][8];
 
         // Set black pieces
-        startBoard[7] = resetBackRow(ChessGame.TeamColor.BLACK);
+        startBoard[7] = resetBackRowBlack();
         startBoard[6] = resetFrontRow(ChessGame.TeamColor.BLACK);
 
         // Set white pieces
-        startBoard[0] = resetBackRow(ChessGame.TeamColor.WHITE);
+        startBoard[0] = resetBackRowWhite();
         startBoard[1] = resetFrontRow(ChessGame.TeamColor.WHITE);
 
         board = startBoard;

@@ -125,8 +125,6 @@ public class ChessClient {
     private String logout() throws Exception {
         if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             return "Not logged in.";
-        } else if (clientInfo.getState() == ClientState.PLAYING) {
-            return "Please exit game before logging out.";
         }
 
         try {
@@ -272,19 +270,19 @@ public class ChessClient {
     private String help() {
         String msg = SET_TEXT_BOLD + "Options:" + SET_TEXT_FAINT + "\n";
         if (clientInfo.getState() == ClientState.LOGGED_OUT) {
-            for (String option : new String[]{"login", "register", "list", "quit", "clear", "help"}) {
+            for (String option : new String[]{"login", "register", "list", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else if (clientInfo.getState() == ClientState.LOGGED_IN) {
-            for (String option : new String[]{"logout", "create", "list", "play", "quit", "clear", "help"}) {
+            for (String option : new String[]{"logout", "create", "list", "play", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else if (clientInfo.getState() == ClientState.PLAYING) {
-            for (String option : new String[]{"board", "list", "leave", "quit", "clear", "help"}) {
+            for (String option : new String[]{"board", "list", "leave", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else {
-            for (String option : new String[]{"logout", "board", "list", "leave", "quit", "clear", "help"}) {
+            for (String option : new String[]{"logout", "board", "list", "leave", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }

@@ -65,7 +65,8 @@ public class EscapeSequences {
     public static final String EMPTY = " \u2003 ";
     public static final String THIN_EMPTY = "\u2009";
 
-    public static final String COL_INDICES = "   A   B " + THIN_EMPTY + " C   D  " + THIN_EMPTY + "E   F  G   H ";
+    public static final String COL_INDICES_WHITE = "   A   B " + THIN_EMPTY + " C   D  " + THIN_EMPTY + "E   F  G   H ";
+    public static final String COL_INDICES_BLACK = "   H   G " + THIN_EMPTY + " F   E  " + THIN_EMPTY + "D   C  B   A ";
 
     public static String moveCursorToLocation(int x, int y) {
         return UNICODE_ESCAPE + "[" + y + ";" + x + "H";
