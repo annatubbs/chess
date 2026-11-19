@@ -187,9 +187,9 @@ public class ServerFacade {
         }
     }
 
-    public String getRowStr(int colIndex, boolean startLightSquare, ChessPiece[] row, boolean whitePerspective) {
+    public String getRowStr(int colIndex, boolean startDarkSquare, ChessPiece[] row, boolean whitePerspective) {
         String rowStr = "";
-        boolean lightSquare = startLightSquare;
+        boolean lightSquare = !startDarkSquare;
 
         for (ChessPiece colVal : row) {
             if (whitePerspective) {
@@ -208,16 +208,16 @@ public class ServerFacade {
     public String toStringWhitePerspective(ChessBoard board) {
         ChessPiece[][] boardArr = board.getBoardArray();
         String boardStr = "";
-        boolean startLightSquare = true;
+        boolean startDarkSquare = true;
         int colIndex = 1;
 
         // reverse concatenation of rows to print in correct order
         for (ChessPiece[] row : boardArr) {
-            String rowStr = getRowStr(colIndex, startLightSquare, row, true);
+            String rowStr = getRowStr(colIndex, startDarkSquare, row, true);
             boardStr = rowStr + "\n" + boardStr;
 
             colIndex++;
-            startLightSquare = !startLightSquare;
+            startDarkSquare = !startDarkSquare;
         }
         return COL_INDICES_WHITE + "\n" + boardStr + COL_INDICES_WHITE;
     }
@@ -225,16 +225,16 @@ public class ServerFacade {
     public String toStringBlackPerspective(ChessBoard board) {
         ChessPiece[][] boardArr = board.getBoardArray();
         String boardStr = "";
-        boolean startLightSquare = true;
+        boolean startDarkSquare = true;
         int colIndex = 1;
 
         // reverse concatenation of rows to print in correct order
         for (ChessPiece[] row : boardArr) {
-            String rowStr = getRowStr(colIndex, startLightSquare, row, false);
+            String rowStr = getRowStr(colIndex, startDarkSquare, row, false);
             boardStr = boardStr + rowStr + "\n";
 
             colIndex++;
-            startLightSquare = !startLightSquare;
+            startDarkSquare = !startDarkSquare;
         }
         return COL_INDICES_BLACK + "\n" + boardStr + COL_INDICES_BLACK;
     }
