@@ -1,6 +1,7 @@
 package client;
 
 import chess.ChessGame.TeamColor;
+import client.websocket.WebSocketFacade;
 
 import java.util.*;
 
@@ -8,6 +9,7 @@ import static ui.EscapeSequences.*;
 
 public class ChessClient {
     private final ServerFacade server;
+    private final WebSocketFacade webSocketFacade;
     private ClientInfo clientInfo;
     private ClientGameInfo gameInfo;
     private boolean stopProg;
@@ -26,6 +28,8 @@ public class ChessClient {
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
+        webSocketFacade = new WebSocketFacade(serverUrl, this);
+
         clientInfo = new ClientInfo();
         gameInfo = new ClientGameInfo();
         stopProg = false;

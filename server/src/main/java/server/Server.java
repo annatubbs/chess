@@ -8,6 +8,7 @@ import handlers.GameHandler;
 import handlers.UserHandler;
 import io.javalin.*;
 import io.javalin.http.Context;
+import server.websocket.WebSocketHandler;
 import services.*;
 
 import handlers.Handler;
@@ -20,6 +21,7 @@ public class Server {
 
     private final UserHandler userHandler;
     private final GameHandler gameHandler;
+    private final WebSocketHandler webSocketHandler;
     private final Javalin javalin;
 
     public Server() throws RuntimeException {
@@ -27,9 +29,10 @@ public class Server {
             DataTransfer dataTransfer = new SQLDataTransfer();
             Service service = new Service(new DataAccess(dataTransfer));
             Handler handler = new Handler(service);
-
             userHandler = handler.getUserHandler();
             gameHandler = handler.getGameHandler();
+
+            webSocketHandler = new WebSocketHandler();
             javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
             // each request takes url path and handler
@@ -41,6 +44,12 @@ public class Server {
             javalin.get("/image", this::getGame);
             javalin.put("/game", this::joinGame);
             javalin.delete("/db", this::clearDb);
+            javalin.ws("/ws", ws -> {
+                ws.onConnect(webSocketHandler);
+                ws.onMessage(webSocketHandler);
+                ws.onClose(webSocketHandler);
+            });
+
         } catch (Exception e) {
             throw new RuntimeException("Error starting server: " + e.getMessage());
         }
