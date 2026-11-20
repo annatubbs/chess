@@ -27,7 +27,7 @@ public class ServerFacade {
         HttpRequest request = buildRequest("POST", "/user", body);
         HttpResponse<String> response = sendRequest(request);
 
-        sendRequest(buildRequest("WS", "/ws", null));
+//        sendRequest(buildRequest("WS", "/ws", null));
 
         return handleResponse(response, Map.class);
     }
@@ -43,7 +43,7 @@ public class ServerFacade {
     public Map<String, String> logout(String authToken) throws Exception {
         HttpRequest request = buildRequestWithHeader("DELETE", "/session", authToken, null);
         HttpResponse<String> response = sendRequest(request);
-        
+
         return handleResponse(response, Map.class);
     }
 
