@@ -27,6 +27,8 @@ public class ChessClient {
             Map.entry("leave", "Leave current game: \"leave\""),
             Map.entry("quit", "Quit: \"quit\""),
             Map.entry("help", "Help: \"help\""));
+    private final Map<Character, Integer> rowCharToIntMap = Map.of('a', 1, 'b', 2, 'c', 3,
+            'd', 4, 'e', 5, 'f', 6, 'g', 7, 'h', 8);
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -248,20 +250,6 @@ public class ChessClient {
         return "Game: " + gameInfo.getGameName() + "\n" + boardStr;
     }
 
-    private int[] getPieceIndex(String positionName) {
-        positionName = positionName.toLowerCase(Locale.ROOT);
-        String regex = "^[a-h][1-8]$";
-        if (!positionName.matches(regex)) {
-            return null;
-        }
-
-        char[] posChars = positionName.toCharArray();
-        int rowIndex = posChars[1] - '0';
-        int colIndex = "abcdefgh".indexOf(posChars[0]) + 1;
-
-        return new int[]{rowIndex, colIndex};
-    }
-
     public String makeMove(String[] params) {
         if (clientInfo.getState() != ClientState.PLAYING) {
             return "You are not in a game";
@@ -275,7 +263,7 @@ public class ChessClient {
         return "Move";
     }
 
-    public String validMoveOptions(String[] params) throws Exception {
+    public String validMoveOptions(String[] params) throws Exception {// CHECK VALID MVS+PRINT FUNC. MARKS WRONG VALID MVS******
         if (clientInfo.getState() != ClientState.PLAYING) {
             return "You are not in a game";
         }
@@ -410,6 +398,20 @@ public class ChessClient {
         } else { // bad input
             return wantsToClear();
         }
+    }
+
+    private int[] getPieceIndex(String positionName) {
+        positionName = positionName.toLowerCase(Locale.ROOT);
+        String regex = "^[a-h][1-8]$";
+        if (!positionName.matches(regex)) {
+            return null;
+        }
+
+        char[] posChars = positionName.toCharArray();
+        int rowIndex = posChars[1] - '0';
+        int colIndex = rowCharToIntMap.get(posChars[0]);
+
+        return new int[]{rowIndex, colIndex};
     }
 
 }

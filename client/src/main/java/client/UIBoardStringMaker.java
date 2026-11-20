@@ -9,18 +9,22 @@ import java.util.Collection;
 import static ui.EscapeSequences.*;
 
 public class UIBoardStringMaker {
-    private Collection<ChessPosition> validPositions = new ArrayList<ChessPosition>();
+    private Collection<ChessPosition> validPositionIndexes = new ArrayList<ChessPosition>();
 
     public UIBoardStringMaker() {
     }
 
     public UIBoardStringMaker(Collection<ChessMove> validMoves) {
-        ArrayList<ChessPosition> validPositions = new ArrayList<ChessPosition>();
+        ArrayList<ChessPosition> validPositionIndexes = new ArrayList<ChessPosition>();
 
-        for (ChessMove move : validMoves) {
-            validPositions.add(move.getEndPosition());
+        if (validMoves != null) {
+            for (ChessMove move : validMoves) {
+                ChessPosition endPos = move.getEndPosition();
+                ChessPosition zeroIndexPos = new ChessPosition(endPos.getRow() - 1, endPos.getColumn() - 1);
+                validPositionIndexes.add(endPos);
+            }
+            this.validPositionIndexes = validPositionIndexes;
         }
-        this.validPositions = validPositions;
     }
 
     public String getUIBoardString(ChessBoard board, ChessGame.TeamColor playerColor) {
@@ -52,8 +56,8 @@ public class UIBoardStringMaker {
         boolean startDarkSquare = true;
 
         // reverse concatenation of rows to print in correct order
-        for (int rowI = 0; rowI < boardArr.length; rowI++) {
-            String rowStr = getRowStr(rowI, startDarkSquare, boardArr[rowI], false);
+        for (int rowI = 1; rowI <= boardArr.length; rowI++) {
+            String rowStr = getRowStr(rowI, startDarkSquare, boardArr[rowI - 1], false);
             boardStr = boardStr + rowStr + "\n";
 
             startDarkSquare = !startDarkSquare;
@@ -62,12 +66,11 @@ public class UIBoardStringMaker {
     }
 
     private String getRowStr(int rowI, boolean startDarkSquare, ChessPiece[] row, boolean whitePerspective) {
-        int rowLabel = rowI + 1;
         String rowStr = "";
         boolean isLightSquare = !startDarkSquare;
 
-        for (int colI = 0; colI < row.length; colI++) {
-            ChessPiece colVal = row[colI];
+        for (int colI = 1; colI <= row.length; colI++) {
+            ChessPiece colVal = row[colI - 1];
             if (whitePerspective) {
                 rowStr += setSquareColor(isLightSquare, new ChessPosition(rowI, colI)) + setSquarePiece(colVal);
             } else {
@@ -75,18 +78,18 @@ public class UIBoardStringMaker {
             }
             isLightSquare = !isLightSquare;
         }
-        rowStr = String.valueOf(rowLabel) + " " + rowStr + RESET_BG_COLOR + RESET_TEXT_COLOR + " " +
-                String.valueOf(rowLabel);
+        String rowLabel = String.valueOf(rowI);
+        rowStr = rowLabel + " " + rowStr + RESET_BG_COLOR + RESET_TEXT_COLOR + " " + rowLabel;
 
         return rowStr;
     }
 
-    private String setSquareColor(boolean isLightSquare, ChessPosition currPos) {
-        if (isLightSquare && validPositions.contains(currPos)) {
+    private String setSquareColor(boolean isLightSquare, ChessPosition currIndex) {
+        if (isLightSquare && validPositionIndexes.contains(currIndex)) {
             return SET_BG_COLOR_GREEN + SET_TEXT_COLOR_BLACK;
         } else if (isLightSquare) { // no highlight
             return SET_BG_COLOR_LIGHT_BROWN + SET_TEXT_COLOR_BLACK;
-        } else if (validPositions.contains(currPos)) { // dark square
+        } else if (validPositionIndexes.contains(currIndex)) { // dark square
             return SET_BG_COLOR_DARK_GREEN + SET_TEXT_COLOR_BLACK;
         } else { // dark and no highlight
             return SET_BG_COLOR_DARK_BROWN + SET_TEXT_COLOR_BLACK;
