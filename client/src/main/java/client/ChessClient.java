@@ -22,6 +22,7 @@ public class ChessClient {
             Map.entry("play", "Play game: \"play\" <PLAYERCOLOR:black/white> <GAMEID> "),
             Map.entry("observe", "Observe a game: \"observe\" <GAMEID>"),
             Map.entry("board", "Render chess board: \"board\""),
+            Map.entry("move", "Make a move: \"move\" <STARTSQUARE> <ENDSQUARE>"),
             Map.entry("leave", "Leave current game: \"leave\""),
             Map.entry("quit", "Quit: \"quit\""),
             Map.entry("help", "Help: \"help\""));
@@ -81,7 +82,8 @@ public class ChessClient {
             case "list" -> list();
             case "play" -> play(params);
             case "observe" -> observe(params);
-            case "board" -> renderBoard();
+            case "board" -> redrawBoard();
+            case "move" -> makeMove(params);
             case "leave" -> leave();
             case "quit" -> quit();
             case "clear" -> clear();
@@ -200,7 +202,7 @@ public class ChessClient {
             String msg = "Playing " + formatGameDataStr(gameDataMap.get("gameName").toString(),
                     switchNullToEmptyObj(gameDataMap.get("whiteUsername")),
                     switchNullToEmptyObj(gameDataMap.get("blackUsername"))) + "\n";
-            return msg.replaceFirst("\\R$", "") + "\n" + renderBoard();
+            return msg.replaceFirst("\\R$", "") + "\n" + redrawBoard();
 
         } catch (Exception e) {
             return e.getMessage();
@@ -226,13 +228,13 @@ public class ChessClient {
             clientInfo.setState(ClientState.OBSERVING);
             gameInfo = new ClientGameInfo(gameID, gameName, ClientGameInfo.Role.OBSERVER);
 
-            return "Observing:\n" + renderBoard();
+            return "Observing:\n" + redrawBoard();
         } catch (Exception e) {
             return e.getMessage();
         }
     }
 
-    private String renderBoard() throws Exception {
+    private String redrawBoard() throws Exception {
         if (clientInfo.getState() == ClientState.LOGGED_OUT) {
             return "Please log in to view chess boards.";
         } else if (clientInfo.getState() == ClientState.LOGGED_IN) {
@@ -242,6 +244,19 @@ public class ChessClient {
                 gameInfo.getPlayerColor());
 
         return "Game: " + gameInfo.getGameName() + "\n" + boardStr;
+    }
+
+    public String makeMove(String[] params) {
+        if (clientInfo.getState() != ClientState.PLAYING) {
+            return "You are not in a game";
+        }
+        if (params.length != 2) {
+            return "Incorrect format \n " + inputFormatStrs.get("move");
+        }
+
+        // check that move valid. Already sure that in right game. Check that is their turn.
+
+        return "Move";
     }
 
     public String leave() {
