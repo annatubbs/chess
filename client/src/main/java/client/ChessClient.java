@@ -22,6 +22,7 @@ public class ChessClient {
             Map.entry("play", "Play game: \"play\" <PLAYERCOLOR:black/white> <GAMEID> "),
             Map.entry("observe", "Observe a game: \"observe\" <GAMEID>"),
             Map.entry("board", "Render chess board: \"board\""),
+            Map.entry("options", "See the valid move options for a piece: \"options\" <PIECESQUARE>"),
             Map.entry("move", "Make a move: \"move\" <STARTSQUARE> <ENDSQUARE>"),
             Map.entry("leave", "Leave current game: \"leave\""),
             Map.entry("quit", "Quit: \"quit\""),
@@ -83,6 +84,7 @@ public class ChessClient {
             case "play" -> play(params);
             case "observe" -> observe(params);
             case "board" -> redrawBoard();
+            case "options" -> validMoveOptions(params);
             case "move" -> makeMove(params);
             case "leave" -> leave();
             case "quit" -> quit();
@@ -246,6 +248,20 @@ public class ChessClient {
         return "Game: " + gameInfo.getGameName() + "\n" + boardStr;
     }
 
+    private int[] getPieceIndex(String positionName) {
+        positionName = positionName.toLowerCase(Locale.ROOT);
+        String regex = "^[a-h][1-8]$";
+        if (!positionName.matches(regex)) {
+            return null;
+        }
+
+        char[] posChars = positionName.toCharArray();
+        int rowIndex = posChars[1] - '0';
+        int colIndex = "abcdefgh".indexOf(posChars[0]) + 1;
+
+        return new int[]{rowIndex, colIndex};
+    }
+
     public String makeMove(String[] params) {
         if (clientInfo.getState() != ClientState.PLAYING) {
             return "You are not in a game";
@@ -257,6 +273,22 @@ public class ChessClient {
         // check that move valid. Already sure that in right game. Check that is their turn.
 
         return "Move";
+    }
+
+    public String validMoveOptions(String[] params) throws Exception {
+        if (clientInfo.getState() != ClientState.PLAYING) {
+            return "You are not in a game";
+        }
+        if (params.length != 1) {
+            return "Incorrect format \n " + inputFormatStrs.get("options");
+        }
+
+        int[] pieceIndex = getPieceIndex(params[0]);
+        String highlightBoardStr = server.getValidMoves(clientInfo.getAuthToken(), String.valueOf(gameInfo.getGameID()),
+                gameInfo.getPlayerColor(), pieceIndex);
+
+
+        return "Options:\n" + highlightBoardStr;
     }
 
     public String leave() {
@@ -297,11 +329,11 @@ public class ChessClient {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         } else if (clientInfo.getState() == ClientState.PLAYING) {
-            for (String option : new String[]{"board", "list", "leave", "quit", "help"}) {
+            for (String option : new String[]{"board", "options", "move", "leave", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
-        } else {
-            for (String option : new String[]{"logout", "board", "list", "leave", "quit", "help"}) {
+        } else { // OBSERVING
+            for (String option : new String[]{"logout", "board", "leave", "quit", "help"}) {
                 msg += inputFormatStrs.get(option) + "\n";
             }
         }
